@@ -4,17 +4,18 @@ Dokumen ini menjelaskan status implementasi saat ini dan arah milestone berikutn
 
 ## Milestone 0 - Blueprint
 
-Status: tersedia.
+Status: updated.
 
 Artefak:
 
-- `REPUBLIK_ARGUMEN_MVP_AI_DEBATE_BLUEPRINT.md`
+- `REPUBLIK_ARGUMEN_MVP_VOICE_ARENA_BLUEPRINT.md`
+- `docs/archive/REPUBLIK_ARGUMEN_MVP_AI_DEBATE_BLUEPRINT.md`
 
 Tujuan:
 
-- Mendefinisikan MVP personal untuk debat tiga ronde.
-- Menetapkan batasan fitur: tanpa login, database, pembayaran, multiplayer, atau social layer.
-- Menetapkan kontrak AI Opponent, AI Judge, localStorage, voice browser, dan export JSON.
+- Menjadikan Voice Arena sebagai source of truth fase aktif.
+- Menetapkan text-only sebagai fallback wajib.
+- Menetapkan device check, camera preview lokal, STT/TTS server-side, Delivery Signals, dan fallback ladder.
 
 ## Milestone 1 - Personal MVP Web App
 
@@ -31,8 +32,20 @@ Hasil utama:
 - Report AI Judge menampilkan overall score, lima dimensi skor, strengths, improvements, exercise, disclaimer, dan transcript.
 - Riwayat debat lokal memakai `localStorage`.
 - Export satu session sebagai JSON tanpa API key.
-- Voice input dan text-to-speech memakai API browser saat tersedia.
+- Text session masih bisa memakai voice input dan text-to-speech browser sebagai fallback.
 - Dockerfile dan `docker-compose.yml` tersedia untuk deployment sederhana.
+
+Voice Arena additions:
+
+- Mode/input selector di lobby.
+- `/debate/device-check` untuk `VOICE` dan `VOICE_CAMERA`.
+- Local camera preview tanpa upload video.
+- Mic level meter berbasis Web Audio.
+- Fallback ke voice-only dan text-only.
+- OpenRouter STT route tersambung ke `MediaRecorder` untuk mode voice.
+- OpenRouter TTS route dipakai untuk auto-speak lawan di mode voice, dengan browser TTS fallback.
+- Delivery Signals helper tanpa klaim emosi.
+- Local analytics event scaffold.
 
 Provider AI saat ini:
 
@@ -51,26 +64,28 @@ Validasi:
 - `npm run test`
 - `npm run build`
 
-## Milestone 2 - Blueprint Detail Integration
+## Milestone 2 - Voice Pipeline Integration
+
+Status: partially implemented.
+
+Rencana kerja:
+
+- Done: hubungkan `MediaRecorder` audio-only ke `/api/voice/transcribe`.
+- Done: tambahkan transcript review lewat composer sebelum argumen dikirim.
+- Done: auto-speak lawan di mode voice memakai `/api/voice/synthesize` saat model TTS tersedia.
+- Remaining: tambahkan sentence chunker dan audio queue untuk `/api/voice/synthesize`.
+- Remaining: tambahkan tombol interupsi yang menghentikan audio queue dan kembali ke state listening.
+- Remaining: tampilkan Delivery Coach tab di result screen.
+
+## Milestone 3 - Blueprint Detail Integration
 
 Status: planned.
 
 Trigger:
 
-- User mengunggah blueprint detail baru.
+- User mengunggah tambahan blueprint detail setelah Voice Arena source of truth.
 
-Rencana kerja:
-
-- Bandingkan blueprint detail dengan MVP yang sudah berjalan.
-- Pisahkan perubahan menjadi kategori:
-  - must-have untuk personal MVP;
-  - follow-up setelah MVP stabil;
-  - fitur yang tetap ditunda.
-- Update README dan milestone ini sesuai keputusan baru.
-- Tambahkan atau revisi acceptance checklist.
-- Implementasi perubahan dalam branch terpisah agar mudah direview.
-
-## Milestone 3 - Stabilization
+## Milestone 4 - Stabilization
 
 Status: planned.
 
@@ -82,7 +97,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 4 - Product Refinement
+## Milestone 5 - Product Refinement
 
 Status: planned.
 

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowRight, History, KeyRound } from "lucide-react";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { PageShell } from "@/components/layout/PageShell";
+import { InputModeSelector } from "@/components/topics/InputModeSelector";
+import { ModeSelector } from "@/components/topics/ModeSelector";
 import { SideSelector } from "@/components/topics/SideSelector";
 import { TopicSelector } from "@/components/topics/TopicSelector";
 import { debateTopics } from "@/data/topics";
@@ -18,12 +20,20 @@ import {
   savePreferences,
   upsertLocalSession,
 } from "@/lib/storage/localSessions";
-import type { DebateTopic, SideSelection } from "@/types/debate";
+import type {
+  DebateInputMode,
+  DebateMode,
+  DebateTopic,
+  SideSelection,
+} from "@/types/debate";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const router = useRouter();
   const [selectedTopic, setSelectedTopic] = useState<DebateTopic>(debateTopics[0]);
+  const [debateMode, setDebateMode] =
+    useState<DebateMode>("DUEL_WACANA_AI");
+  const [inputMode, setInputMode] = useState<DebateInputMode>("TEXT");
   const [sideSelection, setSideSelection] = useState<SideSelection>("PRO");
   const [openRouterApiKey, setOpenRouterApiKey] = useState("");
   const [openRouterOpponentModel, setOpenRouterOpponentModel] =
@@ -64,9 +74,19 @@ export default function Home() {
       openRouterJudgeModel: judgeModel,
     });
 
-    const session = createDebateSession(selectedTopic, sideSelection);
+    const session = createDebateSession(selectedTopic, sideSelection, {
+      mode: debateMode,
+      inputMode,
+    });
     upsertLocalSession(session);
-    router.push(`/debate/${session.id}`);
+
+    if (inputMode === "TEXT") {
+      router.push(`/debate/${session.id}`);
+    } else {
+      router.push(
+        `/debate/device-check?sessionId=${encodeURIComponent(session.id)}&input=${inputMode}`,
+      );
+    }
   }
 
   function focusSetup() {
@@ -117,8 +137,18 @@ export default function Home() {
         >
           <h2 className="text-lg font-semibold text-white">Setup Debat</h2>
           <div className="mt-5">
+            <p className="mb-3 text-sm font-medium text-slate-300">Mode</p>
+            <ModeSelector value={debateMode} onChange={setDebateMode} />
+          </div>
+          <div className="mt-5">
             <p className="mb-3 text-sm font-medium text-slate-300">Posisi</p>
             <SideSelector value={sideSelection} onChange={setSideSelection} />
+          </div>
+          <div className="mt-6">
+            <p className="mb-3 text-sm font-medium text-slate-300">
+              Input Arena
+            </p>
+            <InputModeSelector value={inputMode} onChange={setInputMode} />
           </div>
           <div className="mt-6">
             <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slate-300">

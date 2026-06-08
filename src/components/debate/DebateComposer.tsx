@@ -14,8 +14,10 @@ export function DebateComposer({
   disabled,
   isVoiceSupported,
   isListening,
+  isVoiceBusy,
   voiceInterim,
   voiceError,
+  voiceStatus,
   onStartVoice,
   onStopVoice,
 }: {
@@ -26,8 +28,10 @@ export function DebateComposer({
   disabled: boolean;
   isVoiceSupported: boolean;
   isListening: boolean;
+  isVoiceBusy?: boolean;
   voiceInterim: string;
   voiceError: string;
+  voiceStatus?: string;
   onStartVoice: () => void;
   onStopVoice: () => void;
 }) {
@@ -68,14 +72,23 @@ export function DebateComposer({
           {voiceInterim}
         </p>
       ) : null}
-      {voiceError ? <div className="mt-3"><ErrorBanner message={voiceError} /></div> : null}
+      {voiceStatus ? (
+        <p className="mt-2 rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-sm text-slate-300">
+          {voiceStatus}
+        </p>
+      ) : null}
+      {voiceError ? (
+        <div className="mt-3">
+          <ErrorBanner message={voiceError} />
+        </div>
+      ) : null}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <VoiceInputButton
           isSupported={isVoiceSupported}
           isListening={isListening}
           onStart={onStartVoice}
           onStop={onStopVoice}
-          disabled={disabled}
+          disabled={disabled || Boolean(isVoiceBusy && !isListening)}
         />
         <button
           type="button"

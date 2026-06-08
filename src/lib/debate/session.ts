@@ -1,6 +1,8 @@
 import { getOpponentSide } from "@/lib/debate/rules";
 import { createId } from "@/lib/utils/ids";
 import type {
+  DebateInputMode,
+  DebateMode,
   DebateSession,
   DebateSide,
   DebateTopic,
@@ -18,12 +20,18 @@ export function resolveSide(selection: SideSelection): DebateSide {
 export function createDebateSession(
   topic: DebateTopic,
   selection: SideSelection,
+  options: {
+    mode?: DebateMode;
+    inputMode?: DebateInputMode;
+  } = {},
 ): DebateSession {
   const userSide = resolveSide(selection);
 
   return {
     id: createId("debate"),
     version: 1,
+    mode: options.mode ?? "DUEL_WACANA_AI",
+    inputMode: options.inputMode ?? "TEXT",
     topic,
     userSide,
     opponentSide: getOpponentSide(userSide),

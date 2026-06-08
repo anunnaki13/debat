@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Gavel, RotateCcw, Trash2 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { LoadingDots } from "@/components/common/LoadingDots";
@@ -10,7 +10,9 @@ import { DebateComposer } from "@/components/debate/DebateComposer";
 import { DebateHeader } from "@/components/debate/DebateHeader";
 import { DebateTranscript } from "@/components/debate/DebateTranscript";
 import { PageShell } from "@/components/layout/PageShell";
+import { useOpenRouterVoiceInput } from "@/hooks/useOpenRouterVoiceInput";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
+import { trackLocalEvent } from "@/lib/analytics/localAnalytics";
 import {
   canRequestJudge,
   getNextRound,
@@ -28,10 +30,13 @@ import {
   savePreferences,
   upsertLocalSession,
 } from "@/lib/storage/localSessions";
+import { buildDeliveryReport } from "@/lib/voice/deliverySignals";
 import type {
   ApiErrorResponse,
   DebateMessage,
   DebateSession,
+  DeliverySignals,
+  InputSource,
   JudgeReport,
   UserPreferences,
 } from "@/types/debate";
@@ -62,13 +67,64 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   const [preferences, setPreferences] =
     useState<UserPreferences>(getPreferences);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [inputSource, setInputSource] = useState<InputSource>("TEXT");
+  const activeAudioRef = useRef<HTMLAudioElement | null>(null);
+  const activeAudioUrlRef = useRef<string | null>(null);
 
-  const appendFinalTranscript = useCallback((text: string) => {
+  const appendBrowserTranscript = useCallback((text: string) => {
     setInput((current) => [current, text].filter(Boolean).join(" ").trimStart());
+    setInputSource("BROWSER_STT");
   }, []);
+
+  const updateDeliverySignals = useCallback((signals: DeliverySignals) => {
+    setSession((currentSession) => {
+      if (!currentSession) {
+        return currentSession;
+      }
+
+      const updatedSession: DebateSession = {
+        ...currentSession,
+        deliveryReport: buildDeliveryReport(signals),
+      };
+      upsertLocalSession(updatedSession);
+
+      return updatedSession;
+    });
+  }, []);
+
+  const appendOpenRouterTranscript = useCallback(
+    ({
+      transcript,
+      deliverySignals,
+    }: {
+      transcript: string;
+      deliverySignals?: DeliverySignals;
+    }) => {
+      setInput((current) =>
+        [current, transcript].filter(Boolean).join(" ").trimStart(),
+      );
+      setInputSource("OPENROUTER_STT");
+
+      if (deliverySignals) {
+        updateDeliverySignals(deliverySignals);
+      }
+    },
+    [updateDeliverySignals],
+  );
   const speech = useSpeechRecognition({
-    onFinalTranscript: appendFinalTranscript,
-    enabled: preferences.voiceInputEnabled,
+    onFinalTranscript: appendBrowserTranscript,
+    enabled:
+      preferences.voiceInputEnabled &&
+      Boolean(session) &&
+      session?.inputMode === "TEXT",
+  });
+  const openRouterVoice = useOpenRouterVoiceInput({
+    enabled:
+      preferences.voiceInputEnabled &&
+      Boolean(session) &&
+      session?.inputMode !== "TEXT",
+    onTranscript: appendOpenRouterTranscript,
+    sessionId: session?.id,
   });
 
   useEffect(() => {
@@ -116,6 +172,53 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     savePreferences(nextPreferences);
   }
 
+  const stopOpenRouterAudio = useCallback(() => {
+    activeAudioRef.current?.pause();
+    activeAudioRef.current = null;
+
+    if (activeAudioUrlRef.current) {
+      URL.revokeObjectURL(activeAudioUrlRef.current);
+      activeAudioUrlRef.current = null;
+    }
+  }, []);
+
+  const speakOpponentVoice = useCallback(
+    async (text: string, targetSessionId: string) => {
+      stopOpenRouterAudio();
+      trackLocalEvent("tts_started", undefined, targetSessionId);
+
+      try {
+        const response = await fetch("/api/voice/synthesize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        });
+
+        if (!response.ok) {
+          throw new Error("TTS server gagal.");
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+
+        activeAudioRef.current = audio;
+        activeAudioUrlRef.current = url;
+        audio.onended = stopOpenRouterAudio;
+        audio.onerror = stopOpenRouterAudio;
+        await audio.play();
+      } catch {
+        stopOpenRouterAudio();
+        trackLocalEvent("tts_failed", undefined, targetSessionId);
+        trackLocalEvent("browser_tts_fallback_used", undefined, targetSessionId);
+        speakText(text);
+      }
+    },
+    [stopOpenRouterAudio],
+  );
+
+  useEffect(() => stopOpenRouterAudio, [stopOpenRouterAudio]);
+
   async function callOpponent(nextSession: DebateSession) {
     setError("");
     setIsLoadingOpponent(true);
@@ -157,9 +260,18 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
       };
 
       persistSession(updatedSession);
+      trackLocalEvent(
+        nextRound ? "round_completed" : "debate_completed",
+        { round: nextSession.currentRound },
+        nextSession.id,
+      );
 
       if (preferences.autoSpeakOpponent) {
-        speakText(opponentMessage.content);
+        if (nextSession.inputMode === "TEXT") {
+          speakText(opponentMessage.content);
+        } else {
+          void speakOpponentVoice(opponentMessage.content, nextSession.id);
+        }
       }
     } catch (requestError) {
       setError(
@@ -196,6 +308,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
       speaker: "USER",
       round: session.currentRound,
       content,
+      inputSource,
       createdAt: new Date().toISOString(),
     };
     const nextSession = {
@@ -204,7 +317,13 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     };
 
     persistSession(nextSession);
+    trackLocalEvent(
+      "argument_submitted",
+      { round: session.currentRound, inputMode: session.inputMode },
+      session.id,
+    );
     setInput("");
+    setInputSource(session.inputMode === "TEXT" ? "TEXT" : "TRANSCRIPT_EDIT");
     await callOpponent(nextSession);
   }
 
@@ -216,6 +335,23 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     await callOpponent(session);
   }
 
+  function handleInputChange(value: string) {
+    setInput(value);
+
+    if (!session || session.inputMode === "TEXT") {
+      setInputSource("TEXT");
+      return;
+    }
+
+    setInputSource((currentSource) =>
+      currentSource === "OPENROUTER_STT" ||
+      currentSource === "BROWSER_STT" ||
+      currentSource === "TEXT"
+        ? "TRANSCRIPT_EDIT"
+        : currentSource,
+    );
+  }
+
   async function requestJudge() {
     if (!session || !canRequestJudge(session.messages)) {
       setError("Debat belum lengkap untuk dinilai.");
@@ -224,6 +360,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
     setError("");
     setIsLoadingJudge(true);
+    stopOpenRouterAudio();
     stopSpeaking();
 
     try {
@@ -272,6 +409,28 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   }
 
   const canJudge = session.status === "AWAITING_JUDGE" && canRequestJudge(session.messages);
+  const useOpenRouterVoice = session.inputMode !== "TEXT";
+  const voiceInput = useOpenRouterVoice
+    ? {
+        isSupported: openRouterVoice.isSupported,
+        isListening: openRouterVoice.isRecording,
+        isBusy: openRouterVoice.isBusy,
+        interim: "",
+        error: openRouterVoice.error,
+        status: openRouterVoice.status,
+        start: openRouterVoice.startRecording,
+        stop: openRouterVoice.stopRecording,
+      }
+    : {
+        isSupported: speech.isSupported,
+        isListening: speech.isListening,
+        isBusy: false,
+        interim: speech.interimTranscript,
+        error: speech.error,
+        status: "",
+        start: speech.startListening,
+        stop: speech.stopListening,
+      };
 
   return (
     <PageShell className="space-y-6">
@@ -301,15 +460,17 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
             <DebateComposer
               round={session.currentRound}
               value={input}
-              onChange={setInput}
+              onChange={handleInputChange}
               onSubmit={submitArgument}
               disabled={awaitingOpponent || isLoadingJudge}
-              isVoiceSupported={speech.isSupported}
-              isListening={speech.isListening}
-              voiceInterim={speech.interimTranscript}
-              voiceError={speech.error}
-              onStartVoice={speech.startListening}
-              onStopVoice={speech.stopListening}
+              isVoiceSupported={voiceInput.isSupported}
+              isListening={voiceInput.isListening}
+              isVoiceBusy={voiceInput.isBusy}
+              voiceInterim={voiceInput.interim}
+              voiceError={voiceInput.error}
+              voiceStatus={voiceInput.status}
+              onStartVoice={voiceInput.start}
+              onStopVoice={voiceInput.stop}
             />
           ) : null}
 
@@ -346,9 +507,9 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           </button>
 
           <div className="rounded-lg border border-white/10 bg-slate-950/75 p-4 text-sm leading-6 text-slate-400">
-            Fitur mikrofon bergantung pada dukungan browser. Bila tidak tersedia,
-            gunakan input ketik. Pada sebagian browser, pengenalan suara dapat
-            diproses oleh layanan milik platform browser.
+            {useOpenRouterVoice
+              ? "Mode suara merekam audio giliran Anda untuk ditranskrip melalui server OpenRouter. Kamera tetap sebatas preview lokal."
+              : "Fitur mikrofon bergantung pada dukungan browser. Bila tidak tersedia, gunakan input ketik."}
           </div>
         </div>
       </section>
@@ -361,6 +522,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           onCancel={() => setShowCancelDialog(false)}
           onConfirm={() => {
             deleteLocalSession(session.id);
+            stopOpenRouterAudio();
             stopSpeaking();
             router.push("/");
           }}

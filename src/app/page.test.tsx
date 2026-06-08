@@ -82,4 +82,24 @@ describe("Home setup flow", () => {
       await screen.findByText("Isi OpenRouter API key dulu sebelum mulai debat."),
     ).toBeInTheDocument();
   });
+
+  it("routes voice mode through device check before the debate arena", async () => {
+    render(<Home />);
+
+    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
+      target: { value: "sk-or-dummy-free-router-key-123456" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /VoiceGunakan mikrofon/i,
+      }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
+    );
+
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock.mock.calls[0][0]).toContain("/debate/device-check");
+    expect(pushMock.mock.calls[0][0]).toContain("input=VOICE");
+  });
 });

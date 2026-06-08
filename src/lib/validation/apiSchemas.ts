@@ -8,6 +8,18 @@ export const MAX_MESSAGE_CHARS = 1500;
 export const debateSideSchema = z.enum(["PRO", "CONTRA"]);
 export const roundIdSchema = z.enum(["OPENING", "REBUTTAL", "CLOSING"]);
 export const speakerSchema = z.enum(["USER", "OPPONENT"]);
+export const debateModeSchema = z.enum([
+  "DUEL_WACANA_AI",
+  "KURSI_PANAS_AI",
+  "PRIVATE_OPINION",
+]);
+export const debateInputModeSchema = z.enum(["TEXT", "VOICE", "VOICE_CAMERA"]);
+export const inputSourceSchema = z.enum([
+  "TEXT",
+  "BROWSER_STT",
+  "OPENROUTER_STT",
+  "TRANSCRIPT_EDIT",
+]);
 
 export const debateTopicSchema = z.object({
   id: z.string().min(1).max(80),
@@ -23,6 +35,7 @@ export const debateMessageSchema = z.object({
   round: roundIdSchema,
   content: z.string().trim().min(1).max(MAX_MESSAGE_CHARS),
   createdAt: z.string().datetime(),
+  inputSource: inputSourceSchema.optional(),
 });
 
 const clientProviderConfigBaseSchema = z.object({
@@ -45,6 +58,8 @@ export const clientAiConfigSchema = z
 export const debateSessionSchema = z.object({
   id: z.string().min(1).max(120),
   version: z.literal(1),
+  mode: debateModeSchema.default("DUEL_WACANA_AI"),
+  inputMode: debateInputModeSchema.default("TEXT"),
   topic: debateTopicSchema,
   userSide: debateSideSchema,
   opponentSide: debateSideSchema,

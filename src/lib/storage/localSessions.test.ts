@@ -10,6 +10,8 @@ function session(index: number): DebateSession {
   return {
     id: `session-${index}`,
     version: 1,
+    mode: "DUEL_WACANA_AI",
+    inputMode: "TEXT",
     topic: {
       id: "topic",
       title: "Topik",

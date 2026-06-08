@@ -1,4 +1,4 @@
-import { Shield, Swords } from "lucide-react";
+import { Camera, Keyboard, Mic, Shield, Swords } from "lucide-react";
 import { RoundStepper } from "@/components/debate/RoundStepper";
 import { TurnTimer } from "@/components/debate/TurnTimer";
 import type { DebateSession } from "@/types/debate";
@@ -19,6 +19,16 @@ export function DebateHeader({
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-slate-900/75 px-3 py-1 text-xs font-semibold text-slate-200">
+              {session.inputMode === "VOICE_CAMERA" ? (
+                <Camera size={14} aria-hidden="true" />
+              ) : session.inputMode === "VOICE" ? (
+                <Mic size={14} aria-hidden="true" />
+              ) : (
+                <Keyboard size={14} aria-hidden="true" />
+              )}
+              {session.inputMode.replace("_", " + ")}
+            </span>
             <span className="inline-flex items-center gap-2 rounded-md border border-amber-200/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-100">
               <Shield size={14} aria-hidden="true" />
               {session.userSide}

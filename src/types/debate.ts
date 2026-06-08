@@ -39,6 +39,8 @@ export interface DebateTopic {
   category: string;
   difficulty: "pemula" | "menengah" | "lanjutan";
   shortContext: string;
+  spiceLevel?: 1 | 2 | 3 | 4;
+  custom?: boolean;
 }
 
 export interface DebateMessage {

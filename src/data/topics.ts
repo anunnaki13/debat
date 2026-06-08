@@ -9,6 +9,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "menengah",
     shortContext:
       "Bahas dampak otomatisasi, produktivitas, reskilling, dan distribusi manfaat ekonomi.",
+    spiceLevel: 3,
   },
   {
     id: "remote-work",
@@ -18,6 +19,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "pemula",
     shortContext:
       "Pertimbangkan produktivitas, kolaborasi, biaya, budaya kerja, dan fleksibilitas.",
+    spiceLevel: 2,
   },
   {
     id: "cashless",
@@ -27,6 +29,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "menengah",
     shortContext:
       "Pertimbangkan efisiensi, inklusi, keamanan, dan akses masyarakat.",
+    spiceLevel: 2,
   },
   {
     id: "public-transport",
@@ -36,6 +39,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "menengah",
     shortContext:
       "Pertimbangkan biaya, kemacetan, emisi, dan aksesibilitas.",
+    spiceLevel: 3,
   },
   {
     id: "school-skill",
@@ -45,6 +49,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "pemula",
     shortContext:
       "Bahas fondasi ilmu, kemampuan berpikir, kesiapan kerja, dan karakter.",
+    spiceLevel: 2,
   },
   {
     id: "electric-vehicle",
@@ -54,6 +59,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "lanjutan",
     shortContext:
       "Pertimbangkan emisi, keadilan subsidi, infrastruktur, dan industri nasional.",
+    spiceLevel: 4,
   },
   {
     id: "four-day-workweek",
@@ -62,6 +68,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "menengah",
     shortContext:
       "Bahas produktivitas, jenis industri, kesejahteraan, dan layanan publik.",
+    spiceLevel: 3,
   },
   {
     id: "university-degree",
@@ -71,6 +78,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "pemula",
     shortContext:
       "Bahas kompetensi, pengalaman, kredensial, dan kebutuhan perusahaan.",
+    spiceLevel: 2,
   },
   {
     id: "social-media-age",
@@ -79,6 +87,7 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "menengah",
     shortContext:
       "Bahas perlindungan anak, kebebasan, verifikasi usia, dan literasi digital.",
+    spiceLevel: 3,
   },
   {
     id: "city-green-space",
@@ -88,5 +97,6 @@ export const debateTopics: DebateTopic[] = [
     difficulty: "pemula",
     shortContext:
       "Pertimbangkan ekonomi, kesehatan, iklim mikro, dan tata ruang.",
+    spiceLevel: 2,
   },
 ];

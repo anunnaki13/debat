@@ -10,7 +10,7 @@ import { ProgressResumeCard } from "@/components/lobby/ProgressResumeCard";
 import { UserUtilityBar } from "@/components/lobby/UserUtilityBar";
 import { InputModeSelector } from "@/components/topics/InputModeSelector";
 import { SideSelector } from "@/components/topics/SideSelector";
-import { TopicSelector } from "@/components/topics/TopicSelector";
+import { TopicExplorer } from "@/components/topics/TopicExplorer";
 import { Badge, Button, Card, CardDescription, CardTitle } from "@/components/ui";
 import { debateTopics } from "@/data/topics";
 import { createDebateSession } from "@/lib/debate/session";
@@ -129,24 +129,11 @@ export default function Home() {
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
         <div id="pilih-topik" className="scroll-mt-6 space-y-4">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <Badge tone="prestige">Tantangan Pilihan</Badge>
-              <h2 className="mt-3 font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
-                Topik untuk diuji
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--ra-text-secondary)]">
-                Pilih satu gagasan. Lawan AI akan mengambil posisi berseberangan.
-              </p>
-            </div>
-            <span className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-default)] px-3 py-1 text-xs font-semibold text-[var(--ra-text-muted)]">
-              {debateTopics.length} topik
-            </span>
-          </div>
-          <TopicSelector
+          <TopicExplorer
             topics={debateTopics}
             selectedTopic={selectedTopic}
             onSelect={setSelectedTopic}
+            onSideChange={setSideSelection}
           />
         </div>
 

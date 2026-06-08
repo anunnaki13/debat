@@ -127,7 +127,29 @@ Catatan:
 - Dedicated `/topics`, `/settings`, dan full arena visual migration belum dibangun.
 - Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
 
-## Milestone 6 - Stabilization
+## Milestone 6 - UI Sprint 2 Topic Flow
+
+Status: implemented.
+
+Hasil utama:
+
+- Topic explorer dengan search, category chips, level filter, dan spice filter.
+- Spice meter reusable di `src/components/topics/SpiceMeter.tsx`.
+- Custom topic form dengan tesis, kategori, kepedasan, posisi user, dan konteks opsional.
+- Local refiner comparison tanpa API call.
+- Conservative sensitive topic validation state.
+- Custom topic dapat dipakai dalam session debat.
+- Visual QA screenshots:
+  - `docs/visual-qa/topic-flow-desktop.png`
+  - `docs/visual-qa/topic-flow-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_2_REPORT.md`.
+
+Catatan:
+
+- Dedicated `/topics`, `/topics/new`, dan `/topics/refine` belum dibuat sebagai route terpisah.
+- Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
+
+## Milestone 7 - Stabilization
 
 Status: planned.
 
@@ -139,7 +161,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 7 - Product Refinement
+## Milestone 8 - Product Refinement
 
 Status: planned.
 

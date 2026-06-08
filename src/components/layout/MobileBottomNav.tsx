@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 const navItems = [
   { label: "Beranda", href: "/", icon: Home, match: "/", primary: false },
   { label: "Arena", href: "/#setup-debat", icon: Swords, match: "/debate", primary: false },
-  { label: "Topik", href: "/#setup-debat", icon: Plus, match: "/topics/new", primary: true },
+  { label: "Topik", href: "/#custom-topic", icon: Plus, match: "/topics/new", primary: true },
   { label: "Jelajah", href: "/#pilih-topik", icon: Compass, match: "/topics", primary: false },
   { label: "Profil", href: "/history", icon: UserCircle, match: "/history", primary: false },
 ] as const;

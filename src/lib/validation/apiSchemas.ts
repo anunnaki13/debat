@@ -27,6 +27,8 @@ export const debateTopicSchema = z.object({
   category: z.string().min(1).max(120),
   difficulty: z.enum(["pemula", "menengah", "lanjutan"]),
   shortContext: z.string().min(1).max(1000),
+  spiceLevel: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
+  custom: z.boolean().optional(),
 });
 
 export const debateMessageSchema = z.object({

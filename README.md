@@ -97,6 +97,15 @@ UI Sprint 1 menambahkan:
 - sticky setup arena panel;
 - progress resume card.
 
+UI Sprint 2 menambahkan:
+
+- topic search dan filter chips;
+- spice meter;
+- custom topic form;
+- local refiner comparison;
+- validation state untuk topik sensitif;
+- screenshot QA topic flow.
+
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, dan `docs/progress/UI_SPRINT_1_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, dan `docs/progress/UI_SPRINT_2_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

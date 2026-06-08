@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-06-09 — UI Sprint 2 Topic Flow
+
+- Added topic explorer with search, category chips, difficulty filter, and spice filter.
+- Added spice level metadata to built-in topics.
+- Added custom topic form with thesis, category, spice level, side selection, and optional context.
+- Added local refiner comparison for custom topics without API calls.
+- Added conservative sensitive topic validation copy.
+- Added selected custom topic state and custom topic session coverage test.
+- Added topic flow visual QA screenshots:
+  - `docs/visual-qa/topic-flow-desktop.png`;
+  - `docs/visual-qa/topic-flow-mobile.png`.
+- Added `docs/progress/UI_SPRINT_2_REPORT.md`.
+
 ## 2026-06-09 — UI Sprint 1 App Shell and Lobby
 
 - Added desktop sidebar and mobile bottom navigation.

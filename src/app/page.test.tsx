@@ -103,4 +103,30 @@ describe("Home setup flow", () => {
     expect(pushMock.mock.calls[0][0]).toContain("/debate/device-check");
     expect(pushMock.mock.calls[0][0]).toContain("input=VOICE");
   });
+
+  it("uses a custom topic for the created debate session", async () => {
+    render(<Home />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Buat Topik Privat/i }));
+    fireEvent.change(await screen.findByLabelText(/Tesis utama/i), {
+      target: {
+        value:
+          "Klub sepak bola lokal sebaiknya membatasi transfer mahal dan fokus ke akademi muda",
+      },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Gunakan Langsung/i }));
+    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
+      target: { value: "sk-or-dummy-free-router-key-123456" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
+    );
+
+    const sessions = JSON.parse(
+      window.localStorage.getItem(SESSIONS_STORAGE_KEY) ?? "[]",
+    ) as Array<{ topic: { custom?: boolean; title: string } }>;
+
+    expect(sessions[0].topic.custom).toBe(true);
+    expect(sessions[0].topic.title).toMatch(/akademi muda/i);
+  });
 });

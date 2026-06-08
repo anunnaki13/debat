@@ -1,4 +1,5 @@
-import { CheckCircle2, Flame } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { SpiceMeter } from "@/components/topics/SpiceMeter";
 import { Badge } from "@/components/ui";
 import type { DebateTopic } from "@/types/debate";
 
@@ -48,23 +49,7 @@ export function TopicCard({
         <Badge tone={difficultyTone[topic.difficulty]}>
           {topic.difficulty}
         </Badge>
-        <span
-          className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--ra-text-muted)]"
-          aria-label="Spice level dua dari empat"
-        >
-          {[0, 1, 2, 3].map((index) => (
-            <Flame
-              key={index}
-              size={13}
-              aria-hidden="true"
-              className={
-                index < 2
-                  ? "text-[var(--ra-amber)]"
-                  : "text-[var(--ra-text-disabled)]"
-              }
-            />
-          ))}
-        </span>
+        <SpiceMeter level={topic.spiceLevel ?? 2} compact />
       </div>
     </button>
   );

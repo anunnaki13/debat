@@ -149,7 +149,33 @@ Catatan:
 - Dedicated `/topics`, `/topics/new`, dan `/topics/refine` belum dibuat sebagai route terpisah.
 - Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
 
-## Milestone 7 - Stabilization
+## Milestone 7 - UI Sprint 3 Device Check
+
+Status: implemented.
+
+Hasil utama:
+
+- `/debate/device-check` mengikuti direction Device Check dari UI/UX Style Blueprint.
+- Permission explanation tampil sebelum user memanggil browser permission dialog.
+- Camera preview tile tidak menyalakan kamera sebelum consent.
+- Video ref selalu tersedia agar stream kamera dapat terpasang setelah permission granted.
+- Selector mikrofon dan kamera memakai `navigator.mediaDevices.enumerateDevices()`.
+- Mic meter memakai visual bar token-based dan `role="meter"`.
+- Status mic, kamera, dan speaker memakai ikon dan copy fallback.
+- Speaker test memakai cue browser TTS singkat dengan timeout otomatis.
+- Fallback `Lanjut Tanpa Kamera` dan `Gunakan Teks` tetap langsung menuju arena.
+- Visual QA screenshots:
+  - `docs/visual-qa/device-check-desktop.png`
+  - `docs/visual-qa/device-check-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_3_REPORT.md`.
+
+Catatan:
+
+- Selector speaker belum mengubah output device karena `speechSynthesis` tidak menyediakan sink selection portabel.
+- Permission denied matrix perangkat fisik masih masuk fase stabilisasi.
+- Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
+
+## Milestone 8 - Stabilization
 
 Status: planned.
 
@@ -161,7 +187,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 8 - Product Refinement
+## Milestone 9 - Product Refinement
 
 Status: planned.
 

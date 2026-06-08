@@ -106,6 +106,16 @@ UI Sprint 2 menambahkan:
 - validation state untuk topik sensitif;
 - screenshot QA topic flow.
 
+UI Sprint 3 menambahkan:
+
+- device check dengan permission explanation yang lebih jelas;
+- camera preview tile yang tidak aktif sebelum consent;
+- selector mikrofon dan kamera;
+- status mic/kamera/speaker berbasis ikon dan copy fallback;
+- speaker test cue singkat;
+- fallback button untuk voice-only dan text-only;
+- screenshot QA device check.
+
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, dan `docs/progress/UI_SPRINT_2_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, `docs/progress/UI_SPRINT_2_REPORT.md`, dan `docs/progress/UI_SPRINT_3_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

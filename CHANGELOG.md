@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-06-09 — UI Sprint 3 Device Check
+
+- Redesigned `/debate/device-check` around the UI/UX Style Blueprint device-check rules.
+- Added permission explanation before media activation.
+- Added microphone and camera selectors backed by `enumerateDevices()`.
+- Reworked camera preview so the video ref exists before permission is granted while preview remains inactive before consent.
+- Added token-based mic meter, status cards, speaker cue test, and clearer fallback actions.
+- Preserved voice-only and text-only escape paths.
+- Added device check visual QA screenshots:
+  - `docs/visual-qa/device-check-desktop.png`;
+  - `docs/visual-qa/device-check-mobile.png`.
+- Added `docs/progress/UI_SPRINT_3_REPORT.md`.
+
 ## 2026-06-09 — UI Sprint 2 Topic Flow
 
 - Added topic explorer with search, category chips, difficulty filter, and spice filter.

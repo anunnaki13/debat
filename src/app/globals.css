@@ -1,21 +1,37 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/themes.css";
+@import "../styles/motion.css";
 
 :root {
-  --background: #071019;
-  --foreground: #eef7f8;
+  --background: var(--ra-bg-deep);
+  --foreground: var(--ra-text-primary);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--ra-font-ui);
+  --font-serif: var(--ra-font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--ra-bg-deep);
 }
 
 body {
-  background: var(--background);
+  min-width: 320px;
+  background: var(--ra-gradient-hero);
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--ra-font-ui);
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -23,11 +39,24 @@ a,
 textarea,
 select,
 input {
-  outline-color: #22d3ee;
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ra-focus-ring);
+  outline-offset: 3px;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(50, 212, 209, 0.35);
+  color: var(--ra-text-primary);
 }
 
 @keyframes loading-bounce {

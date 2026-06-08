@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-06-09 — UI/UX Style Blueprint Foundation
+
+- Added `REPUBLIK_ARGUMEN_UI_UX_STYLE_BLUEPRINT.md` as the source of truth for visual implementation.
+- Added centralized design tokens:
+  - `src/styles/tokens.css`;
+  - `src/styles/motion.css`;
+  - `src/styles/themes.css`;
+  - `src/lib/design-tokens.ts`.
+- Swapped global app typography to the blueprint direction: `Plus Jakarta Sans` for UI and `Fraunces` for editorial headings.
+- Added core UI primitives under `src/components/ui/`.
+- Added development-only `/dev/ui-playground` with button, chip, badge, card, form, overlay, toast, skeleton, error, voice halo, waveform, and momentum states.
+- Added `docs/progress/UI_SPRINT_0_REPORT.md`.
+
 ## 2026-06-09 — Voice Arena Blueprint Integration
 
 - Added `REPUBLIK_ARGUMEN_MVP_VOICE_ARENA_BLUEPRINT.md` as the active source of truth.

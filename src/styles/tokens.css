@@ -1,0 +1,134 @@
+:root {
+  /* Backgrounds */
+  --ra-bg-deep: #070B13;
+  --ra-bg-base: #0A111D;
+  --ra-bg-surface: #0E1827;
+  --ra-bg-panel: #132033;
+  --ra-bg-panel-strong: #17283D;
+  --ra-bg-elevated: #1B2D45;
+  --ra-bg-glass: rgba(10, 17, 29, 0.68);
+  --ra-bg-overlay: rgba(3, 8, 15, 0.82);
+
+  /* Text */
+  --ra-text-primary: #F6F2E9;
+  --ra-text-secondary: #B5C0D0;
+  --ra-text-muted: #7F8EA4;
+  --ra-text-disabled: #58677B;
+  --ra-text-inverse: #07101C;
+
+  /* Brand accents */
+  --ra-cyan: #32D4D1;
+  --ra-cyan-bright: #5BE7E1;
+  --ra-cyan-soft: rgba(50, 212, 209, 0.14);
+  --ra-blue: #4E9CFF;
+  --ra-blue-soft: rgba(78, 156, 255, 0.14);
+
+  /* Prestige */
+  --ra-gold: #D8AA5C;
+  --ra-gold-bright: #F0C97D;
+  --ra-gold-soft: rgba(216, 170, 92, 0.15);
+
+  /* AI opponent and danger */
+  --ra-coral: #EE6A64;
+  --ra-coral-bright: #FF8179;
+  --ra-coral-soft: rgba(238, 106, 100, 0.14);
+
+  /* Success and agreement */
+  --ra-emerald: #62D49C;
+  --ra-emerald-soft: rgba(98, 212, 156, 0.14);
+
+  /* Special modes */
+  --ra-violet: #9C7CFF;
+  --ra-violet-soft: rgba(156, 124, 255, 0.15);
+  --ra-amber: #E6A247;
+  --ra-amber-soft: rgba(230, 162, 71, 0.15);
+
+  /* Borders */
+  --ra-border-subtle: rgba(255, 255, 255, 0.08);
+  --ra-border-default: rgba(255, 255, 255, 0.13);
+  --ra-border-strong: rgba(255, 255, 255, 0.20);
+
+  /* Focus */
+  --ra-focus-ring: #8CE9E3;
+  --ra-focus-offset: #07101C;
+
+  /* Semantic colors */
+  --ra-user: var(--ra-cyan);
+  --ra-user-soft: var(--ra-cyan-soft);
+  --ra-ai: var(--ra-coral);
+  --ra-ai-soft: var(--ra-coral-soft);
+  --ra-action: var(--ra-cyan);
+  --ra-action-hover: var(--ra-cyan-bright);
+  --ra-prestige: var(--ra-gold);
+  --ra-positive: var(--ra-emerald);
+  --ra-warning: var(--ra-amber);
+  --ra-negative: var(--ra-coral);
+  --ra-special: var(--ra-violet);
+
+  /* Gradients */
+  --ra-gradient-hero:
+    radial-gradient(circle at 72% 18%, rgba(50, 212, 209, 0.16), transparent 30%),
+    radial-gradient(circle at 92% 62%, rgba(156, 124, 255, 0.11), transparent 34%),
+    linear-gradient(135deg, #0B1422 0%, #08111E 56%, #0A1019 100%);
+  --ra-gradient-user:
+    linear-gradient(135deg, rgba(50, 212, 209, 0.26), rgba(78, 156, 255, 0.10));
+  --ra-gradient-ai:
+    linear-gradient(135deg, rgba(238, 106, 100, 0.24), rgba(156, 124, 255, 0.08));
+  --ra-gradient-gold:
+    linear-gradient(135deg, #F1D08A 0%, #D8AA5C 52%, #A97A32 100%);
+  --ra-gradient-hot-seat:
+    linear-gradient(145deg, rgba(230, 162, 71, 0.22), rgba(238, 106, 100, 0.11));
+  --ra-gradient-result:
+    radial-gradient(circle at 50% 18%, rgba(216, 170, 92, 0.20), transparent 34%),
+    linear-gradient(180deg, #111B2B 0%, #09111C 100%);
+
+  /* Shadows and glow */
+  --ra-shadow-card: 0 16px 44px rgba(0, 0, 0, 0.26);
+  --ra-shadow-elevated: 0 24px 64px rgba(0, 0, 0, 0.34);
+  --ra-shadow-overlay: 0 28px 80px rgba(0, 0, 0, 0.42);
+  --ra-glow-user: 0 0 0 1px rgba(50, 212, 209, 0.28), 0 0 28px rgba(50, 212, 209, 0.16);
+  --ra-glow-ai: 0 0 0 1px rgba(238, 106, 100, 0.26), 0 0 28px rgba(238, 106, 100, 0.14);
+  --ra-glow-gold: 0 0 0 1px rgba(216, 170, 92, 0.30), 0 0 32px rgba(216, 170, 92, 0.16);
+
+  /* Radius */
+  --ra-radius-xs: 6px;
+  --ra-radius-sm: 10px;
+  --ra-radius-md: 14px;
+  --ra-radius-lg: 18px;
+  --ra-radius-xl: 24px;
+  --ra-radius-pill: 999px;
+
+  /* Spacing */
+  --ra-space-1: 4px;
+  --ra-space-2: 8px;
+  --ra-space-3: 12px;
+  --ra-space-4: 16px;
+  --ra-space-5: 20px;
+  --ra-space-6: 24px;
+  --ra-space-8: 32px;
+  --ra-space-10: 40px;
+  --ra-space-12: 48px;
+  --ra-space-16: 64px;
+  --ra-space-20: 80px;
+
+  /* Z-index */
+  --ra-z-base: 0;
+  --ra-z-card: 10;
+  --ra-z-sticky: 30;
+  --ra-z-dropdown: 50;
+  --ra-z-modal: 80;
+  --ra-z-toast: 100;
+  --ra-z-critical: 120;
+
+  /* Typography */
+  --ra-font-display: var(--font-fraunces), "DM Serif Display", Georgia, serif;
+  --ra-font-ui: var(--font-plus-jakarta), Inter, system-ui, sans-serif;
+  --ra-text-xs: 12px;
+  --ra-text-sm: 14px;
+  --ra-text-md: 16px;
+  --ra-text-lg: 18px;
+  --ra-text-xl: 22px;
+  --ra-text-2xl: 28px;
+  --ra-text-3xl: 36px;
+  --ra-text-4xl: 48px;
+}

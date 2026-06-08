@@ -9,11 +9,13 @@ Status: updated.
 Artefak:
 
 - `REPUBLIK_ARGUMEN_MVP_VOICE_ARENA_BLUEPRINT.md`
+- `REPUBLIK_ARGUMEN_UI_UX_STYLE_BLUEPRINT.md`
 - `docs/archive/REPUBLIK_ARGUMEN_MVP_AI_DEBATE_BLUEPRINT.md`
 
 Tujuan:
 
 - Menjadikan Voice Arena sebagai source of truth fase aktif.
+- Menjadikan UI/UX Style Blueprint sebagai source of truth khusus visual implementation.
 - Menetapkan text-only sebagai fallback wajib.
 - Menetapkan device check, camera preview lokal, STT/TTS server-side, Delivery Signals, dan fallback ladder.
 
@@ -85,7 +87,26 @@ Trigger:
 
 - User mengunggah tambahan blueprint detail setelah Voice Arena source of truth.
 
-## Milestone 4 - Stabilization
+## Milestone 4 - UI Sprint 0 Design Foundation
+
+Status: implemented.
+
+Hasil utama:
+
+- Design tokens terpusat di `src/styles/tokens.css`.
+- Motion dan reduced-motion base di `src/styles/motion.css`.
+- Mode theme variables di `src/styles/themes.css`.
+- Typed token exports di `src/lib/design-tokens.ts`.
+- Core UI primitives di `src/components/ui/`.
+- Development-only UI playground di `/dev/ui-playground`.
+- Progress report di `docs/progress/UI_SPRINT_0_REPORT.md`.
+
+Catatan:
+
+- Sprint ini tidak mengubah seluruh layar produk lama sekaligus.
+- Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
+
+## Milestone 5 - Stabilization
 
 Status: planned.
 
@@ -97,7 +118,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 5 - Product Refinement
+## Milestone 6 - Product Refinement
 
 Status: planned.
 

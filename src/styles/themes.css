@@ -1,0 +1,29 @@
+[data-ra-theme="default"] {
+  --ra-theme-accent: var(--ra-cyan);
+  --ra-theme-accent-soft: var(--ra-cyan-soft);
+  --ra-theme-glow: var(--ra-glow-user);
+}
+
+[data-ra-theme="hot-seat"] {
+  --ra-theme-accent: var(--ra-amber);
+  --ra-theme-accent-soft: var(--ra-amber-soft);
+  --ra-theme-glow: 0 0 0 1px rgba(230, 162, 71, 0.28), 0 0 28px rgba(238, 106, 100, 0.13);
+}
+
+[data-ra-theme="tribune"] {
+  --ra-theme-accent: var(--ra-emerald);
+  --ra-theme-accent-soft: var(--ra-emerald-soft);
+  --ra-theme-glow: 0 0 0 1px rgba(98, 212, 156, 0.28), 0 0 28px rgba(50, 212, 209, 0.12);
+}
+
+[data-ra-theme="warkop"] {
+  --ra-theme-accent: var(--ra-gold);
+  --ra-theme-accent-soft: var(--ra-gold-soft);
+  --ra-theme-glow: var(--ra-glow-gold);
+}
+
+[data-ra-theme="public-council"] {
+  --ra-theme-accent: var(--ra-gold);
+  --ra-theme-accent-soft: var(--ra-gold-soft);
+  --ra-theme-glow: var(--ra-glow-gold);
+}

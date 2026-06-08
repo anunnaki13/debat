@@ -1,6 +1,6 @@
 # Republik Argumen
 
-Personal MVP untuk debat tiga ronde melawan AI Opponent, lalu dinilai oleh AI Judge. Blueprint aktif sekarang adalah Voice Arena: text-only tetap wajib jalan, sementara voice dan voice+camera masuk melalui device check dan fallback aman.
+Personal MVP untuk debat tiga ronde melawan AI Opponent, lalu dinilai oleh AI Judge. Blueprint aktif sekarang adalah Voice Arena untuk gameplay/voice/backend dan UI/UX Style Blueprint untuk visual implementation.
 
 ## Local Setup
 
@@ -72,8 +72,22 @@ OpenRouter key yang diisi lewat UI tetap berada di browser lokal, dikirim hanya 
 
 ## Active Blueprint
 
-`REPUBLIK_ARGUMEN_MVP_VOICE_ARENA_BLUEPRINT.md` adalah source of truth aktif. Blueprint lama diarsipkan di `docs/archive/`.
+- `REPUBLIK_ARGUMEN_MVP_VOICE_ARENA_BLUEPRINT.md`: source of truth gameplay, keamanan, voice flow, dan backend.
+- `REPUBLIK_ARGUMEN_UI_UX_STYLE_BLUEPRINT.md`: source of truth visual, UX, responsive behavior, motion, accessibility, dan UI QA.
+
+Blueprint lama diarsipkan di `docs/archive/`.
+
+## UI Development
+
+Fondasi desain mengikuti UI Sprint 0 dari style blueprint:
+
+- design tokens terpusat di `src/styles/tokens.css`;
+- motion/reduced-motion base di `src/styles/motion.css`;
+- mode theme variables di `src/styles/themes.css`;
+- typed token exports di `src/lib/design-tokens.ts`;
+- core UI primitives di `src/components/ui/`;
+- development-only playground di `/dev/ui-playground`.
 
 ## Milestones
 
-Lihat `MILESTONES.md` dan `docs/progress/SPRINT_0_6_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, dan `docs/progress/UI_SPRINT_0_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

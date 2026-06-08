@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-06-09 — UI Sprint 1 App Shell and Lobby
+
+- Added desktop sidebar and mobile bottom navigation.
+- Added shared `AppShell` through `PageShell`.
+- Redesigned the lobby around the Modern Civic Arena direction:
+  - top utility bar;
+  - lobby hero;
+  - mode carousel/cards;
+  - sticky setup arena panel;
+  - progress resume card.
+- Refreshed topic cards, side selector, and input mode selector with design tokens.
+- Added lobby visual QA screenshots:
+  - `docs/visual-qa/lobby-desktop.png`;
+  - `docs/visual-qa/lobby-mobile.png`.
+- Added `docs/progress/UI_SPRINT_1_REPORT.md`.
+
 ## 2026-06-09 — UI/UX Style Blueprint Foundation
 
 - Added `REPUBLIK_ARGUMEN_UI_UX_STYLE_BLUEPRINT.md` as the source of truth for visual implementation.

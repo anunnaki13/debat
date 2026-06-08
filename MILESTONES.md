@@ -106,7 +106,28 @@ Catatan:
 - Sprint ini tidak mengubah seluruh layar produk lama sekaligus.
 - Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
 
-## Milestone 5 - Stabilization
+## Milestone 5 - UI Sprint 1 App Shell and Lobby
+
+Status: implemented.
+
+Hasil utama:
+
+- Desktop sidebar di `src/components/layout/DesktopSidebar.tsx`.
+- Mobile bottom nav di `src/components/layout/MobileBottomNav.tsx`.
+- Shared AppShell melalui `PageShell`.
+- Lobby hero, mode carousel/card, progress resume card, dan utility bar.
+- Topic card, side selector, dan input mode selector mulai mengikuti design tokens.
+- Visual QA screenshots:
+  - `docs/visual-qa/lobby-desktop.png`
+  - `docs/visual-qa/lobby-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_1_REPORT.md`.
+
+Catatan:
+
+- Dedicated `/topics`, `/settings`, dan full arena visual migration belum dibangun.
+- Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
+
+## Milestone 6 - Stabilization
 
 Status: planned.
 
@@ -118,7 +139,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 6 - Product Refinement
+## Milestone 7 - Product Refinement
 
 Status: planned.
 

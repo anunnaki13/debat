@@ -88,6 +88,15 @@ Fondasi desain mengikuti UI Sprint 0 dari style blueprint:
 - core UI primitives di `src/components/ui/`;
 - development-only playground di `/dev/ui-playground`.
 
+UI Sprint 1 menambahkan:
+
+- desktop sidebar dan mobile bottom nav;
+- lobby hero;
+- mode carousel/card;
+- refreshed topic cards;
+- sticky setup arena panel;
+- progress resume card.
+
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, dan `docs/progress/UI_SPRINT_0_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, dan `docs/progress/UI_SPRINT_1_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

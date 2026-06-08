@@ -1,4 +1,5 @@
 import { Shuffle } from "lucide-react";
+import { cn } from "@/lib/cn";
 import type { SideSelection } from "@/types/debate";
 
 const options: Array<{ value: SideSelection; label: string }> = [
@@ -21,11 +22,13 @@ export function SideSelector({
           key={option.value}
           type="button"
           onClick={() => onChange(option.value)}
-          className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-md border px-4 py-3 text-sm font-semibold transition ${
+          aria-pressed={value === option.value}
+          className={cn(
+            "inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border px-4 py-3 text-sm font-semibold transition duration-150",
             value === option.value
-              ? "border-cyan-300/70 bg-cyan-300/15 text-cyan-100"
-              : "border-white/10 bg-slate-900/75 text-slate-200 hover:border-cyan-300/40 hover:bg-slate-900"
-          }`}
+              ? "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-user)]"
+              : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-secondary)] hover:border-[var(--ra-border-strong)] hover:bg-[var(--ra-bg-panel-strong)] hover:text-[var(--ra-text-primary)]",
+          )}
         >
           {option.value === "RANDOM" ? <Shuffle size={16} aria-hidden="true" /> : null}
           {option.label}

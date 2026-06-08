@@ -15,6 +15,7 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: pushMock,
   }),
+  usePathname: () => "/",
 }));
 
 describe("Home setup flow", () => {

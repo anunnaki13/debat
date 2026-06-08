@@ -1,4 +1,5 @@
 import { Camera, Keyboard, Mic, type LucideIcon } from "lucide-react";
+import { cn } from "@/lib/cn";
 import type { DebateInputMode } from "@/types/debate";
 
 const inputModes: Array<{
@@ -45,16 +46,18 @@ export function InputModeSelector({
             key={mode.value}
             type="button"
             onClick={() => onChange(mode.value)}
-            className={`flex min-h-28 flex-col items-start justify-between rounded-md border p-3 text-left transition ${
+            aria-pressed={selected}
+            className={cn(
+              "flex min-h-28 flex-col items-start justify-between rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150",
               selected
-                ? "border-cyan-300/70 bg-cyan-300/15 text-cyan-100"
-                : "border-white/10 bg-slate-900/75 text-slate-200 hover:border-cyan-300/40 hover:bg-slate-900"
-            }`}
+                ? "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-user)]"
+                : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-secondary)] hover:border-[var(--ra-border-strong)] hover:bg-[var(--ra-bg-panel-strong)] hover:text-[var(--ra-text-primary)]",
+            )}
           >
             <Icon size={18} aria-hidden="true" />
             <span>
               <span className="block text-sm font-semibold">{mode.label}</span>
-              <span className="mt-1 block text-xs leading-5 text-slate-400">
+              <span className="mt-1 block text-xs leading-5 text-[var(--ra-text-muted)]">
                 {mode.description}
               </span>
             </span>

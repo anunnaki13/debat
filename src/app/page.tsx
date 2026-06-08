@@ -1,14 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowRight, History, KeyRound } from "lucide-react";
+import { ArrowRight, KeyRound } from "lucide-react";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { PageShell } from "@/components/layout/PageShell";
+import { LobbyHero } from "@/components/lobby/LobbyHero";
+import { ModeCarousel } from "@/components/lobby/ModeCarousel";
+import { ProgressResumeCard } from "@/components/lobby/ProgressResumeCard";
+import { UserUtilityBar } from "@/components/lobby/UserUtilityBar";
 import { InputModeSelector } from "@/components/topics/InputModeSelector";
-import { ModeSelector } from "@/components/topics/ModeSelector";
 import { SideSelector } from "@/components/topics/SideSelector";
 import { TopicSelector } from "@/components/topics/TopicSelector";
+import { Badge, Button, Card, CardDescription, CardTitle } from "@/components/ui";
 import { debateTopics } from "@/data/topics";
 import { createDebateSession } from "@/lib/debate/session";
 import {
@@ -17,6 +20,7 @@ import {
 } from "@/lib/openrouter/defaults";
 import {
   getPreferences,
+  getLocalSessions,
   savePreferences,
   upsertLocalSession,
 } from "@/lib/storage/localSessions";
@@ -41,16 +45,25 @@ export default function Home() {
   const [openRouterJudgeModel, setOpenRouterJudgeModel] =
     useState(DEFAULT_OPENROUTER_MODEL);
   const [setupError, setSetupError] = useState("");
+  const [completedCount, setCompletedCount] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
 
   useEffect(() => {
     queueMicrotask(() => {
       const preferences = getPreferences();
+      const sessions = getLocalSessions();
       setOpenRouterApiKey(preferences.openRouterApiKey);
       setOpenRouterOpponentModel(
         preferences.openRouterOpponentModel || DEFAULT_OPENROUTER_MODEL,
       );
       setOpenRouterJudgeModel(
         preferences.openRouterJudgeModel || DEFAULT_OPENROUTER_MODEL,
+      );
+      setCompletedCount(
+        sessions.filter((session) => session.status === "COMPLETED").length,
+      );
+      setActiveCount(
+        sessions.filter((session) => session.status !== "COMPLETED").length,
       );
     });
   }, []);
@@ -97,153 +110,160 @@ export default function Home() {
   }
 
   return (
-    <PageShell>
-      <section className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+    <PageShell className="space-y-6">
+      <UserUtilityBar />
+      <LobbyHero onPrimaryAction={focusSetup} />
+
+      <section aria-labelledby="mode-title" className="space-y-4">
         <div>
-          <p className="text-sm font-semibold uppercase text-amber-100">
-            Personal MVP
-          </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight text-white sm:text-6xl">
-            Republik Argumen
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-200">
-            Naik pangkat bukan karena paling berisik, tetapi karena paling bernas.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={focusSetup}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-cyan-300 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
-            >
-              Isi OpenRouter Key
-              <ArrowDown size={18} aria-hidden="true" />
-            </button>
-            <Link
-              href="/history"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/10 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/40 hover:bg-cyan-300/10"
-            >
-              <History size={17} aria-hidden="true" />
-              Riwayat Debat Lokal
-            </Link>
+          <Badge tone="user">Pilih Mode Permainan</Badge>
+          <h2
+            id="mode-title"
+            className="mt-3 font-serif text-2xl font-bold text-[var(--ra-text-primary)]"
+          >
+            Format arena hari ini
+          </h2>
+        </div>
+        <ModeCarousel value={debateMode} onChange={setDebateMode} />
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
+        <div id="pilih-topik" className="scroll-mt-6 space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <Badge tone="prestige">Tantangan Pilihan</Badge>
+              <h2 className="mt-3 font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
+                Topik untuk diuji
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--ra-text-secondary)]">
+                Pilih satu gagasan. Lawan AI akan mengambil posisi berseberangan.
+              </p>
+            </div>
+            <span className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-default)] px-3 py-1 text-xs font-semibold text-[var(--ra-text-muted)]">
+              {debateTopics.length} topik
+            </span>
           </div>
-          <p className="mt-4 text-sm text-slate-400">
-            Personal MVP - data tersimpan di browser ini.
-          </p>
+          <TopicSelector
+            topics={debateTopics}
+            selectedTopic={selectedTopic}
+            onSelect={setSelectedTopic}
+          />
         </div>
 
-        <div
+        <Card
           id="setup-debat"
-          className="scroll-mt-6 rounded-lg border border-white/10 bg-slate-950/75 p-5"
+          variant="elevated"
+          className="scroll-mt-6 xl:sticky xl:top-7"
         >
-          <h2 className="text-lg font-semibold text-white">Setup Debat</h2>
-          <div className="mt-5">
-            <p className="mb-3 text-sm font-medium text-slate-300">Mode</p>
-            <ModeSelector value={debateMode} onChange={setDebateMode} />
-          </div>
-          <div className="mt-5">
-            <p className="mb-3 text-sm font-medium text-slate-300">Posisi</p>
-            <SideSelector value={sideSelection} onChange={setSideSelection} />
-          </div>
-          <div className="mt-6">
-            <p className="mb-3 text-sm font-medium text-slate-300">
-              Input Arena
-            </p>
-            <InputModeSelector value={inputMode} onChange={setInputMode} />
-          </div>
-          <div className="mt-6">
-            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-slate-300">
-              <KeyRound size={16} aria-hidden="true" />
-              OpenRouter API Key
+          <Badge tone="user">Setup Arena</Badge>
+          <CardTitle className="mt-4">Masuk ke debat</CardTitle>
+          <CardDescription className="mt-2">
+            Simpan key OpenRouter, pilih posisi, lalu mulai ronde pertama.
+          </CardDescription>
+
+          <div className="mt-6 space-y-5">
+            <div>
+              <p className="mb-3 text-sm font-semibold text-[var(--ra-text-secondary)]">
+                Posisi
+              </p>
+              <SideSelector value={sideSelection} onChange={setSideSelection} />
             </div>
-            <input
-              aria-label="OpenRouter API Key"
-              type="password"
-              value={openRouterApiKey}
-              onChange={(event) => {
-                setOpenRouterApiKey(event.target.value);
-                setSetupError("");
-              }}
-              autoComplete="off"
-              spellCheck={false}
-              placeholder="sk-or-..."
-              className="min-h-12 w-full rounded-md border border-white/10 bg-slate-900/85 px-4 py-3 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-300/60"
-            />
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm text-slate-300">
-                <span>Model lawan</span>
-                <select
-                  value={openRouterOpponentModel}
-                  onChange={(event) =>
-                    setOpenRouterOpponentModel(event.target.value)
-                  }
-                  className="mt-2 min-h-11 w-full rounded-md border border-white/10 bg-slate-900/85 px-3 py-2 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-300/60"
-                >
-                  {CHEAP_OPENROUTER_MODELS.map((model) => (
-                    <option key={model.id} value={model.id}>
-                      {model.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="block text-sm text-slate-300">
-                <span>Model wasit</span>
-                <select
-                  value={openRouterJudgeModel}
-                  onChange={(event) =>
-                    setOpenRouterJudgeModel(event.target.value)
-                  }
-                  className="mt-2 min-h-11 w-full rounded-md border border-white/10 bg-slate-900/85 px-3 py-2 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-300/60"
-                >
-                  {CHEAP_OPENROUTER_MODELS.map((model) => (
-                    <option key={model.id} value={model.id}>
-                      {model.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+
+            <div>
+              <p className="mb-3 text-sm font-semibold text-[var(--ra-text-secondary)]">
+                Input Arena
+              </p>
+              <InputModeSelector value={inputMode} onChange={setInputMode} />
             </div>
-            <p className="mt-2 text-xs leading-5 text-slate-400">
-              Default gratis: {DEFAULT_OPENROUTER_MODEL}. Jika kena limit,
-              coba model murah berbayar di dropdown. Key tersimpan lokal di
-              browser ini dan tidak ikut diekspor.
-            </p>
-            <div className="mt-3">
-              <ErrorBanner message={setupError} />
+
+            <div>
+              <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[var(--ra-text-secondary)]">
+                <KeyRound size={16} aria-hidden="true" />
+                OpenRouter API Key
+              </div>
+              <input
+                aria-label="OpenRouter API Key"
+                type="password"
+                value={openRouterApiKey}
+                onChange={(event) => {
+                  setOpenRouterApiKey(event.target.value);
+                  setSetupError("");
+                }}
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="sk-or-..."
+                className="min-h-12 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-4 py-3 text-sm text-[var(--ra-text-primary)] placeholder:text-[var(--ra-text-muted)] transition focus-visible:border-[var(--ra-cyan)]"
+              />
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                <label className="block text-sm font-semibold text-[var(--ra-text-secondary)]">
+                  <span>Model lawan</span>
+                  <select
+                    value={openRouterOpponentModel}
+                    onChange={(event) =>
+                      setOpenRouterOpponentModel(event.target.value)
+                    }
+                    className="mt-2 min-h-11 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-primary)] transition focus-visible:border-[var(--ra-cyan)]"
+                  >
+                    {CHEAP_OPENROUTER_MODELS.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="block text-sm font-semibold text-[var(--ra-text-secondary)]">
+                  <span>Model wasit</span>
+                  <select
+                    value={openRouterJudgeModel}
+                    onChange={(event) =>
+                      setOpenRouterJudgeModel(event.target.value)
+                    }
+                    className="mt-2 min-h-11 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-primary)] transition focus-visible:border-[var(--ra-cyan)]"
+                  >
+                    {CHEAP_OPENROUTER_MODELS.map((model) => (
+                      <option key={model.id} value={model.id}>
+                        {model.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <p className="mt-2 text-xs leading-5 text-[var(--ra-text-muted)]">
+                Default gratis: {DEFAULT_OPENROUTER_MODEL}. Key tersimpan lokal
+                di browser ini dan tidak ikut diekspor.
+              </p>
+              <div className="mt-3">
+                <ErrorBanner message={setupError} />
+              </div>
+              <Button
+                size="lg"
+                onClick={startDebate}
+                className="mt-4 w-full"
+                trailingIcon={<ArrowRight size={18} aria-hidden="true" />}
+              >
+                Simpan & Mulai Debat
+              </Button>
             </div>
-            <button
-              type="button"
-              onClick={startDebate}
-              className="mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-cyan-300 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
-            >
-              Simpan & Mulai Debat
-              <ArrowRight size={18} aria-hidden="true" />
-            </button>
+
+            <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] p-4">
+              <p className="text-sm font-semibold text-[var(--ra-cyan-bright)]">
+                Topik Terpilih
+              </p>
+              <p className="mt-2 text-base font-bold leading-6 text-[var(--ra-text-primary)]">
+                {selectedTopic.title}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
+                {selectedTopic.shortContext}
+              </p>
+            </div>
           </div>
-          <div className="mt-6 rounded-md border border-cyan-300/20 bg-cyan-300/10 p-4">
-            <p className="text-sm font-semibold text-cyan-100">Topik Terpilih</p>
-            <p className="mt-2 text-base font-semibold leading-6 text-white">
-              {selectedTopic.title}
-            </p>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              {selectedTopic.shortContext}
-            </p>
-          </div>
-        </div>
+        </Card>
       </section>
 
-      <section className="mt-10">
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 className="text-xl font-bold text-white">Pilih Topik</h2>
-          <span className="rounded-md border border-white/10 px-3 py-1 text-xs uppercase text-slate-400">
-            {debateTopics.length} topik
-          </span>
-        </div>
-        <TopicSelector
-          topics={debateTopics}
-          selectedTopic={selectedTopic}
-          onSelect={setSelectedTopic}
-        />
-      </section>
+      <ProgressResumeCard
+        completedCount={completedCount}
+        activeCount={activeCount}
+      />
     </PageShell>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, KeyRound } from "lucide-react";
+import { ArrowRight, CheckCircle2, KeyRound, RadioTower } from "lucide-react";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { PageShell } from "@/components/layout/PageShell";
 import { ArenaProgressShowcase } from "@/components/lobby/ArenaProgressShowcase";
@@ -34,6 +34,16 @@ import type {
 } from "@/types/debate";
 import { useEffect, useState } from "react";
 
+type OpenRouterCheckState = "idle" | "checking" | "ready" | "error";
+
+interface OpenRouterCheckResponse {
+  message?: string;
+  checkedModels?: string[];
+  error?: {
+    message?: string;
+  };
+}
+
 export default function Home() {
   const router = useRouter();
   const [selectedTopic, setSelectedTopic] = useState<DebateTopic>(debateTopics[0]);
@@ -47,6 +57,9 @@ export default function Home() {
   const [openRouterJudgeModel, setOpenRouterJudgeModel] =
     useState(DEFAULT_OPENROUTER_MODEL);
   const [setupError, setSetupError] = useState("");
+  const [openRouterCheckState, setOpenRouterCheckState] =
+    useState<OpenRouterCheckState>("idle");
+  const [openRouterCheckMessage, setOpenRouterCheckMessage] = useState("");
   const [completedCount, setCompletedCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
 
@@ -70,17 +83,24 @@ export default function Home() {
     });
   }, []);
 
-  function startDebate() {
+  function readOpenRouterSetup() {
     const trimmedKey = openRouterApiKey.trim();
     const opponentModel =
       openRouterOpponentModel.trim() || DEFAULT_OPENROUTER_MODEL;
     const judgeModel = openRouterJudgeModel.trim() || DEFAULT_OPENROUTER_MODEL;
 
-    if (!trimmedKey) {
-      setSetupError("Isi OpenRouter API key dulu sebelum mulai debat.");
-      return;
-    }
+    return { trimmedKey, opponentModel, judgeModel };
+  }
 
+  function persistOpenRouterPreferences({
+    trimmedKey,
+    opponentModel,
+    judgeModel,
+  }: {
+    trimmedKey: string;
+    opponentModel: string;
+    judgeModel: string;
+  }) {
     savePreferences({
       ...getPreferences(),
       aiProvider: "openrouter",
@@ -88,6 +108,71 @@ export default function Home() {
       openRouterOpponentModel: opponentModel,
       openRouterJudgeModel: judgeModel,
     });
+  }
+
+  function resetOpenRouterCheck() {
+    setSetupError("");
+    setOpenRouterCheckState("idle");
+    setOpenRouterCheckMessage("");
+  }
+
+  async function testOpenRouterConnection() {
+    const setup = readOpenRouterSetup();
+
+    if (!setup.trimmedKey) {
+      setOpenRouterCheckState("error");
+      setOpenRouterCheckMessage("");
+      setSetupError("Isi OpenRouter API key dulu sebelum tes koneksi.");
+      return;
+    }
+
+    setSetupError("");
+    setOpenRouterCheckState("checking");
+    setOpenRouterCheckMessage("Mengetes koneksi OpenRouter...");
+
+    try {
+      const response = await fetch("/api/ai/openrouter-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey: setup.trimmedKey,
+          opponentModel: setup.opponentModel,
+          judgeModel: setup.judgeModel,
+        }),
+      });
+      const payload = (await response.json()) as OpenRouterCheckResponse;
+
+      if (!response.ok) {
+        throw new Error(
+          payload.error?.message ?? "Tes OpenRouter belum berhasil.",
+        );
+      }
+
+      persistOpenRouterPreferences(setup);
+      setOpenRouterCheckState("ready");
+      setOpenRouterCheckMessage(
+        payload.message ?? "OpenRouter siap untuk memulai debat.",
+      );
+    } catch (error) {
+      setOpenRouterCheckState("error");
+      setOpenRouterCheckMessage("");
+      setSetupError(
+        error instanceof Error
+          ? error.message
+          : "Tes OpenRouter belum berhasil.",
+      );
+    }
+  }
+
+  function startDebate() {
+    const setup = readOpenRouterSetup();
+
+    if (!setup.trimmedKey) {
+      setSetupError("Isi OpenRouter API key dulu sebelum mulai debat.");
+      return;
+    }
+
+    persistOpenRouterPreferences(setup);
 
     const session = createDebateSession(selectedTopic, sideSelection, {
       mode: debateMode,
@@ -184,7 +269,7 @@ export default function Home() {
                 value={openRouterApiKey}
                 onChange={(event) => {
                   setOpenRouterApiKey(event.target.value);
-                  setSetupError("");
+                  resetOpenRouterCheck();
                 }}
                 autoComplete="off"
                 spellCheck={false}
@@ -196,9 +281,10 @@ export default function Home() {
                   <span>Model lawan</span>
                   <select
                     value={openRouterOpponentModel}
-                    onChange={(event) =>
-                      setOpenRouterOpponentModel(event.target.value)
-                    }
+                    onChange={(event) => {
+                      setOpenRouterOpponentModel(event.target.value);
+                      resetOpenRouterCheck();
+                    }}
                     className="mt-2 min-h-11 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-primary)] transition focus-visible:border-[var(--ra-cyan)]"
                   >
                     {CHEAP_OPENROUTER_MODELS.map((model) => (
@@ -212,9 +298,10 @@ export default function Home() {
                   <span>Model wasit</span>
                   <select
                     value={openRouterJudgeModel}
-                    onChange={(event) =>
-                      setOpenRouterJudgeModel(event.target.value)
-                    }
+                    onChange={(event) => {
+                      setOpenRouterJudgeModel(event.target.value);
+                      resetOpenRouterCheck();
+                    }}
                     className="mt-2 min-h-11 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-primary)] transition focus-visible:border-[var(--ra-cyan)]"
                   >
                     {CHEAP_OPENROUTER_MODELS.map((model) => (
@@ -232,14 +319,34 @@ export default function Home() {
               <div className="mt-3">
                 <ErrorBanner message={setupError} />
               </div>
-              <Button
-                size="lg"
-                onClick={startDebate}
-                className="mt-4 w-full"
-                trailingIcon={<ArrowRight size={18} aria-hidden="true" />}
-              >
-                Simpan & Mulai Debat
-              </Button>
+              {openRouterCheckState === "ready" && (
+                <div className="mt-3 flex items-start gap-3 rounded-[var(--ra-radius-md)] border border-[rgba(44,214,163,0.35)] bg-[rgba(44,214,163,0.10)] px-4 py-3 text-sm text-[var(--ra-emerald)]">
+                  <CheckCircle2
+                    className="mt-0.5 shrink-0"
+                    size={18}
+                    aria-hidden="true"
+                  />
+                  <p>{openRouterCheckMessage}</p>
+                </div>
+              )}
+              <div className="mt-4 grid gap-3 sm:grid-cols-[0.82fr_1.18fr] xl:grid-cols-1">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={testOpenRouterConnection}
+                  isLoading={openRouterCheckState === "checking"}
+                  leadingIcon={<RadioTower size={18} aria-hidden="true" />}
+                >
+                  Tes OpenRouter
+                </Button>
+                <Button
+                  size="lg"
+                  onClick={startDebate}
+                  trailingIcon={<ArrowRight size={18} aria-hidden="true" />}
+                >
+                  Simpan & Mulai Debat
+                </Button>
+              </div>
             </div>
 
             <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] p-4">

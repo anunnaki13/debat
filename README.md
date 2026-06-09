@@ -12,7 +12,7 @@ npm run dev
 
 Buka `http://localhost:3000`.
 
-Isi `OpenRouter API Key` di halaman awal lalu tekan `Simpan & Mulai Debat`. Default model paling hemat adalah `openrouter/free`. Jika kena limit, pilih model murah berbayar di dropdown seperti `inclusionai/ling-2.6-flash`, `meta-llama/llama-3.1-8b-instruct`, atau `mistralai/mistral-nemo`. Key disimpan lokal di browser dan tidak ikut diekspor dalam JSON session.
+Isi `OpenRouter API Key` di halaman awal, tekan `Tes OpenRouter` bila ingin mengecek key/model lebih dulu, lalu tekan `Simpan & Mulai Debat`. Default model paling hemat adalah `openrouter/free`. Jika kena limit, pilih model murah berbayar di dropdown seperti `inclusionai/ling-2.6-flash`, `meta-llama/llama-3.1-8b-instruct`, atau `mistralai/mistral-nemo`. Key disimpan lokal di browser dan tidak ikut diekspor dalam JSON session.
 
 Mode input:
 
@@ -61,6 +61,7 @@ Konfigurasi OpenRouter tetap dibaca dari `.env.local` melalui `docker-compose.ym
 - Prompt menyertakan knowledge base pertandingan: topik, konteks, posisi user, posisi AI yang wajib berlawanan, dan wasit AI terpisah.
 - Error OpenRouter dibedakan untuk key tidak valid, rate limit, model tidak tersedia, kredit kurang, structured output tidak didukung, respons kosong, timeout, dan upstream error umum.
 - AI Judge mencoba fallback JSON plain text bila model murah menolak mode `json_schema` ketat.
+- Lobby menyediakan tombol `Tes OpenRouter` untuk validasi API key dan model sebelum debat dimulai.
 - Session tersimpan di `localStorage` browser.
 - Report bisa dibuka dari history dan diekspor sebagai JSON.
 - Text session masih bisa memakai voice input dan text-to-speech browser sebagai fallback.

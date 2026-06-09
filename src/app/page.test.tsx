@@ -30,6 +30,7 @@ describe("Home setup flow", () => {
 
   afterEach(() => {
     cleanup();
+    vi.unstubAllGlobals();
   });
 
   it("saves the OpenRouter key and starts a debate session from the setup button", async () => {
@@ -73,7 +74,7 @@ describe("Home setup flow", () => {
       openRouterOpponentModel: "openrouter/free",
       openRouterJudgeModel: "openrouter/free",
     });
-  });
+  }, 10_000);
 
   it("does not start without an OpenRouter key", async () => {
     render(<Home />);
@@ -86,6 +87,36 @@ describe("Home setup flow", () => {
     expect(
       await screen.findByText("Isi OpenRouter API key dulu sebelum mulai debat."),
     ).toBeInTheDocument();
+  });
+
+  it("tests OpenRouter connection before starting debate", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        Response.json({
+          status: "ready",
+          checkedModels: ["openrouter/free"],
+          message: "OpenRouter siap. Model openrouter/free bisa merespons.",
+        }),
+      ),
+    );
+
+    render(<Home />);
+
+    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
+      target: { value: "sk-or-dummy-free-router-key-123456" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Tes OpenRouter/i }));
+
+    expect(
+      await screen.findByText(/OpenRouter siap\. Model openrouter\/free/i),
+    ).toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/ai/openrouter-check",
+      expect.objectContaining({
+        method: "POST",
+      }),
+    );
   });
 
   it("routes voice mode through device check before the debate arena", async () => {

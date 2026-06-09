@@ -299,6 +299,7 @@ Fokus:
 - Done: tambah smoke test route API dengan mock provider untuk lawan AI dan AI Judge.
 - Done: perluas smoke test untuk STT/TTS success dan failure path.
 - Done: tambah test klasifikasi error OpenRouter client.
+- Done: tambah tombol `Tes OpenRouter` di lobby agar API key/model bisa dicek sebelum debat dimulai.
 - Remaining: uji manual dengan OpenRouter key nyata.
 - Remaining: pastikan model gratis dan murah memberi respons yang cukup baik untuk debat Indonesia.
 
@@ -310,8 +311,11 @@ Artefak:
 - `src/app/api/debate/judge/route.test.ts`
 - `src/app/api/voice/transcribe/route.test.ts`
 - `src/app/api/voice/synthesize/route.test.ts`
+- `src/app/api/ai/openrouter-check/route.ts`
+- `src/app/api/ai/openrouter-check/route.test.ts`
 - `docs/progress/STABILIZATION_SPRINT_1_REPORT.md`
 - `docs/progress/STABILIZATION_SPRINT_2_REPORT.md`
+- `docs/progress/STABILIZATION_SPRINT_3_REPORT.md`
 
 ## Milestone 12 - Product Refinement
 

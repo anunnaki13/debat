@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-09 - Stabilization Sprint 3 OpenRouter Setup Check
+
+- Added `/api/ai/openrouter-check` to verify a user's OpenRouter key and selected model IDs with a minimal chat request before starting a debate.
+- Added a `Tes OpenRouter` action in the lobby setup panel with loading, success, and provider-specific error states.
+- Saved OpenRouter preferences after a successful setup check so the same verified key/model selection is reused.
+- Added tests for the check endpoint and the lobby setup check flow.
+
 ## 2026-06-09 - Stabilization Sprint 2 Voice API Smoke Tests
 
 - Added smoke tests for `/api/voice/transcribe` success, missing audio, authentication failure, and empty transcript fallback.

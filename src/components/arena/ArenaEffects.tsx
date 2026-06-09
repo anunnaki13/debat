@@ -24,10 +24,27 @@ export function NeonFrame({
   return <div className={cn("ra-animated-frame", className)}>{children}</div>;
 }
 
-export function ArenaParticleField({ className }: { className?: string }) {
+export function ArenaParticleField({
+  className,
+  density = particleSeeds.length,
+}: {
+  className?: string;
+  density?: number;
+}) {
+  const particles = Array.from({ length: density }, (_, index) => {
+    const seed = particleSeeds[index % particleSeeds.length];
+    const cycle = Math.floor(index / particleSeeds.length);
+
+    return {
+      ...seed,
+      delay: `${Number.parseInt(seed.delay, 10) + cycle * 180}ms`,
+      size: cycle % 2 === 0 ? seed.size : "2px",
+    };
+  });
+
   return (
     <div className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
-      {particleSeeds.map((particle, index) => (
+      {particles.map((particle, index) => (
         <span
           key={index}
           className="absolute bottom-8 rounded-[var(--ra-radius-pill)] bg-[var(--ra-cyan-bright)] shadow-[0_0_18px_rgba(91,231,225,0.75)]"

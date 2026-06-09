@@ -2,7 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Compass, History, Home, Settings, Swords, Zap } from "lucide-react";
+import {
+  CircleDollarSign,
+  Compass,
+  History,
+  Home,
+  Settings,
+  ShieldCheck,
+  Swords,
+  Trophy,
+  Users,
+  Zap,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -10,8 +21,12 @@ import { cn } from "@/lib/cn";
 const navItems = [
   { label: "Beranda", href: "/", icon: Home, match: "/" },
   { label: "Arena", href: "/#setup-debat", icon: Swords, match: "/debate" },
-  { label: "Jelajah Topik", href: "/#pilih-topik", icon: Compass, match: "/topics" },
+  { label: "Topik", href: "/#pilih-topik", icon: Compass, match: "/topics" },
+  { label: "Tantangan Saya", href: "/history", icon: ShieldCheck, match: "/challenges" },
+  { label: "Peringkat", href: "/history", icon: Trophy, match: "/ranking" },
+  { label: "Kredit Arena", href: "/#setup-debat", icon: CircleDollarSign, match: "/credits" },
   { label: "Riwayat", href: "/history", icon: History, match: "/history" },
+  { label: "Clan", href: "/#setup-debat", icon: Users, match: "/clan" },
   { label: "Pengaturan", href: "/#setup-debat", icon: Settings, match: "/settings" },
 ] as const;
 
@@ -19,9 +34,9 @@ export function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-60 border-r border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.88)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
-      <Link href="/" className="flex min-h-12 items-center gap-3 rounded-[var(--ra-radius-md)] px-2">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] shadow-[var(--ra-glow-user)]">
+    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.92)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
+      <Link href="/" className="flex min-h-14 items-center gap-3 rounded-[var(--ra-radius-md)] px-2">
+        <span className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] shadow-[var(--ra-glow-user)]">
           <Image
             src="/assets/arena/logo-mark.svg"
             alt=""
@@ -31,16 +46,53 @@ export function DesktopSidebar() {
           />
         </span>
         <span>
-          <span className="block text-xs font-semibold uppercase tracking-wide text-[var(--ra-cyan-bright)]">
-            Republik
+          <span className="block font-serif text-[1.42rem] font-bold leading-none text-[var(--ra-text-primary)]">
+            REPUBLIK
           </span>
-          <span className="block font-serif text-xl font-bold leading-none text-[var(--ra-text-primary)]">
-            Argumen
+          <span className="block font-serif text-[1.34rem] font-bold leading-none text-[var(--ra-text-primary)]">
+            ARGUMEN
+          </span>
+          <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--ra-text-muted)]">
+            Debat - Fakta - Titik Temu
           </span>
         </span>
       </Link>
 
-      <nav className="mt-8 flex flex-1 flex-col gap-2" aria-label="Navigasi utama">
+      <div className="mt-6 rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-subtle)] bg-[rgba(19,32,51,0.58)] p-3">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/assets/arena/user-orator-avatar.svg"
+            alt=""
+            width={48}
+            height={48}
+            className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)] bg-[var(--ra-bg-deep)]"
+            aria-hidden="true"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-extrabold text-[var(--ra-text-primary)]">
+              Budi Hidayat
+            </p>
+            <p className="text-[11px] font-semibold text-[var(--ra-text-muted)]">
+              Menteri Klarifikasi
+            </p>
+            <Badge tone="prestige" className="mt-1 gap-1">
+              <Zap size={12} aria-hidden="true" />
+              Orator Muda
+            </Badge>
+          </div>
+        </div>
+        <div className="mt-3">
+          <div className="flex items-center justify-between text-[11px] font-bold text-[var(--ra-text-secondary)]">
+            <span>Level 23</span>
+            <span>3.450 XP</span>
+          </div>
+          <div className="mt-2 h-1.5 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.08)]">
+            <div className="h-full w-[64%] rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-cyan),var(--ra-gold))]" />
+          </div>
+        </div>
+      </div>
+
+      <nav className="mt-5 flex flex-1 flex-col gap-1.5" aria-label="Navigasi utama">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active =
@@ -66,27 +118,8 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      <div className="ra-animated-frame rounded-[var(--ra-radius-xl)] p-4">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/assets/arena/user-orator-avatar.svg"
-            alt=""
-            width={48}
-            height={48}
-            className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)]"
-            aria-hidden="true"
-          />
-          <div>
-            <p className="text-sm font-semibold text-[var(--ra-text-primary)]">
-              Budi Hidayat
-            </p>
-            <Badge tone="prestige" className="mt-1 gap-1">
-              <Zap size={12} aria-hidden="true" />
-              Orator Muda
-            </Badge>
-          </div>
-        </div>
-        <div className="mt-4 rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] p-3">
+      <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.28)] bg-[linear-gradient(135deg,rgba(50,212,209,0.12),rgba(216,170,92,0.13))] p-3 shadow-[var(--ra-shadow-card)]">
+        <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.48)] p-3">
           <p className="text-xs font-semibold text-[var(--ra-text-muted)]">
             Kredit Arena
           </p>

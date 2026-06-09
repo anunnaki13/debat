@@ -1,44 +1,75 @@
-import { Flame, Mic2, Swords } from "lucide-react";
+import { Building2, Flame, Mic2, Skull, Swords } from "lucide-react";
 import { ModeCard } from "@/components/lobby/ModeCard";
 import type { DebateMode } from "@/types/debate";
 
 const modes = [
   {
+    id: "duel-ai",
     value: "DUEL_WACANA_AI",
-    title: "Duel Wacana AI",
-    subtitle: "Latihan debat 1 lawan 1 dengan AI dalam tiga ronde.",
+    title: "Duel AI",
+    subtitle: "1 lawan 1",
     icon: Swords,
     accent: "cyan",
-    estimatedDuration: "12-18 menit",
-    difficulty: "Pemula",
+    estimatedDuration: "8 KA",
+    difficulty: "3 ronde",
     badge: "Aktif",
     artSrc: "/assets/arena/mode-duel-ai.svg",
     enabled: true,
     comingSoon: false,
   },
   {
+    id: "kursi-panas",
     value: "KURSI_PANAS_AI",
     title: "Kursi Panas AI",
-    subtitle: "Hadapi beberapa persona AI secara bergiliran.",
+    subtitle: "Bertahan dari banyak penantang",
     icon: Flame,
     accent: "amber",
-    estimatedDuration: "Sprint lanjut",
-    difficulty: "Menantang",
+    estimatedDuration: "12 KA",
+    difficulty: "Sulit",
     badge: undefined,
     artSrc: "/assets/arena/mode-kursi-panas.svg",
     enabled: false,
     comingSoon: true,
   },
   {
+    id: "satu-lawan-tribun",
     value: "PRIVATE_OPINION",
-    title: "Pasang Pendapat Privat",
-    subtitle: "Uji pendapat buatanmu sendiri dengan struktur yang lebih rapi.",
+    title: "Satu Lawan Tribun",
+    subtitle: "Mode format khusus",
     icon: Mic2,
+    accent: "emerald",
+    estimatedDuration: "15 KA",
+    difficulty: "Viral",
+    badge: undefined,
+    artSrc: "/assets/arena/mode-satu-lawan-tribun.svg",
+    enabled: false,
+    comingSoon: true,
+  },
+  {
+    id: "majelis-publik",
+    value: "PRIVATE_OPINION",
+    title: "Majelis Publik",
+    subtitle: "Debat topik serius",
+    icon: Building2,
     accent: "violet",
-    estimatedDuration: "Sprint lanjut",
-    difficulty: "Menengah",
+    estimatedDuration: "10 KA",
+    difficulty: "Kebijakan",
     badge: undefined,
     artSrc: "/assets/arena/mode-majelis-publik.svg",
+    enabled: false,
+    comingSoon: true,
+  },
+  {
+    id: "boss-battle",
+    value: "PRIVATE_OPINION",
+    title: "Boss Battle",
+    subtitle: "AI Expert",
+    icon: Skull,
+    accent: "cyan",
+    estimatedDuration: "20 KA",
+    difficulty: "Expert",
+    badge: undefined,
+    artSrc: "/assets/arena/mode-boss-battle.svg",
     enabled: false,
     comingSoon: true,
   },
@@ -52,9 +83,9 @@ export function ModeCarousel({
   onChange: (value: DebateMode) => void;
 }) {
   return (
-    <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0">
+    <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
       {modes.map((mode) => (
-        <div key={mode.value} className="min-w-[260px] snap-start sm:min-w-0">
+        <div key={mode.id} className="min-w-[168px] snap-start sm:min-w-[182px] lg:min-w-[174px] xl:min-w-[178px]">
           <ModeCard
             value={mode.value}
             title={mode.title}

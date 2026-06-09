@@ -123,9 +123,9 @@ UI Sprint 4 menambahkan:
 - SVG arena assets di `public/assets/arena/`;
 - CSS animation utilities dan reusable arena effects;
 - development-only `/dev/mock-arena`;
-- real arena layout dengan user podium, AI panel, momentum meter, action bar, dan input dock;
-- lobby/sidebar/mode card visual mulai mengikuti mockup game arena;
-- screenshot QA mock arena dan real arena.
+- mockup-aligned lobby dengan hero duel, profile/rank card, compact mode strip, dan popular challenge feed;
+- real arena layout dengan match HUD, user podium, transcript center, AI panel, waveform, momentum meter, action bar, dan input dock;
+- screenshot QA mock arena, lobby mockup-aligned, dan real arena.
 
 ## Milestones
 

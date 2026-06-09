@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="title desc">
+  <title id="title">Public transport challenge artwork</title>
+  <desc id="desc">A city transit scene with civic arena lighting.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1639"/>
+      <stop offset=".6" stop-color="#071321"/>
+      <stop offset="1" stop-color="#092a2c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".66" cy=".38" r=".62">
+      <stop offset="0" stop-color="#9c7cff" stop-opacity=".36"/>
+      <stop offset="1" stop-color="#9c7cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="360" height="190" rx="18" fill="url(#bg)"/>
+  <rect width="360" height="190" rx="18" fill="url(#glow)"/>
+  <path d="M0 142c54-20 106-29 156-23 62 7 116 14 204-21v92H0z" fill="#03101d" opacity=".76"/>
+  <g opacity=".3" stroke="#5be7e1">
+    <path d="M38 145h286M56 119h72M248 111h72"/>
+    <path d="M76 145V57M278 145V42"/>
+  </g>
+  <g transform="translate(74 64)">
+    <rect x="0" y="25" width="220" height="78" rx="20" fill="#132033" stroke="#9c7cff" stroke-width="3"/>
+    <rect x="23" y="40" width="56" height="28" rx="8" fill="#07101c"/>
+    <rect x="94" y="40" width="56" height="28" rx="8" fill="#07101c"/>
+    <rect x="165" y="40" width="34" height="28" rx="8" fill="#07101c"/>
+    <path d="M34 92h145" stroke="#32d4d1" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="47" cy="108" r="15" fill="#07101c" stroke="#d8aa5c" stroke-width="4"/>
+    <circle cx="177" cy="108" r="15" fill="#07101c" stroke="#d8aa5c" stroke-width="4"/>
+    <path d="M66 14c42-16 81-16 119 0" stroke="#f0c97d" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

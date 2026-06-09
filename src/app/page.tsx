@@ -6,6 +6,7 @@ import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { PageShell } from "@/components/layout/PageShell";
 import { LobbyHero } from "@/components/lobby/LobbyHero";
 import { ModeCarousel } from "@/components/lobby/ModeCarousel";
+import { PopularChallengeStrip } from "@/components/lobby/PopularChallengeStrip";
 import { ProgressResumeCard } from "@/components/lobby/ProgressResumeCard";
 import { UserUtilityBar } from "@/components/lobby/UserUtilityBar";
 import { InputModeSelector } from "@/components/topics/InputModeSelector";
@@ -126,6 +127,12 @@ export default function Home() {
         </div>
         <ModeCarousel value={debateMode} onChange={setDebateMode} />
       </section>
+
+      <PopularChallengeStrip
+        topics={debateTopics}
+        selectedTopic={selectedTopic}
+        onSelect={setSelectedTopic}
+      />
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
         <div id="pilih-topik" className="scroll-mt-6 space-y-4">

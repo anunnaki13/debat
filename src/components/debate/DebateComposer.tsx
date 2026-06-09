@@ -41,7 +41,7 @@ export function DebateComposer({
   const overLimit = value.length > limit;
 
   return (
-    <section className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[var(--ra-bg-glass)] p-3">
+    <section className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[rgba(10,17,29,0.70)] p-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-[var(--ra-text-primary)]">
@@ -62,14 +62,31 @@ export function DebateComposer({
           {value.length}/{limit}
         </span>
       </div>
-      <textarea
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        maxLength={limit + 200}
-        disabled={disabled}
-        className="mt-3 min-h-24 w-full resize-y rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-4 text-sm leading-7 text-[var(--ra-text-primary)] placeholder:text-[var(--ra-text-muted)] transition focus-visible:border-[var(--ra-cyan)] disabled:cursor-not-allowed disabled:opacity-70 md:min-h-20"
-        placeholder="Tulis argumen Anda..."
-      />
+      <div className="mt-3 grid gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(50,212,209,0.28)] bg-[rgba(7,11,19,0.76)] p-3 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-end">
+        <VoiceInputButton
+          isSupported={isVoiceSupported}
+          isListening={isListening}
+          onStart={onStartVoice}
+          onStop={onStopVoice}
+          disabled={disabled || Boolean(isVoiceBusy && !isListening)}
+        />
+        <textarea
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          maxLength={limit + 200}
+          disabled={disabled}
+          className="min-h-20 w-full resize-y rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-4 text-sm leading-7 text-[var(--ra-text-primary)] placeholder:text-[var(--ra-text-muted)] transition focus-visible:border-[var(--ra-cyan)] disabled:cursor-not-allowed disabled:opacity-70 md:min-h-16"
+          placeholder="Tulis argumen Anda..."
+        />
+        <Button
+          onClick={onSubmit}
+          disabled={disabled || !value.trim() || overLimit}
+          trailingIcon={<Send size={16} aria-hidden="true" />}
+          className="md:min-h-12"
+        >
+          Kirim Argumen
+        </Button>
+      </div>
       {voiceInterim ? (
         <p className="mt-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] px-3 py-2 text-sm text-[var(--ra-cyan-bright)]">
           {voiceInterim}
@@ -85,22 +102,6 @@ export function DebateComposer({
           <ErrorBanner message={voiceError} />
         </div>
       ) : null}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-        <VoiceInputButton
-          isSupported={isVoiceSupported}
-          isListening={isListening}
-          onStart={onStartVoice}
-          onStop={onStopVoice}
-          disabled={disabled || Boolean(isVoiceBusy && !isListening)}
-        />
-        <Button
-          onClick={onSubmit}
-          disabled={disabled || !value.trim() || overLimit}
-          trailingIcon={<Send size={16} aria-hidden="true" />}
-        >
-          Kirim Argumen
-        </Button>
-      </div>
     </section>
   );
 }

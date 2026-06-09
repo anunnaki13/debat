@@ -1,24 +1,39 @@
 import Link from "next/link";
-import { History, Search, Settings } from "lucide-react";
+import { Bell, Crown, Gift, History, Search, Settings } from "lucide-react";
 import { Badge, IconButton } from "@/components/ui";
 
 export function UserUtilityBar() {
   return (
-    <div className="flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[var(--ra-bg-glass)] px-4 py-3 shadow-[var(--ra-shadow-card)]">
-      <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[var(--ra-radius-md)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-muted)]">
+    <div className="flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-subtle)] bg-[rgba(10,17,29,0.74)] px-4 py-3 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
+      <label className="group flex min-w-0 flex-1 items-center gap-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.72)] px-3 py-2 transition focus-within:border-[var(--ra-cyan)]">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-muted)] group-focus-within:text-[var(--ra-cyan-bright)]">
           <Search size={17} aria-hidden="true" />
         </span>
-        <p className="truncate text-sm text-[var(--ra-text-secondary)]">
-          <span className="sm:hidden">Arena siap</span>
-          <span className="hidden sm:inline">
-            Cari topik, pilih mode, lalu masuk arena.
-          </span>
-        </p>
-      </div>
+        <span className="sr-only">Cari topik atau tantangan</span>
+        <input
+          type="search"
+          disabled
+          placeholder="Cari topik atau tantangan..."
+          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-[var(--ra-text-primary)] outline-none placeholder:text-[var(--ra-text-muted)] disabled:cursor-not-allowed"
+        />
+        <span className="hidden rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] px-2 py-1 text-[11px] font-bold text-[var(--ra-text-muted)] sm:inline">
+          Ctrl K
+        </span>
+      </label>
       <div className="flex items-center gap-2">
-        <Badge tone="prestige" className="hidden sm:inline-flex">
-          Lokal MVP
+        <IconButton
+          icon={<Bell size={17} aria-hidden="true" />}
+          label="Notifikasi belum tersedia"
+          disabled
+        />
+        <IconButton
+          icon={<Gift size={17} aria-hidden="true" />}
+          label="Hadiah belum tersedia"
+          disabled
+        />
+        <Badge tone="prestige" className="hidden gap-2 sm:inline-flex">
+          <Crown size={14} aria-hidden="true" />
+          Premium Club
         </Badge>
         <Link
           href="/history"

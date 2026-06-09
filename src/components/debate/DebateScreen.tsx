@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Gavel, RotateCcw, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -8,10 +9,11 @@ import { ErrorBanner } from "@/components/common/ErrorBanner";
 import {
   AiOpponentPanel,
   ArenaActionBar,
-  ArenaStatusBanner,
   MomentumMeter,
   RoundTransitionCard,
   UserPodium,
+  VoiceWaveform,
+  getArenaStateMeta,
   type ArenaMomentum,
   type ArenaVisualState,
 } from "@/components/debate/ArenaVisuals";
@@ -528,120 +530,142 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         }
       />
 
-      <ArenaStatusBanner
-        state={arenaState}
-        notice={
-          arenaNotice ||
-          (useOpenRouterVoice
-            ? "Mode suara aktif. Kamera tetap hanya preview lokal."
-            : undefined)
-        }
-      />
-
       <ErrorBanner message={error} />
 
-      <section className="grid gap-4 xl:grid-cols-[240px_minmax(460px,1fr)_300px]">
-        <div className="hidden xl:block">
-          <UserPodium
-            inputMode={session.inputMode}
-            side={session.userSide}
-            state={arenaState}
-          />
-        </div>
+      <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.24)] bg-[rgba(7,11,19,0.88)] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
+        <Image
+          src="/assets/arena/arena-backdrop.svg"
+          alt=""
+          fill
+          className="object-cover opacity-[0.18]"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(50,212,209,0.16),transparent_34%),radial-gradient(circle_at_84%_26%,rgba(238,106,100,0.16),transparent_32%),linear-gradient(180deg,rgba(7,11,19,0.12),rgba(7,11,19,0.88))]" />
 
-        <div className="ra-animated-frame relative overflow-hidden rounded-[var(--ra-radius-xl)] p-4">
-          <div className="relative z-[1]">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase text-[var(--ra-cyan-bright)]">
-                  Live Transcript
-                </p>
-                <h2 className="font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
-                  Ronde {session.currentRound.toLowerCase()}
-                </h2>
+        <div className="relative grid gap-4 xl:grid-cols-[220px_minmax(420px,1fr)_280px]">
+          <div className="hidden xl:block">
+            <UserPodium
+              inputMode={session.inputMode}
+              side={session.userSide}
+              state={arenaState}
+            />
+          </div>
+
+          <div className="min-w-0 space-y-3">
+            <div className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[rgba(10,17,29,0.74)] p-4 shadow-[var(--ra-shadow-card)]">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-extrabold uppercase text-[var(--ra-cyan-bright)]">
+                    Live Transcript
+                  </p>
+                  <h2 className="text-xl font-extrabold text-[var(--ra-text-primary)]">
+                    Ronde {session.currentRound.toLowerCase()}
+                  </h2>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-default)] bg-[rgba(7,11,19,0.62)] px-3 py-1 text-xs font-bold text-[var(--ra-text-secondary)]">
+                    {arenaNotice ||
+                      (useOpenRouterVoice
+                        ? "Voice aktif. Kamera lokal."
+                        : getArenaStateMeta(arenaState).copy)}
+                  </span>
+                  {canJudge ? (
+                    <Button
+                      variant="prestige"
+                      onClick={requestJudge}
+                      disabled={isLoadingJudge}
+                      leadingIcon={<Gavel size={17} aria-hidden="true" />}
+                    >
+                      {isLoadingJudge ? "Menilai..." : "Minta Penilaian"}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
-              {canJudge ? (
-                <Button
-                  variant="prestige"
-                  onClick={requestJudge}
-                  disabled={isLoadingJudge}
-                  leadingIcon={<Gavel size={17} aria-hidden="true" />}
-                >
-                  {isLoadingJudge ? "Menilai..." : "Minta Penilaian"}
-                </Button>
+
+              <div className="mt-4">
+                <DebateTranscript messages={session.messages} />
+              </div>
+              {isLoadingOpponent ? (
+                <div className="mt-4">
+                  <RoundTransitionCard round={session.currentRound} state="ai_thinking" />
+                </div>
               ) : null}
             </div>
-            <div className="mt-4">
-              <DebateTranscript messages={session.messages} />
-            </div>
-            {isLoadingOpponent ? (
-              <div className="mt-4">
-                <RoundTransitionCard round={session.currentRound} state="ai_thinking" />
+
+            <div className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[rgba(7,11,19,0.58)] p-3 shadow-[var(--ra-shadow-card)]">
+              <VoiceWaveform
+                tone={arenaState === "ai_speaking" || arenaState === "ai_thinking" ? "ai" : "user"}
+              />
+              <div className="mt-2 flex items-center justify-between text-xs font-bold text-[var(--ra-text-muted)]">
+                <span>Input ketik atau voice</span>
+                <span>Lawan AI siap menanggapi</span>
               </div>
-            ) : null}
+            </div>
           </div>
+
+          <AiOpponentPanel
+            side={session.opponentSide}
+            userSide={session.userSide}
+            inputMode={session.inputMode}
+            state={arenaState}
+            latestCaption={latestOpponentMessage?.content}
+          />
         </div>
 
-        <AiOpponentPanel
-          side={session.opponentSide}
-          userSide={session.userSide}
-          inputMode={session.inputMode}
-          state={arenaState}
-          latestCaption={latestOpponentMessage?.content}
-        />
-      </section>
+        <div className="relative mt-4 grid gap-3 xl:grid-cols-[minmax(0,1fr)_auto]">
+          <MomentumMeter momentum={momentum} />
 
-      <MomentumMeter momentum={momentum} />
-
-      <ArenaActionBar
-        state={arenaState}
-        onInterrupt={() => {
-          stopOpenRouterAudio();
-          stopSpeaking();
-          setArenaNotice("AI dihentikan. Silakan sampaikan interupsi Anda.");
-          setError("");
-        }}
-        onMarkData={() => setArenaNotice("Kartu Data ditandai untuk laporan akhir.")}
-        onMarkFactCheck={() => setArenaNotice("Cek Fakta ditandai untuk laporan akhir.")}
-        onMarkCommonGround={() => setArenaNotice("Titik Temu ditandai untuk laporan akhir.")}
-      />
-
-      <section className="space-y-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.90)] p-3 shadow-[var(--ra-glow-user)] backdrop-blur-xl">
-        {session.status === "IN_PROGRESS" ? (
-          <DebateComposer
-            round={session.currentRound}
-            value={input}
-            onChange={handleInputChange}
-            onSubmit={submitArgument}
-            disabled={awaitingOpponent || isLoadingJudge}
-            isVoiceSupported={voiceInput.isSupported}
-            isListening={voiceInput.isListening}
-            isVoiceBusy={voiceInput.isBusy}
-            voiceInterim={voiceInput.interim}
-            voiceError={voiceInput.error}
-            voiceStatus={voiceInput.status}
-            onStartVoice={voiceInput.start}
-            onStopVoice={voiceInput.stop}
+          <ArenaActionBar
+            state={arenaState}
+            onInterrupt={() => {
+              stopOpenRouterAudio();
+              stopSpeaking();
+              setArenaNotice("AI dihentikan. Silakan sampaikan interupsi Anda.");
+              setError("");
+            }}
+            onMarkData={() => setArenaNotice("Kartu Data ditandai untuk laporan akhir.")}
+            onMarkFactCheck={() => setArenaNotice("Cek Fakta ditandai untuk laporan akhir.")}
+            onMarkCommonGround={() => setArenaNotice("Titik Temu ditandai untuk laporan akhir.")}
           />
-        ) : null}
+        </div>
 
-        <div className="flex flex-wrap gap-2">
-          {awaitingOpponent && !isLoadingOpponent ? (
-            <Button
-              variant="outline"
-              leadingIcon={<RotateCcw size={16} aria-hidden="true" />}
-              onClick={retryOpponent}
-            >
-              Coba Lagi Lawan AI
-            </Button>
+        <div className="relative mt-4 space-y-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.82)] p-3 shadow-[var(--ra-glow-user)] backdrop-blur-xl">
+          {session.status === "IN_PROGRESS" ? (
+            <DebateComposer
+              round={session.currentRound}
+              value={input}
+              onChange={handleInputChange}
+              onSubmit={submitArgument}
+              disabled={awaitingOpponent || isLoadingJudge}
+              isVoiceSupported={voiceInput.isSupported}
+              isListening={voiceInput.isListening}
+              isVoiceBusy={voiceInput.isBusy}
+              voiceInterim={voiceInput.interim}
+              voiceError={voiceInput.error}
+              voiceStatus={voiceInput.status}
+              onStartVoice={voiceInput.start}
+              onStopVoice={voiceInput.stop}
+            />
           ) : null}
-          <Button
-            variant="danger"
-            leadingIcon={<Trash2 size={16} aria-hidden="true" />}
-            onClick={() => setShowCancelDialog(true)}
-          >
-            Batalkan Debat
-          </Button>
+
+          <div className="flex flex-wrap gap-2">
+            {awaitingOpponent && !isLoadingOpponent ? (
+              <Button
+                variant="outline"
+                leadingIcon={<RotateCcw size={16} aria-hidden="true" />}
+                onClick={retryOpponent}
+              >
+                Coba Lagi Lawan AI
+              </Button>
+            ) : null}
+            <Button
+              variant="danger"
+              leadingIcon={<Trash2 size={16} aria-hidden="true" />}
+              onClick={() => setShowCancelDialog(true)}
+            >
+              Batalkan Debat
+            </Button>
+          </div>
         </div>
       </section>
 

@@ -9,18 +9,25 @@
   - user orator avatar;
   - AI opponent avatar;
   - arena backdrop;
-  - mode card art.
+  - mode card art;
+  - hero duel scene;
+  - popular challenge art.
 - Added CSS animation utilities for neon frames, waveforms, scanlines, particles, card float, and energy sweeps.
 - Added reusable arena animation components in `src/components/arena/ArenaEffects.tsx`.
 - Added development-only `/dev/mock-arena` for simulated arena visual states without API calls.
-- Redesigned the real debate arena base with user podium, AI panel, status banner, momentum meter, action bar, and game-style input dock.
-- Updated lobby hero, desktop sidebar, and mode cards to use the new asset direction.
+- Redesigned the real debate arena base with match HUD, user podium, AI panel, transcript center, waveform, momentum meter, action bar, and game-style input dock.
+- Reworked the lobby toward the uploaded mockups with a hero duel scene, profile/rank card, compact mode strip, and popular challenge feed.
+- Updated desktop sidebar to match the product/game profile structure from the mockups.
 - Added visual QA screenshots:
   - `docs/visual-qa/mock-arena-desktop.png`;
   - `docs/visual-qa/mock-arena-mobile.png`;
   - `docs/visual-qa/lobby-game-assets-desktop.png`;
   - `docs/visual-qa/arena-real-desktop.png`;
-  - `docs/visual-qa/arena-real-mobile.png`.
+  - `docs/visual-qa/arena-real-mobile.png`;
+  - `docs/visual-qa/lobby-mockup-aligned-desktop.png`;
+  - `docs/visual-qa/lobby-mockup-aligned-mobile.png`;
+  - `docs/visual-qa/arena-mockup-aligned-desktop.png`;
+  - `docs/visual-qa/arena-mockup-aligned-mobile.png`.
 - Added `docs/progress/UI_SPRINT_4_REPORT.md`.
 
 ## 2026-06-09 — UI Sprint 3 Device Check

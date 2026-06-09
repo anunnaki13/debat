@@ -186,23 +186,30 @@ Hasil utama:
   - `docs/design-reference/mockup-product-system.png`
 - SVG asset pack dibuat di `public/assets/arena/`.
 - Asset manifest dibuat di `public/assets/arena/assets-manifest.md`.
+- Hero duel scene, compact mode art, boss battle card, dan popular challenge art dibuat sebagai SVG repo-native.
 - CSS animation utilities ditambahkan untuk neon border, waveform, orbit ring, scanline, particle rise, floating card, dan energy sweep.
 - Reusable arena effects dibuat di `src/components/arena/ArenaEffects.tsx`.
 - `/dev/mock-arena` dibuat untuk simulasi state visual tanpa API call.
 - Real debate arena memakai:
+  - match HUD dengan timer tengah;
   - user podium;
   - AI opponent panel;
-  - arena status banner;
+  - transcript center;
+  - waveform;
   - momentum meter;
   - action bar;
   - game-style input dock.
-- Lobby hero, desktop sidebar, dan mode cards mulai memakai asset game-style.
+- Lobby hero, desktop sidebar, mode cards, dan popular challenge feed dirombak agar lebih dekat ke mockup.
 - Visual QA screenshots:
   - `docs/visual-qa/mock-arena-desktop.png`
   - `docs/visual-qa/mock-arena-mobile.png`
   - `docs/visual-qa/lobby-game-assets-desktop.png`
   - `docs/visual-qa/arena-real-desktop.png`
   - `docs/visual-qa/arena-real-mobile.png`
+  - `docs/visual-qa/lobby-mockup-aligned-desktop.png`
+  - `docs/visual-qa/lobby-mockup-aligned-mobile.png`
+  - `docs/visual-qa/arena-mockup-aligned-desktop.png`
+  - `docs/visual-qa/arena-mockup-aligned-mobile.png`
 - Progress report di `docs/progress/UI_SPRINT_4_REPORT.md`.
 
 Catatan:

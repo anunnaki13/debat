@@ -1,0 +1,109 @@
+"use client";
+
+import Image from "next/image";
+import { CheckCircle2, Users, Zap } from "lucide-react";
+import { SpiceMeter } from "@/components/topics/SpiceMeter";
+import { Badge } from "@/components/ui";
+import { cn } from "@/lib/cn";
+import type { DebateTopic } from "@/types/debate";
+
+const challengeArt: Record<string, string> = {
+  "ai-jobs": "/assets/arena/challenge-ai-jobs.svg",
+  "remote-work": "/assets/arena/challenge-remote-work.svg",
+  cashless: "/assets/arena/challenge-cashless.svg",
+  "public-transport": "/assets/arena/challenge-public-transport.svg",
+};
+
+const waitingCounts: Record<string, string> = {
+  "ai-jobs": "612 menunggu",
+  "remote-work": "210 menunggu",
+  cashless: "428 menunggu",
+  "public-transport": "518 menunggu",
+};
+
+export function PopularChallengeStrip({
+  topics,
+  selectedTopic,
+  onSelect,
+}: {
+  topics: DebateTopic[];
+  selectedTopic: DebateTopic;
+  onSelect: (topic: DebateTopic) => void;
+}) {
+  const featured = topics.filter((topic) => challengeArt[topic.id]).slice(0, 4);
+
+  return (
+    <section aria-labelledby="popular-challenge-title" className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <Badge tone="prestige">Tantangan Populer Hari Ini</Badge>
+          <h2
+            id="popular-challenge-title"
+            className="mt-3 text-xl font-extrabold text-[var(--ra-text-primary)]"
+          >
+            Pilih isu yang sedang panas
+          </h2>
+        </div>
+      </div>
+      <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+        {featured.map((topic) => {
+          const selected = topic.id === selectedTopic.id;
+
+          return (
+            <button
+              key={topic.id}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => onSelect(topic)}
+              className={cn(
+                "group relative min-h-[170px] min-w-[260px] snap-start overflow-hidden rounded-[var(--ra-radius-lg)] border p-4 text-left shadow-[var(--ra-shadow-card)] transition duration-150 sm:min-w-[280px] lg:min-w-0 lg:flex-1",
+                selected
+                  ? "border-[var(--ra-cyan)] shadow-[var(--ra-glow-user)]"
+                  : "border-[var(--ra-border-default)] hover:border-[var(--ra-border-strong)]",
+              )}
+            >
+              <Image
+                src={challengeArt[topic.id]}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 25vw, 280px"
+                className="object-cover opacity-95 transition duration-300 group-hover:scale-[1.04]"
+                aria-hidden="true"
+              />
+              <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,19,0.10),rgba(7,11,19,0.56)_54%,rgba(7,11,19,0.96))]" />
+              <div className="relative z-[1] flex items-start justify-between gap-3">
+                <Badge tone={topic.difficulty === "lanjutan" ? "warning" : "positive"}>
+                  {topic.category.split(" ")[0]}
+                </Badge>
+                {selected ? (
+                  <CheckCircle2
+                    size={18}
+                    aria-hidden="true"
+                    className="text-[var(--ra-cyan-bright)]"
+                  />
+                ) : null}
+              </div>
+
+              <div className="relative z-[1] mt-14">
+                <h3 className="line-clamp-2 text-[15px] font-extrabold leading-snug text-[var(--ra-text-primary)]">
+                  {topic.title}
+                </h3>
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-bold text-[var(--ra-text-secondary)]">
+                  <span className="inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] bg-[rgba(7,11,19,0.70)] px-2 py-1">
+                    <Users size={12} aria-hidden="true" />
+                    {waitingCounts[topic.id] ?? "180 menunggu"}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] bg-[rgba(7,11,19,0.70)] px-2 py-1 text-[var(--ra-amber)]">
+                    <Zap size={12} aria-hidden="true" />
+                    Panas
+                  </span>
+                  <SpiceMeter level={topic.spiceLevel ?? 2} compact />
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

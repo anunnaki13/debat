@@ -1,6 +1,7 @@
 import { Camera, Keyboard, Mic, Shield, Swords } from "lucide-react";
 import { RoundStepper } from "@/components/debate/RoundStepper";
 import { TurnTimer } from "@/components/debate/TurnTimer";
+import { Badge } from "@/components/ui";
 import type { DebateSession } from "@/types/debate";
 
 export function DebateHeader({
@@ -14,45 +15,48 @@ export function DebateHeader({
   autoSpeak: boolean;
   onAutoSpeakChange: (value: boolean) => void;
 }) {
+  const inputIcon =
+    session.inputMode === "VOICE_CAMERA" ? (
+      <Camera size={14} aria-hidden="true" />
+    ) : session.inputMode === "VOICE" ? (
+      <Mic size={14} aria-hidden="true" />
+    ) : (
+      <Keyboard size={14} aria-hidden="true" />
+    );
+
   return (
-    <section className="rounded-lg border border-white/10 bg-slate-950/75 p-5">
+    <section className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] p-4 shadow-[var(--ra-shadow-elevated)] md:p-5">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-slate-900/75 px-3 py-1 text-xs font-semibold text-slate-200">
-              {session.inputMode === "VOICE_CAMERA" ? (
-                <Camera size={14} aria-hidden="true" />
-              ) : session.inputMode === "VOICE" ? (
-                <Mic size={14} aria-hidden="true" />
-              ) : (
-                <Keyboard size={14} aria-hidden="true" />
-              )}
+            <Badge tone="user" className="gap-2">
+              {inputIcon}
               {session.inputMode.replace("_", " + ")}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-md border border-amber-200/30 bg-amber-300/10 px-3 py-1 text-xs font-semibold text-amber-100">
+            </Badge>
+            <Badge tone="prestige" className="gap-2">
               <Shield size={14} aria-hidden="true" />
               {session.userSide}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-md border border-red-200/25 bg-red-300/10 px-3 py-1 text-xs font-semibold text-red-100">
+            </Badge>
+            <Badge tone="ai" className="gap-2">
               <Swords size={14} aria-hidden="true" />
               AI {session.opponentSide}
-            </span>
+            </Badge>
           </div>
-          <h1 className="mt-4 max-w-4xl text-2xl font-bold leading-9 text-white">
+          <h1 className="mt-4 max-w-4xl font-serif text-2xl font-bold leading-tight text-[var(--ra-text-primary)] md:text-3xl">
             {session.topic.title}
           </h1>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--ra-text-secondary)]">
             {session.topic.shortContext}
           </p>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-3">
           <TurnTimer remainingSeconds={remainingSeconds} />
-          <label className="inline-flex min-h-10 items-center gap-2 rounded-md border border-white/10 bg-slate-900/75 px-3 py-2 text-sm text-slate-200">
+          <label className="inline-flex min-h-10 items-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm font-semibold text-[var(--ra-text-secondary)]">
             <input
               type="checkbox"
               checked={autoSpeak}
               onChange={(event) => onAutoSpeakChange(event.target.checked)}
-              className="h-4 w-4 accent-cyan-300"
+              className="h-4 w-4 accent-[var(--ra-cyan)]"
             />
             Suara otomatis
           </label>

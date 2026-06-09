@@ -1,4 +1,5 @@
 import { Clock } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 function formatSeconds(seconds: number): string {
   const positive = Math.max(0, seconds);
@@ -14,11 +15,12 @@ export function TurnTimer({ remainingSeconds }: { remainingSeconds: number }) {
 
   return (
     <div
-      className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm ${
+      className={cn(
+        "inline-flex min-h-10 items-center gap-2 rounded-[var(--ra-radius-md)] border px-3 py-2 text-sm font-semibold",
         expired
-          ? "border-amber-300/40 bg-amber-300/10 text-amber-100"
-          : "border-white/10 bg-slate-900/80 text-slate-200"
-      }`}
+          ? "border-[var(--ra-amber)] bg-[var(--ra-amber-soft)] text-[var(--ra-amber)]"
+          : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-primary)]",
+      )}
     >
       <Clock size={16} aria-hidden="true" />
       <span>{expired ? "Waktu lewat" : formatSeconds(remainingSeconds)}</span>

@@ -5,11 +5,21 @@ import { Gavel, RotateCcw, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
-import { LoadingDots } from "@/components/common/LoadingDots";
+import {
+  AiOpponentPanel,
+  ArenaActionBar,
+  ArenaStatusBanner,
+  MomentumMeter,
+  RoundTransitionCard,
+  UserPodium,
+  type ArenaMomentum,
+  type ArenaVisualState,
+} from "@/components/debate/ArenaVisuals";
 import { DebateComposer } from "@/components/debate/DebateComposer";
 import { DebateHeader } from "@/components/debate/DebateHeader";
 import { DebateTranscript } from "@/components/debate/DebateTranscript";
 import { PageShell } from "@/components/layout/PageShell";
+import { Button } from "@/components/ui";
 import { useOpenRouterVoiceInput } from "@/hooks/useOpenRouterVoiceInput";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { trackLocalEvent } from "@/lib/analytics/localAnalytics";
@@ -56,6 +66,62 @@ function readApiError(error: unknown, fallback: string): string {
   return fallback;
 }
 
+function getArenaVisualState({
+  error,
+  isLoadingJudge,
+  awaitingOpponent,
+  isLoadingOpponent,
+  isListening,
+  status,
+}: {
+  error: string;
+  isLoadingJudge: boolean;
+  awaitingOpponent: boolean;
+  isLoadingOpponent: boolean;
+  isListening: boolean;
+  status: DebateSession["status"];
+}): ArenaVisualState {
+  if (error) {
+    return "recoverable_error";
+  }
+
+  if (isLoadingJudge) {
+    return "judging";
+  }
+
+  if (status === "AWAITING_JUDGE" || status === "COMPLETED") {
+    return "complete";
+  }
+
+  if (awaitingOpponent || isLoadingOpponent) {
+    return "ai_thinking";
+  }
+
+  if (isListening) {
+    return "user_speaking";
+  }
+
+  return "ready";
+}
+
+function getMomentum(messages: DebateMessage[]): ArenaMomentum {
+  if (messages.length === 0) {
+    return { user: 50, ai: 50 };
+  }
+
+  const userCharacters = messages
+    .filter((message) => message.speaker === "USER")
+    .reduce((total, message) => total + message.content.length, 0);
+  const aiCharacters = messages
+    .filter((message) => message.speaker === "OPPONENT")
+    .reduce((total, message) => total + message.content.length, 0);
+  const totalCharacters = Math.max(1, userCharacters + aiCharacters);
+  const tilt = ((userCharacters - aiCharacters) / totalCharacters) * 16;
+  const user = Math.min(66, Math.max(34, Math.round(50 + tilt)));
+
+  return { user, ai: 100 - user };
+}
+
 export function DebateScreen({ sessionId }: { sessionId: string }) {
   const router = useRouter();
   const [session, setSession] = useState<DebateSession | null>(null);
@@ -68,6 +134,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     useState<UserPreferences>(getPreferences);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [inputSource, setInputSource] = useState<InputSource>("TEXT");
+  const [arenaNotice, setArenaNotice] = useState("");
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
 
@@ -141,6 +208,14 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           isLoadingOpponent
         : false,
     [isLoadingOpponent, session],
+  );
+
+  const latestOpponentMessage = useMemo(
+    () =>
+      session
+        ? [...session.messages].reverse().find((message) => message.speaker === "OPPONENT")
+        : undefined,
+    [session],
   );
 
   useEffect(() => {
@@ -323,6 +398,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
       session.id,
     );
     setInput("");
+    setArenaNotice("");
     setInputSource(session.inputMode === "TEXT" ? "TEXT" : "TRANSCRIPT_EDIT");
     await callOpponent(nextSession);
   }
@@ -431,9 +507,18 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         start: speech.startListening,
         stop: speech.stopListening,
       };
+  const arenaState = getArenaVisualState({
+    error,
+    isLoadingJudge,
+    awaitingOpponent,
+    isLoadingOpponent,
+    isListening: voiceInput.isListening,
+    status: session.status,
+  });
+  const momentum = getMomentum(session.messages);
 
   return (
-    <PageShell className="space-y-6">
+    <PageShell className="space-y-5">
       <DebateHeader
         session={session}
         remainingSeconds={remainingSeconds}
@@ -443,74 +528,120 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         }
       />
 
+      <ArenaStatusBanner
+        state={arenaState}
+        notice={
+          arenaNotice ||
+          (useOpenRouterVoice
+            ? "Mode suara aktif. Kamera tetap hanya preview lokal."
+            : undefined)
+        }
+      />
+
       <ErrorBanner message={error} />
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
-        <div className="rounded-lg border border-white/10 bg-slate-950/65 p-4">
-          <DebateTranscript messages={session.messages} />
-          {isLoadingOpponent ? (
-            <div className="mt-4 rounded-md border border-cyan-300/20 bg-cyan-300/10 px-4 py-3">
-              <LoadingDots label="AI menyusun balasan" />
-            </div>
-          ) : null}
+      <section className="grid gap-4 xl:grid-cols-[240px_minmax(460px,1fr)_300px]">
+        <div className="hidden xl:block">
+          <UserPodium
+            inputMode={session.inputMode}
+            side={session.userSide}
+            state={arenaState}
+          />
         </div>
 
-        <div className="space-y-4">
-          {session.status === "IN_PROGRESS" ? (
-            <DebateComposer
-              round={session.currentRound}
-              value={input}
-              onChange={handleInputChange}
-              onSubmit={submitArgument}
-              disabled={awaitingOpponent || isLoadingJudge}
-              isVoiceSupported={voiceInput.isSupported}
-              isListening={voiceInput.isListening}
-              isVoiceBusy={voiceInput.isBusy}
-              voiceInterim={voiceInput.interim}
-              voiceError={voiceInput.error}
-              voiceStatus={voiceInput.status}
-              onStartVoice={voiceInput.start}
-              onStopVoice={voiceInput.stop}
-            />
-          ) : null}
-
-          {awaitingOpponent && !isLoadingOpponent ? (
-            <button
-              type="button"
-              onClick={retryOpponent}
-              className="inline-flex w-full min-h-11 items-center justify-center gap-2 rounded-md border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-100 transition hover:bg-amber-300/15"
-            >
-              <RotateCcw size={16} aria-hidden="true" />
-              Coba Lagi Lawan AI
-            </button>
-          ) : null}
-
-          {canJudge ? (
-            <button
-              type="button"
-              onClick={requestJudge}
-              disabled={isLoadingJudge}
-              className="inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-md bg-amber-300 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
-            >
-              <Gavel size={17} aria-hidden="true" />
-              {isLoadingJudge ? "Meminta Penilaian..." : "Akhiri dan Minta Penilaian"}
-            </button>
-          ) : null}
-
-          <button
-            type="button"
-            onClick={() => setShowCancelDialog(true)}
-            className="inline-flex w-full min-h-11 items-center justify-center gap-2 rounded-md border border-red-300/30 px-4 py-2 text-sm font-semibold text-red-100 transition hover:bg-red-300/10"
-          >
-            <Trash2 size={16} aria-hidden="true" />
-            Batalkan Debat
-          </button>
-
-          <div className="rounded-lg border border-white/10 bg-slate-950/75 p-4 text-sm leading-6 text-slate-400">
-            {useOpenRouterVoice
-              ? "Mode suara merekam audio giliran Anda untuk ditranskrip melalui server OpenRouter. Kamera tetap sebatas preview lokal."
-              : "Fitur mikrofon bergantung pada dukungan browser. Bila tidak tersedia, gunakan input ketik."}
+        <div className="ra-animated-frame relative overflow-hidden rounded-[var(--ra-radius-xl)] p-4">
+          <div className="relative z-[1]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase text-[var(--ra-cyan-bright)]">
+                  Live Transcript
+                </p>
+                <h2 className="font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
+                  Ronde {session.currentRound.toLowerCase()}
+                </h2>
+              </div>
+              {canJudge ? (
+                <Button
+                  variant="prestige"
+                  onClick={requestJudge}
+                  disabled={isLoadingJudge}
+                  leadingIcon={<Gavel size={17} aria-hidden="true" />}
+                >
+                  {isLoadingJudge ? "Menilai..." : "Minta Penilaian"}
+                </Button>
+              ) : null}
+            </div>
+            <div className="mt-4">
+              <DebateTranscript messages={session.messages} />
+            </div>
+            {isLoadingOpponent ? (
+              <div className="mt-4">
+                <RoundTransitionCard round={session.currentRound} state="ai_thinking" />
+              </div>
+            ) : null}
           </div>
+        </div>
+
+        <AiOpponentPanel
+          side={session.opponentSide}
+          userSide={session.userSide}
+          inputMode={session.inputMode}
+          state={arenaState}
+          latestCaption={latestOpponentMessage?.content}
+        />
+      </section>
+
+      <MomentumMeter momentum={momentum} />
+
+      <ArenaActionBar
+        state={arenaState}
+        onInterrupt={() => {
+          stopOpenRouterAudio();
+          stopSpeaking();
+          setArenaNotice("AI dihentikan. Silakan sampaikan interupsi Anda.");
+          setError("");
+        }}
+        onMarkData={() => setArenaNotice("Kartu Data ditandai untuk laporan akhir.")}
+        onMarkFactCheck={() => setArenaNotice("Cek Fakta ditandai untuk laporan akhir.")}
+        onMarkCommonGround={() => setArenaNotice("Titik Temu ditandai untuk laporan akhir.")}
+      />
+
+      <section className="space-y-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.90)] p-3 shadow-[var(--ra-glow-user)] backdrop-blur-xl">
+        {session.status === "IN_PROGRESS" ? (
+          <DebateComposer
+            round={session.currentRound}
+            value={input}
+            onChange={handleInputChange}
+            onSubmit={submitArgument}
+            disabled={awaitingOpponent || isLoadingJudge}
+            isVoiceSupported={voiceInput.isSupported}
+            isListening={voiceInput.isListening}
+            isVoiceBusy={voiceInput.isBusy}
+            voiceInterim={voiceInput.interim}
+            voiceError={voiceInput.error}
+            voiceStatus={voiceInput.status}
+            onStartVoice={voiceInput.start}
+            onStopVoice={voiceInput.stop}
+          />
+        ) : null}
+
+        <div className="flex flex-wrap gap-2">
+          {awaitingOpponent && !isLoadingOpponent ? (
+            <Button
+              variant="outline"
+              leadingIcon={<RotateCcw size={16} aria-hidden="true" />}
+              onClick={retryOpponent}
+            >
+              Coba Lagi Lawan AI
+            </Button>
+          ) : null}
+          <Button
+            variant="danger"
+            leadingIcon={<Trash2 size={16} aria-hidden="true" />}
+            onClick={() => setShowCancelDialog(true)}
+          >
+            Batalkan Debat
+          </Button>
         </div>
       </section>
 

@@ -18,6 +18,10 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
+vi.mock("next/image", () => ({
+  default: () => null,
+}));
+
 describe("Home setup flow", () => {
   beforeEach(() => {
     pushMock.mockClear();

@@ -35,6 +35,179 @@
   }
 }
 
+@keyframes ra-neon-border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes ra-wave-dance {
+  0%,
+  100% {
+    transform: scaleY(0.38);
+    opacity: 0.58;
+  }
+
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ra-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ra-scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes ra-particle-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.8);
+  }
+
+  18% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--ra-particle-x, 0), -72px, 0) scale(1.08);
+  }
+}
+
+@keyframes ra-card-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ra-energy-sweep {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+.ra-animated-frame {
+  position: relative;
+}
+
+.ra-animated-frame::before {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(50, 212, 209, 0.42),
+    rgba(156, 124, 255, 0.18),
+    rgba(216, 170, 92, 0.34),
+    rgba(238, 106, 100, 0.38),
+    rgba(50, 212, 209, 0.42)
+  );
+  background-size: 260% 260%;
+  content: "";
+  opacity: 0.62;
+  animation: ra-neon-border-flow 7.5s ease-in-out infinite;
+}
+
+.ra-animated-frame::after {
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgba(7, 11, 19, 0.92);
+  content: "";
+}
+
+.ra-arena-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.ra-arena-scanline::after {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(50, 212, 209, 0.12),
+    transparent
+  );
+  content: "";
+  animation: ra-scanline 5.8s ease-in-out infinite;
+}
+
+.ra-floating-card {
+  animation: ra-card-float 5.2s ease-in-out infinite;
+}
+
+.ra-energy-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.ra-energy-line::after {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 34%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(91, 231, 225, 0.42),
+    transparent
+  );
+  content: "";
+  animation: ra-energy-sweep 2.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

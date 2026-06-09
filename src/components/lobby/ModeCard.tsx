@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { CheckCircle2, Clock } from "lucide-react";
 import { Badge } from "@/components/ui";
@@ -37,6 +38,8 @@ export interface ModeCardProps<TValue extends string> {
   estimatedDuration?: string;
   difficulty?: string;
   badge?: string;
+  artSrc?: string;
+  artAlt?: string;
   selected?: boolean;
   disabled?: boolean;
   comingSoon?: boolean;
@@ -52,6 +55,8 @@ export function ModeCard<TValue extends string>({
   estimatedDuration,
   difficulty,
   badge,
+  artSrc,
+  artAlt = "",
   selected = false,
   disabled = false,
   comingSoon = false,
@@ -66,22 +71,33 @@ export function ModeCard<TValue extends string>({
       aria-pressed={selected}
       onClick={() => onSelect(value)}
       className={cn(
-        "flex h-full min-h-[220px] flex-col rounded-[var(--ra-radius-lg)] border p-4 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-55",
+        "group relative flex h-full min-h-[260px] flex-col overflow-hidden rounded-[var(--ra-radius-lg)] border p-4 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-55",
         selected
           ? tone.border
           : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] hover:border-[var(--ra-border-strong)] hover:bg-[var(--ra-bg-panel-strong)]",
       )}
     >
+      {artSrc ? (
+        <Image
+          src={artSrc}
+          alt={artAlt}
+          fill
+          sizes="(min-width: 640px) 33vw, 260px"
+          className="object-cover opacity-[0.78] transition duration-300 group-hover:scale-[1.03]"
+          aria-hidden={artAlt ? undefined : true}
+        />
+      ) : null}
+      <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,19,0.12),rgba(7,11,19,0.78)_62%,rgba(7,11,19,0.95))]" />
       <div className="flex items-start justify-between gap-3">
         <span
           className={cn(
-            "grid h-12 w-12 place-items-center rounded-[var(--ra-radius-md)] border",
+            "relative z-[1] grid h-12 w-12 place-items-center rounded-[var(--ra-radius-md)] border backdrop-blur-md",
             tone.icon,
           )}
         >
           <Icon size={22} aria-hidden="true" />
         </span>
-        <div className="flex flex-col items-end gap-2">
+        <div className="relative z-[1] flex flex-col items-end gap-2">
           {selected ? (
             <CheckCircle2 size={18} aria-hidden="true" className="text-[var(--ra-cyan-bright)]" />
           ) : null}
@@ -93,7 +109,7 @@ export function ModeCard<TValue extends string>({
         </div>
       </div>
 
-      <div className="mt-5 flex-1">
+      <div className="relative z-[1] mt-auto pt-16">
         <h3 className="font-serif text-xl font-bold leading-tight text-[var(--ra-text-primary)]">
           {title}
         </h3>
@@ -102,7 +118,7 @@ export function ModeCard<TValue extends string>({
         </p>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-[var(--ra-text-muted)]">
+      <div className="relative z-[1] mt-5 flex flex-wrap gap-2 text-xs font-semibold text-[var(--ra-text-muted)]">
         {estimatedDuration ? (
           <span className="inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-subtle)] px-2 py-1">
             <Clock size={13} aria-hidden="true" />

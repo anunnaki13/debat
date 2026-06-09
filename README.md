@@ -116,6 +116,17 @@ UI Sprint 3 menambahkan:
 - fallback button untuk voice-only dan text-only;
 - screenshot QA device check.
 
+UI Sprint 4 menambahkan:
+
+- game-style asset pack berdasarkan dua mockup PNG terbaru;
+- design reference di `docs/design-reference/`;
+- SVG arena assets di `public/assets/arena/`;
+- CSS animation utilities dan reusable arena effects;
+- development-only `/dev/mock-arena`;
+- real arena layout dengan user podium, AI panel, momentum meter, action bar, dan input dock;
+- lobby/sidebar/mode card visual mulai mengikuti mockup game arena;
+- screenshot QA mock arena dan real arena.
+
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, `docs/progress/UI_SPRINT_2_REPORT.md`, dan `docs/progress/UI_SPRINT_3_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, `docs/progress/UI_SPRINT_2_REPORT.md`, `docs/progress/UI_SPRINT_3_REPORT.md`, dan `docs/progress/UI_SPRINT_4_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

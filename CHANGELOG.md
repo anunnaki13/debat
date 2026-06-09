@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-06-09 — UI Sprint 4 Game Arena Assets
+
+- Added the two uploaded PNG mockups as design references under `docs/design-reference/`.
+- Added SVG game-arena asset pack under `public/assets/arena/`:
+  - logo mark;
+  - rank badge;
+  - user orator avatar;
+  - AI opponent avatar;
+  - arena backdrop;
+  - mode card art.
+- Added CSS animation utilities for neon frames, waveforms, scanlines, particles, card float, and energy sweeps.
+- Added reusable arena animation components in `src/components/arena/ArenaEffects.tsx`.
+- Added development-only `/dev/mock-arena` for simulated arena visual states without API calls.
+- Redesigned the real debate arena base with user podium, AI panel, status banner, momentum meter, action bar, and game-style input dock.
+- Updated lobby hero, desktop sidebar, and mode cards to use the new asset direction.
+- Added visual QA screenshots:
+  - `docs/visual-qa/mock-arena-desktop.png`;
+  - `docs/visual-qa/mock-arena-mobile.png`;
+  - `docs/visual-qa/lobby-game-assets-desktop.png`;
+  - `docs/visual-qa/arena-real-desktop.png`;
+  - `docs/visual-qa/arena-real-mobile.png`.
+- Added `docs/progress/UI_SPRINT_4_REPORT.md`.
+
 ## 2026-06-09 — UI Sprint 3 Device Check
 
 - Redesigned `/debate/device-check` around the UI/UX Style Blueprint device-check rules.

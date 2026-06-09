@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Compass, History, Home, Settings, Swords } from "lucide-react";
+import { Compass, History, Home, Settings, Swords, Zap } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -18,10 +19,16 @@ export function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-60 border-r border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.86)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
+    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-60 border-r border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.88)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
       <Link href="/" className="flex min-h-12 items-center gap-3 rounded-[var(--ra-radius-md)] px-2">
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-user)]">
-          <BookOpen size={21} aria-hidden="true" />
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] shadow-[var(--ra-glow-user)]">
+          <Image
+            src="/assets/arena/logo-mark.svg"
+            alt=""
+            width={34}
+            height={34}
+            aria-hidden="true"
+          />
         </span>
         <span>
           <span className="block text-xs font-semibold uppercase tracking-wide text-[var(--ra-cyan-bright)]">
@@ -59,14 +66,34 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-4">
-        <Badge tone="prestige">MVP Lokal</Badge>
-        <p className="mt-3 text-sm font-semibold text-[var(--ra-text-primary)]">
-          Voice Arena
-        </p>
-        <p className="mt-1 text-xs leading-5 text-[var(--ra-text-muted)]">
-          Key dan riwayat tetap tersimpan di browser ini.
-        </p>
+      <div className="ra-animated-frame rounded-[var(--ra-radius-xl)] p-4">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/assets/arena/user-orator-avatar.svg"
+            alt=""
+            width={48}
+            height={48}
+            className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)]"
+            aria-hidden="true"
+          />
+          <div>
+            <p className="text-sm font-semibold text-[var(--ra-text-primary)]">
+              Budi Hidayat
+            </p>
+            <Badge tone="prestige" className="mt-1 gap-1">
+              <Zap size={12} aria-hidden="true" />
+              Orator Muda
+            </Badge>
+          </div>
+        </div>
+        <div className="mt-4 rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] p-3">
+          <p className="text-xs font-semibold text-[var(--ra-text-muted)]">
+            Kredit Arena
+          </p>
+          <p className="mt-1 font-serif text-2xl font-bold text-[var(--ra-cyan-bright)]">
+            140 KA
+          </p>
+        </div>
       </div>
     </aside>
   );

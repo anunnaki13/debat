@@ -20,6 +20,10 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/debate/test-session",
 }));
 
+vi.mock("next/image", () => ({
+  default: () => null,
+}));
+
 describe("DebateScreen", () => {
   beforeEach(() => {
     pushMock.mockClear();
@@ -56,8 +60,8 @@ describe("DebateScreen", () => {
     fireEvent.click(screen.getByRole("button", { name: /Kirim Argumen/i }));
 
     expect(
-      await screen.findByText("Balasan AI yang menantang argumen pengguna."),
-    ).toBeInTheDocument();
+      await screen.findAllByText("Balasan AI yang menantang argumen pengguna."),
+    ).not.toHaveLength(0);
 
     await waitFor(() => {
       const sessions = JSON.parse(

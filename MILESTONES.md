@@ -175,7 +175,43 @@ Catatan:
 - Permission denied matrix perangkat fisik masih masuk fase stabilisasi.
 - Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
 
-## Milestone 8 - Stabilization
+## Milestone 8 - UI Sprint 4 Game Arena Assets and Base
+
+Status: implemented.
+
+Hasil utama:
+
+- Dua mockup PNG terbaru disimpan sebagai design reference:
+  - `docs/design-reference/mockup-arena-overview.png`
+  - `docs/design-reference/mockup-product-system.png`
+- SVG asset pack dibuat di `public/assets/arena/`.
+- Asset manifest dibuat di `public/assets/arena/assets-manifest.md`.
+- CSS animation utilities ditambahkan untuk neon border, waveform, orbit ring, scanline, particle rise, floating card, dan energy sweep.
+- Reusable arena effects dibuat di `src/components/arena/ArenaEffects.tsx`.
+- `/dev/mock-arena` dibuat untuk simulasi state visual tanpa API call.
+- Real debate arena memakai:
+  - user podium;
+  - AI opponent panel;
+  - arena status banner;
+  - momentum meter;
+  - action bar;
+  - game-style input dock.
+- Lobby hero, desktop sidebar, dan mode cards mulai memakai asset game-style.
+- Visual QA screenshots:
+  - `docs/visual-qa/mock-arena-desktop.png`
+  - `docs/visual-qa/mock-arena-mobile.png`
+  - `docs/visual-qa/lobby-game-assets-desktop.png`
+  - `docs/visual-qa/arena-real-desktop.png`
+  - `docs/visual-qa/arena-real-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_4_REPORT.md`.
+
+Catatan:
+
+- Asset raster AI native tidak dibuat karena tool image generation tidak tersedia di sesi ini; pengganti yang dipakai adalah SVG/CSS repo-native agar ringan dan stabil.
+- Mockup PNG dipakai sebagai reference, bukan sebagai background produk mentah.
+- Sprint berikutnya harus menunggu konfirmasi user.
+
+## Milestone 9 - Stabilization
 
 Status: planned.
 
@@ -187,7 +223,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 9 - Product Refinement
+## Milestone 10 - Product Refinement
 
 Status: planned.
 

@@ -4,8 +4,13 @@ import type { DebateMessage } from "@/types/debate";
 export function DebateTranscript({ messages }: { messages: DebateMessage[] }) {
   if (messages.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-white/15 bg-slate-900/50 p-6 text-center text-sm text-slate-400">
-        Kritik gagasan, bukan pribadi.
+      <div className="rounded-[var(--ra-radius-xl)] border border-dashed border-[var(--ra-border-strong)] bg-[var(--ra-bg-panel)] p-8 text-center">
+        <p className="font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
+          Arena siap.
+        </p>
+        <p className="mt-2 text-sm leading-6 text-[var(--ra-text-muted)]">
+          Kritik gagasan, bukan pribadi. Mulai argumen untuk membuka ronde.
+        </p>
       </div>
     );
   }

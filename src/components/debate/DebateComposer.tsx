@@ -3,7 +3,9 @@
 import { Send } from "lucide-react";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { VoiceInputButton } from "@/components/debate/VoiceInputButton";
+import { Button } from "@/components/ui";
 import { ROUND_DEFINITIONS } from "@/lib/debate/rules";
+import { cn } from "@/lib/cn";
 import type { RoundId } from "@/types/debate";
 
 export function DebateComposer({
@@ -39,22 +41,23 @@ export function DebateComposer({
   const overLimit = value.length > limit;
 
   return (
-    <section className="rounded-lg border border-white/10 bg-slate-950/75 p-4">
+    <section className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[var(--ra-bg-glass)] p-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold text-white">
+          <h2 className="text-sm font-semibold text-[var(--ra-text-primary)]">
             {ROUND_DEFINITIONS[round].label}
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-xs leading-5 text-[var(--ra-text-muted)]">
             {ROUND_DEFINITIONS[round].purpose}
           </p>
         </div>
         <span
-          className={`rounded-md border px-3 py-1 text-xs font-semibold ${
+          className={cn(
+            "rounded-[var(--ra-radius-pill)] border px-3 py-1 text-xs font-semibold",
             overLimit
-              ? "border-red-300/40 bg-red-300/10 text-red-100"
-              : "border-white/10 bg-slate-900 text-slate-300"
-          }`}
+              ? "border-[var(--ra-coral)] bg-[var(--ra-coral-soft)] text-[var(--ra-coral-bright)]"
+              : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-secondary)]",
+          )}
         >
           {value.length}/{limit}
         </span>
@@ -64,16 +67,16 @@ export function DebateComposer({
         onChange={(event) => onChange(event.target.value)}
         maxLength={limit + 200}
         disabled={disabled}
-        className="mt-4 min-h-40 w-full resize-y rounded-md border border-white/10 bg-slate-900/85 p-4 text-sm leading-7 text-white placeholder:text-slate-500 transition focus:border-cyan-300/60 disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-3 min-h-24 w-full resize-y rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-4 text-sm leading-7 text-[var(--ra-text-primary)] placeholder:text-[var(--ra-text-muted)] transition focus-visible:border-[var(--ra-cyan)] disabled:cursor-not-allowed disabled:opacity-70 md:min-h-20"
         placeholder="Tulis argumen Anda..."
       />
       {voiceInterim ? (
-        <p className="mt-2 rounded-md border border-cyan-300/20 bg-cyan-300/10 px-3 py-2 text-sm text-cyan-100">
+        <p className="mt-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] px-3 py-2 text-sm text-[var(--ra-cyan-bright)]">
           {voiceInterim}
         </p>
       ) : null}
       {voiceStatus ? (
-        <p className="mt-2 rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-sm text-slate-300">
+        <p className="mt-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-secondary)]">
           {voiceStatus}
         </p>
       ) : null}
@@ -82,7 +85,7 @@ export function DebateComposer({
           <ErrorBanner message={voiceError} />
         </div>
       ) : null}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
         <VoiceInputButton
           isSupported={isVoiceSupported}
           isListening={isListening}
@@ -90,15 +93,13 @@ export function DebateComposer({
           onStop={onStopVoice}
           disabled={disabled || Boolean(isVoiceBusy && !isListening)}
         />
-        <button
-          type="button"
+        <Button
           onClick={onSubmit}
           disabled={disabled || !value.trim() || overLimit}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-cyan-300 px-5 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+          trailingIcon={<Send size={16} aria-hidden="true" />}
         >
-          <Send size={16} aria-hidden="true" />
           Kirim Argumen
-        </button>
+        </Button>
       </div>
     </section>
   );

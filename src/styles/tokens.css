@@ -81,6 +81,19 @@
   --ra-gradient-result:
     radial-gradient(circle at 50% 18%, rgba(216, 170, 92, 0.20), transparent 34%),
     linear-gradient(180deg, #111B2B 0%, #09111C 100%);
+  --ra-gradient-game-arena:
+    radial-gradient(circle at 50% 0%, rgba(78, 156, 255, 0.24), transparent 34%),
+    radial-gradient(circle at 18% 32%, rgba(50, 212, 209, 0.16), transparent 28%),
+    radial-gradient(circle at 82% 38%, rgba(238, 106, 100, 0.16), transparent 30%),
+    linear-gradient(180deg, #081329 0%, #070B13 72%);
+  --ra-gradient-card-blue:
+    linear-gradient(145deg, rgba(50, 212, 209, 0.24), rgba(78, 156, 255, 0.10));
+  --ra-gradient-card-orange:
+    linear-gradient(145deg, rgba(230, 162, 71, 0.26), rgba(238, 106, 100, 0.12));
+  --ra-gradient-card-purple:
+    linear-gradient(145deg, rgba(156, 124, 255, 0.26), rgba(78, 156, 255, 0.10));
+  --ra-gradient-card-green:
+    linear-gradient(145deg, rgba(98, 212, 156, 0.24), rgba(50, 212, 209, 0.10));
 
   /* Shadows and glow */
   --ra-shadow-card: 0 16px 44px rgba(0, 0, 0, 0.26);

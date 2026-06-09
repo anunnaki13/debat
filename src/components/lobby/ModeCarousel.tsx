@@ -12,6 +12,7 @@ const modes = [
     estimatedDuration: "12-18 menit",
     difficulty: "Pemula",
     badge: "Aktif",
+    artSrc: "/assets/arena/mode-duel-ai.svg",
     enabled: true,
     comingSoon: false,
   },
@@ -24,6 +25,7 @@ const modes = [
     estimatedDuration: "Sprint lanjut",
     difficulty: "Menantang",
     badge: undefined,
+    artSrc: "/assets/arena/mode-kursi-panas.svg",
     enabled: false,
     comingSoon: true,
   },
@@ -36,6 +38,7 @@ const modes = [
     estimatedDuration: "Sprint lanjut",
     difficulty: "Menengah",
     badge: undefined,
+    artSrc: "/assets/arena/mode-majelis-publik.svg",
     enabled: false,
     comingSoon: true,
   },
@@ -61,6 +64,8 @@ export function ModeCarousel({
             estimatedDuration={mode.estimatedDuration}
             difficulty={mode.difficulty}
             badge={mode.badge}
+            artSrc={mode.artSrc}
+            artAlt=""
             selected={value === mode.value}
             disabled={!mode.enabled}
             comingSoon={mode.comingSoon}

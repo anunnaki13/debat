@@ -54,7 +54,7 @@ Konfigurasi OpenRouter tetap dibaca dari `.env.local` melalui `docker-compose.ym
 
 ## MVP Scope
 
-- Pilih topik lokal dan posisi `PRO`, `CONTRA`, atau acak.
+- Pilih dari 22 topik lokal aman atau buat topik privat, lalu pilih posisi `PRO`, `CONTRA`, atau acak.
 - Debat tiga ronde: opening, rebuttal, closing.
 - AI Opponent dipanggil dari route server `/api/debate/opponent`.
 - AI Judge/wasit dipanggil dari route server `/api/debate/judge`.
@@ -71,6 +71,7 @@ Konfigurasi OpenRouter tetap dibaca dari `.env.local` melalui `docker-compose.ym
 - Server route untuk OpenRouter STT dan TTS.
 - Delivery Signals helper tanpa klaim deteksi emosi.
 - Smoke test API mencakup opponent, judge fallback, STT, dan TTS tanpa memanggil OpenRouter asli.
+- Test data topik memastikan ID unik, schema kompatibel, dan spice level tetap dalam range MVP.
 
 OpenRouter key yang diisi lewat UI tetap berada di browser lokal, dikirim hanya ke route server lokal saat request AI berjalan, dan tidak masuk ke export session.
 

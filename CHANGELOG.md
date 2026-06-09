@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-10 - Product Refinement Sprint 1 Safe Topic Expansion
+
+- Expanded the built-in debate topic pool from 10 to 22 topics across education, work, city policy, environment, digital privacy, tourism, sports management, and local economy.
+- Kept topics within MVP-safe debate framing with spice levels 1-4 and no public social-layer dependency.
+- Added `src/data/topics.test.ts` to verify topic count, unique IDs, API schema compatibility, and MVP spice range.
+- Added `docs/progress/PRODUCT_REFINEMENT_SPRINT_1_REPORT.md`.
+
 ## 2026-06-09 - Stabilization Sprint 3 OpenRouter Setup Check
 
 - Added `/api/ai/openrouter-check` to verify a user's OpenRouter key and selected model IDs with a minimal chat request before starting a debate.

@@ -319,15 +319,22 @@ Artefak:
 
 ## Milestone 12 - Product Refinement
 
-Status: planned.
+Status: partially implemented.
 
 Fokus:
 
-- Memperluas daftar topik aman.
+- Done: memperluas daftar topik aman dari 10 menjadi 22 topik.
+- Done: menambahkan test kualitas topik untuk jumlah, ID unik, kompatibilitas schema API, dan spice range MVP.
 - Menambah preset model/provider jika perlu.
 - Memperbaiki visual polish berdasarkan sesi pemakaian nyata.
 - Menambah dokumentasi deployment VPS.
 - Menilai apakah voice input/output layak dipertahankan sebagai fitur utama.
+
+Artefak:
+
+- `src/data/topics.ts`
+- `src/data/topics.test.ts`
+- `docs/progress/PRODUCT_REFINEMENT_SPRINT_1_REPORT.md`
 
 ## Non-Goals Saat Ini
 

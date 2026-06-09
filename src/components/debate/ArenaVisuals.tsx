@@ -16,8 +16,7 @@ import { AnimatedAvatarRing } from "@/components/arena/ArenaEffects";
 import { Badge, Button, Chip } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import {
-  arenaReferenceAssets,
-  personaCrop,
+  personaPortraits,
   type PersonaCropKey,
 } from "@/lib/arena-reference-assets";
 import type { DebateInputMode, DebateSide, RoundId } from "@/types/debate";
@@ -196,7 +195,7 @@ export function UserPodium({
             active={speaking}
             className={compact ? "h-16 w-16" : "h-24 w-24"}
           >
-            <PersonaDisc crop="reformer" tone="blue" className={compact ? "h-14 w-14" : "h-20 w-20"} />
+            <PersonaDisc crop="livePlayer" tone="blue" className={compact ? "h-14 w-14" : "h-20 w-20"} />
           </AnimatedAvatarRing>
         </div>
         <Badge
@@ -319,7 +318,7 @@ export function AiOpponentPanel({
                 style={{ animation: "ra-halo-pulse 1.8s ease-in-out infinite" }}
               />
             ) : null}
-            <PersonaDisc crop="fieldCommander" tone="red" className="h-28 w-28" />
+            <PersonaDisc crop="liveOpponent" tone="red" className="h-28 w-28" />
           </div>
           <h2 className="mt-3 text-xl font-extrabold text-[var(--ra-text-primary)]">
             Menteri Klarifikasi
@@ -370,9 +369,9 @@ function PersonaDisc({
         className,
       )}
       style={{
-        backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
-        backgroundPosition: personaCrop[crop].backgroundPosition,
-        backgroundSize: personaCrop[crop].backgroundSize,
+        backgroundImage: `url(${personaPortraits[crop]})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
       aria-hidden="true"
     />
@@ -390,9 +389,9 @@ function PersonaPanel({
     <div
       className={cn("bg-cover", className)}
       style={{
-        backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
-        backgroundPosition: personaCrop[crop].backgroundPosition,
-        backgroundSize: personaCrop[crop].backgroundSize,
+        backgroundImage: `url(${personaPortraits[crop]})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
       aria-hidden="true"
     />

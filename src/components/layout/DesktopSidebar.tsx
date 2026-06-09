@@ -16,7 +16,7 @@ import {
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { arenaReferenceAssets, personaCrop } from "@/lib/arena-reference-assets";
+import { arenaReferenceAssets, personaPortraits } from "@/lib/arena-reference-assets";
 
 const navItems = [
   { label: "Debat Cepat", href: "/", icon: Zap, match: "/" },
@@ -35,10 +35,10 @@ export function DesktopSidebar() {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[rgba(72,118,206,0.24)] bg-[linear-gradient(180deg,rgba(2,6,17,0.98),rgba(4,9,25,0.96))] px-3 py-4 backdrop-blur-xl lg:flex lg:flex-col">
-      <Link href="/" className="relative block overflow-hidden rounded-[var(--ra-radius-lg)] border border-[rgba(94,140,255,0.18)] bg-black/40 p-4">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(84,136,255,0.18),transparent_52%)]" />
+      <Link href="/" className="relative flex min-h-[118px] flex-col justify-center rounded-[var(--ra-radius-lg)] border border-[rgba(94,140,255,0.18)] bg-black/40 p-3">
+        <div className="absolute inset-0 rounded-[var(--ra-radius-lg)] bg-[radial-gradient(circle_at_50%_0%,rgba(84,136,255,0.18),transparent_52%)]" />
         <div className="relative">
-          <p className="text-center text-[2.1rem] font-black uppercase leading-[0.82] tracking-tight text-[var(--ra-text-primary)] drop-shadow-[0_0_18px_rgba(70,148,255,0.34)]">
+          <p className="text-center text-[1.85rem] font-black uppercase leading-none tracking-tight text-[var(--ra-text-primary)] drop-shadow-[0_0_18px_rgba(70,148,255,0.34)]">
             Arena
           </p>
           <p className="mt-1 text-center text-xl font-black uppercase leading-none tracking-wide text-[#ff5f72]">
@@ -55,9 +55,9 @@ export function DesktopSidebar() {
           <span
             className="h-14 w-14 shrink-0 rounded-[var(--ra-radius-pill)] border border-[#54caff] bg-cover shadow-[0_0_24px_rgba(68,190,255,0.35)]"
             style={{
-              backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
-              backgroundPosition: personaCrop.reformer.backgroundPosition,
-              backgroundSize: personaCrop.reformer.backgroundSize,
+              backgroundImage: `url(${personaPortraits.livePlayer})`,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
             }}
             aria-hidden="true"
           />

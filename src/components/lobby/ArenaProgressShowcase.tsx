@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ArrowRight, Crown, Share2, Shield, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui";
-import { arenaReferenceAssets, personaCrop } from "@/lib/arena-reference-assets";
+import { arenaReferenceAssets, personaPortraits } from "@/lib/arena-reference-assets";
 
 const careerSteps = [
   { label: "Aktivis", range: "0 - 1.000 XP", active: true },
@@ -100,9 +100,9 @@ export function ArenaProgressShowcase() {
           <span
             className="h-16 w-16 rounded-[var(--ra-radius-pill)] border border-[#55dfff] bg-cover shadow-[0_0_24px_rgba(68,196,255,0.30)]"
             style={{
-              backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
-              backgroundPosition: personaCrop.reformer.backgroundPosition,
-              backgroundSize: personaCrop.reformer.backgroundSize,
+              backgroundImage: `url(${personaPortraits.livePlayer})`,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
             }}
             aria-hidden="true"
           />

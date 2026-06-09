@@ -23,27 +23,14 @@ export const arenaReferenceAssets = {
   verticalArenaFrame,
 } satisfies Record<string, StaticImageData>;
 
-export const personaCrop = {
-  reformer: {
-    backgroundPosition: "0% 0%",
-    backgroundSize: "300% 200%",
-  },
-  strategist: {
-    backgroundPosition: "50% 0%",
-    backgroundSize: "300% 200%",
-  },
-  investigator: {
-    backgroundPosition: "100% 0%",
-    backgroundSize: "300% 200%",
-  },
-  fieldCommander: {
-    backgroundPosition: "25% 100%",
-    backgroundSize: "300% 200%",
-  },
-  publicVoice: {
-    backgroundPosition: "75% 100%",
-    backgroundSize: "300% 200%",
-  },
+export const personaPortraits = {
+  livePlayer: "/assets/arena/personas/live-player.png",
+  liveOpponent: "/assets/arena/personas/live-opponent.png",
+  reformer: "/assets/arena/personas/reformer.png",
+  strategist: "/assets/arena/personas/strategist.png",
+  investigator: "/assets/arena/personas/investigator.png",
+  fieldCommander: "/assets/arena/personas/field-commander.png",
+  publicVoice: "/assets/arena/personas/public-voice.png",
 } as const;
 
-export type PersonaCropKey = keyof typeof personaCrop;
+export type PersonaCropKey = keyof typeof personaPortraits;

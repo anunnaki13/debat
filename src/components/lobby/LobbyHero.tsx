@@ -14,7 +14,7 @@ import { ArenaParticleField } from "@/components/arena/ArenaEffects";
 import { Button } from "@/components/ui";
 import {
   arenaReferenceAssets,
-  personaCrop,
+  personaPortraits,
   type PersonaCropKey,
 } from "@/lib/arena-reference-assets";
 
@@ -72,7 +72,7 @@ export function LobbyHero({
 
           <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
             <HeroPersona
-              crop="reformer"
+              crop="livePlayer"
               label="Anda"
               role="Orator Muda"
               side="PRO"
@@ -109,7 +109,7 @@ export function LobbyHero({
             </div>
 
             <HeroPersona
-              crop="fieldCommander"
+              crop="liveOpponent"
               label="AI Lawan"
               role="Ekonom Konservatif"
               side="CONTRA"
@@ -311,9 +311,9 @@ function PersonaArt({
     <div
       className={className}
       style={{
-        backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
-        backgroundPosition: personaCrop[crop].backgroundPosition,
-        backgroundSize: personaCrop[crop].backgroundSize,
+        backgroundImage: `url(${personaPortraits[crop]})`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
       aria-hidden="true"
     />

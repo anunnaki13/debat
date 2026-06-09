@@ -230,7 +230,33 @@ Catatan:
 - Mockup PNG dipakai sebagai reference, bukan sebagai background produk mentah.
 - Sprint berikutnya harus menunggu konfirmasi user.
 
-## Milestone 9 - Stabilization
+## Milestone 9 - UI Sprint 5 Voice Polish and Barge-In
+
+Status: implemented.
+
+Hasil utama:
+
+- Browser TTS sekarang memiliki lifecycle callback (`onStart`, `onEnd`, `onError`).
+- Real debate arena melacak state suara lawan AI: `idle`, `preparing`, dan `speaking`.
+- State visual `ai_speaking` sekarang aktif di arena real saat auto-speak berjalan.
+- Interupsi menghentikan browser TTS, audio OpenRouter, dan pending OpenRouter TTS synthesis.
+- Event `ai_voice_interrupted` dicatat saat interupsi benar-benar memotong suara AI.
+- Notice arena menjelaskan saat suara AI disiapkan, sedang berbicara, gagal, fallback, atau dihentikan.
+- Test baru:
+  - `src/lib/speech/speakText.test.ts`
+  - tambahan coverage auto-speak/interupsi di `src/components/debate/DebateScreen.test.tsx`
+- Visual QA screenshots:
+  - `docs/visual-qa/arena-voice-polish-desktop.png`
+  - `docs/visual-qa/arena-voice-polish-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_5_REPORT.md`.
+
+Catatan:
+
+- Sprint ini tidak membatalkan request teks lawan AI saat `ai_thinking`; fokusnya playback audio/TTS queue.
+- QA visual memakai server production lokal di port kosong `3002` karena dev server lama di `3001` sedang aktif.
+- Sprint berikutnya harus menunggu konfirmasi user.
+
+## Milestone 10 - Stabilization
 
 Status: planned.
 
@@ -242,7 +268,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 10 - Product Refinement
+## Milestone 11 - Product Refinement
 
 Status: planned.
 

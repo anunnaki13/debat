@@ -63,6 +63,8 @@ const audienceSignals = [
   { label: "Menarik", value: "89", icon: Lightbulb, tone: "text-[var(--ra-violet)]" },
 ] as const;
 
+type OpponentVoiceState = "idle" | "preparing" | "speaking";
+
 function readApiError(error: unknown, fallback: string): string {
   if (
     typeof error === "object" &&
@@ -82,6 +84,7 @@ function getArenaVisualState({
   awaitingOpponent,
   isLoadingOpponent,
   isListening,
+  opponentVoiceState,
   status,
 }: {
   error: string;
@@ -89,6 +92,7 @@ function getArenaVisualState({
   awaitingOpponent: boolean;
   isLoadingOpponent: boolean;
   isListening: boolean;
+  opponentVoiceState: OpponentVoiceState;
   status: DebateSession["status"];
 }): ArenaVisualState {
   if (error) {
@@ -103,7 +107,11 @@ function getArenaVisualState({
     return "complete";
   }
 
-  if (awaitingOpponent || isLoadingOpponent) {
+  if (opponentVoiceState === "speaking") {
+    return "ai_speaking";
+  }
+
+  if (awaitingOpponent || isLoadingOpponent || opponentVoiceState === "preparing") {
     return "ai_thinking";
   }
 
@@ -177,8 +185,11 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [inputSource, setInputSource] = useState<InputSource>("TEXT");
   const [arenaNotice, setArenaNotice] = useState("");
+  const [opponentVoiceState, setOpponentVoiceState] =
+    useState<OpponentVoiceState>("idle");
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
+  const ttsAbortRef = useRef<AbortController | null>(null);
 
   const appendBrowserTranscript = useCallback((text: string) => {
     setInput((current) => [current, text].filter(Boolean).join(" ").trimStart());
@@ -290,6 +301,8 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   }
 
   const stopOpenRouterAudio = useCallback(() => {
+    ttsAbortRef.current?.abort();
+    ttsAbortRef.current = null;
     activeAudioRef.current?.pause();
     activeAudioRef.current = null;
 
@@ -299,15 +312,63 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     }
   }, []);
 
+  const stopOpponentVoice = useCallback(() => {
+    stopOpenRouterAudio();
+    stopSpeaking();
+    setOpponentVoiceState("idle");
+  }, [stopOpenRouterAudio]);
+
+  const finishOpponentVoice = useCallback((notice?: string) => {
+    setOpponentVoiceState("idle");
+
+    if (notice) {
+      setArenaNotice(notice);
+    }
+  }, []);
+
+  const speakOpponentWithBrowserVoice = useCallback(
+    (text: string, targetSessionId: string, isFallback = false) => {
+      stopSpeaking();
+      setOpponentVoiceState("preparing");
+      setArenaNotice(
+        isFallback
+          ? "TTS OpenRouter gagal. Suara browser disiapkan sebagai fallback."
+          : "Menyiapkan suara AI dari browser...",
+      );
+      trackLocalEvent("tts_started", { mode: "browser" }, targetSessionId);
+
+      speakText(text, {
+        onStart: () => {
+          setOpponentVoiceState("speaking");
+          setArenaNotice("AI sedang berbicara. Tekan Interupsi untuk memotong.");
+        },
+        onEnd: () => {
+          finishOpponentVoice("Giliran Anda. Susun balasan berikutnya.");
+        },
+        onError: () => {
+          trackLocalEvent("tts_failed", { mode: "browser" }, targetSessionId);
+          finishOpponentVoice("Suara AI gagal. Teks tetap tersedia di transcript.");
+        },
+      });
+    },
+    [finishOpponentVoice],
+  );
+
   const speakOpponentVoice = useCallback(
     async (text: string, targetSessionId: string) => {
       stopOpenRouterAudio();
+      stopSpeaking();
+      setOpponentVoiceState("preparing");
+      setArenaNotice("Menyiapkan suara AI OpenRouter...");
       trackLocalEvent("tts_started", undefined, targetSessionId);
+      const controller = new AbortController();
+      ttsAbortRef.current = controller;
 
       try {
         const response = await fetch("/api/voice/synthesize", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({ text }),
         });
 
@@ -321,20 +382,40 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
         activeAudioRef.current = audio;
         activeAudioUrlRef.current = url;
-        audio.onended = stopOpenRouterAudio;
-        audio.onerror = stopOpenRouterAudio;
+        ttsAbortRef.current = null;
+        audio.onended = () => {
+          stopOpenRouterAudio();
+          finishOpponentVoice("Giliran Anda. Susun balasan berikutnya.");
+        };
+        audio.onerror = () => {
+          stopOpenRouterAudio();
+          trackLocalEvent("tts_failed", { mode: "openrouter" }, targetSessionId);
+          finishOpponentVoice("Suara AI gagal. Teks tetap tersedia di transcript.");
+        };
+        setOpponentVoiceState("speaking");
+        setArenaNotice("AI sedang berbicara. Tekan Interupsi untuk memotong.");
         await audio.play();
       } catch {
+        if (controller.signal.aborted) {
+          return;
+        }
+
         stopOpenRouterAudio();
         trackLocalEvent("tts_failed", undefined, targetSessionId);
         trackLocalEvent("browser_tts_fallback_used", undefined, targetSessionId);
-        speakText(text);
+        speakOpponentWithBrowserVoice(text, targetSessionId, true);
       }
+    },
+    [finishOpponentVoice, speakOpponentWithBrowserVoice, stopOpenRouterAudio],
+  );
+
+  useEffect(
+    () => () => {
+      stopOpenRouterAudio();
+      stopSpeaking();
     },
     [stopOpenRouterAudio],
   );
-
-  useEffect(() => stopOpenRouterAudio, [stopOpenRouterAudio]);
 
   async function callOpponent(nextSession: DebateSession) {
     setError("");
@@ -385,7 +466,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
       if (preferences.autoSpeakOpponent) {
         if (nextSession.inputMode === "TEXT") {
-          speakText(opponentMessage.content);
+          speakOpponentWithBrowserVoice(opponentMessage.content, nextSession.id);
         } else {
           void speakOpponentVoice(opponentMessage.content, nextSession.id);
         }
@@ -478,8 +559,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
     setError("");
     setIsLoadingJudge(true);
-    stopOpenRouterAudio();
-    stopSpeaking();
+    stopOpponentVoice();
 
     try {
       const response = await fetch("/api/debate/judge", {
@@ -555,6 +635,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     awaitingOpponent,
     isLoadingOpponent,
     isListening: voiceInput.isListening,
+    opponentVoiceState,
     status: session.status,
   });
   const momentum = getMomentum(session.messages);
@@ -663,8 +744,17 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           <ArenaActionBar
             state={arenaState}
             onInterrupt={() => {
-              stopOpenRouterAudio();
-              stopSpeaking();
+              if (opponentVoiceState === "idle") {
+                setArenaNotice("Interupsi aktif saat suara AI sedang berjalan.");
+                return;
+              }
+
+              stopOpponentVoice();
+              trackLocalEvent(
+                "ai_voice_interrupted",
+                { voiceState: opponentVoiceState },
+                session.id,
+              );
               setArenaNotice("AI dihentikan. Silakan sampaikan interupsi Anda.");
               setError("");
             }}
@@ -722,8 +812,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           onCancel={() => setShowCancelDialog(false)}
           onConfirm={() => {
             deleteLocalSession(session.id);
-            stopOpenRouterAudio();
-            stopSpeaking();
+            stopOpponentVoice();
             router.push("/");
           }}
         />

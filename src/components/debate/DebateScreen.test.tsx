@@ -6,12 +6,24 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { debateTopics } from "@/data/topics";
 import { createDebateSession } from "@/lib/debate/session";
 import {
+  DEFAULT_PREFERENCES,
   SESSIONS_STORAGE_KEY,
+  savePreferences,
   upsertLocalSession,
 } from "@/lib/storage/localSessions";
 import { DebateScreen } from "./DebateScreen";
 
 const pushMock = vi.fn();
+
+class MockSpeechSynthesisUtterance {
+  lang = "";
+  rate = 1;
+  onstart: (() => void) | null = null;
+  onend: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+
+  constructor(public text: string) {}
+}
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -72,5 +84,47 @@ describe("DebateScreen", () => {
       expect(updatedSession?.currentRound).toBe("REBUTTAL");
       expect(updatedSession?.messages).toHaveLength(2);
     });
+  });
+
+  it("shows AI speech as interruptible when browser auto-speak is enabled", async () => {
+    const cancelSpeech = vi.fn();
+    const speak = vi.fn((utterance: MockSpeechSynthesisUtterance) => {
+      utterance.onstart?.();
+    });
+    const session = createDebateSession(debateTopics[0], "PRO");
+
+    vi.stubGlobal("SpeechSynthesisUtterance", MockSpeechSynthesisUtterance);
+    vi.stubGlobal("speechSynthesis", {
+      cancel: cancelSpeech,
+      speak,
+    });
+    savePreferences({
+      ...DEFAULT_PREFERENCES,
+      autoSpeakOpponent: true,
+    });
+    upsertLocalSession(session);
+
+    render(<DebateScreen sessionId={session.id} />);
+
+    expect(await screen.findByText(session.topic.title)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText("Tulis argumen Anda..."), {
+      target: {
+        value:
+          "AI bisa menciptakan pekerjaan baru kalau reskilling disiapkan sejak awal.",
+      },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Kirim Argumen/i }));
+
+    expect(
+      await screen.findByText(/AI sedang berbicara\. Tekan Interupsi/i),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Interupsi/i }));
+
+    expect(
+      await screen.findByText(/AI dihentikan\. Silakan sampaikan interupsi/i),
+    ).toBeInTheDocument();
+    expect(cancelSpeech).toHaveBeenCalled();
   });
 });

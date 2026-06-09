@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-06-09 - UI Sprint 5 Voice Polish and Barge-In
+
+- Added lifecycle callbacks to browser speech synthesis so the real arena can show `AI berbicara` while auto-speak is active.
+- Added opponent voice playback state in the debate arena: preparing, speaking, and idle.
+- Added interrupt handling that stops browser TTS, aborts pending OpenRouter TTS synthesis, clears active audio, and tracks `ai_voice_interrupted`.
+- Retuned arena notice copy so users see when AI speech is being prepared, spoken, interrupted, or downgraded to browser fallback.
+- Added unit coverage for `speakText` lifecycle callbacks and integration coverage for the DebateScreen interrupt flow.
+- Added visual QA screenshots:
+  - `docs/visual-qa/arena-voice-polish-desktop.png`;
+  - `docs/visual-qa/arena-voice-polish-mobile.png`.
+- Added `docs/progress/UI_SPRINT_5_REPORT.md`.
+
 ## 2026-06-09 - Arena Politika Asset Reference Pass
 
 - Imported the newly uploaded `asset/` folder from GitHub into the working branch as active visual reference material.

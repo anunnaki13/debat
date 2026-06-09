@@ -9,9 +9,9 @@ export function TranscriptAccordion({
   messages: DebateMessage[];
 }) {
   return (
-    <details className="rounded-lg border border-white/10 bg-slate-950/75 p-4">
-      <summary className="cursor-pointer text-sm font-semibold text-white">
-        Transcript
+    <details className="rounded-[var(--ra-radius-xl)] border border-[rgba(90,142,255,0.24)] bg-[rgba(5,12,28,0.82)] p-4 shadow-[var(--ra-shadow-card)]">
+      <summary className="cursor-pointer text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
+        Transcript Arena
       </summary>
       <div className="mt-4 space-y-4">
         {messages.map((message) => (

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-06-09 - UI Sprint 6 Result and Delivery Coach
+
+- Reworked the result screen into an Arena Politika result reveal with topic hero, score stats, grade badge, CTA row, and local share preview card.
+- Restyled AI Judge report cards, score bars, strengths, improvements, recommended exercise, and transcript accordion using Arena Politika HUD tokens.
+- Added Delivery Coach panel for voice sessions with WPM, pause ratio, filler count, response latency, volume stability, and interruption metrics.
+- Added non-voice fallback copy that keeps Delivery Coach clearly scoped to technical speaking signals, not emotion.
+- Added result screen test coverage for grade reveal, Delivery Coach metrics, and transcript.
+- Added visual QA screenshots:
+  - `docs/visual-qa/result-delivery-coach-desktop.png`;
+  - `docs/visual-qa/result-delivery-coach-mobile.png`.
+- Added `docs/progress/UI_SPRINT_6_REPORT.md`.
+
 ## 2026-06-09 - UI Sprint 5 Voice Polish and Barge-In
 
 - Added lifecycle callbacks to browser speech synthesis so the real arena can show `AI berbicara` while auto-speak is active.

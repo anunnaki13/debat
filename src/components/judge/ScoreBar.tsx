@@ -7,21 +7,34 @@ export function ScoreBar({
   score: number;
   explanation: string;
 }) {
+  const normalizedScore = Math.min(100, Math.max(0, score));
+
   return (
-    <div className="rounded-lg border border-white/10 bg-slate-950/75 p-4">
+    <div className="rounded-[var(--ra-radius-lg)] border border-[rgba(90,142,255,0.22)] bg-[rgba(5,12,28,0.82)] p-4 shadow-[var(--ra-shadow-card)]">
       <div className="flex items-center justify-between gap-4">
-        <h3 className="text-sm font-semibold text-white">{label}</h3>
-        <span className="rounded-md border border-cyan-300/30 bg-cyan-300/10 px-2 py-1 text-sm font-bold text-cyan-100">
-          {score}
+        <h3 className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
+          {label}
+        </h3>
+        <span className="rounded-[var(--ra-radius-md)] border border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] px-2.5 py-1 text-sm font-black text-[var(--ra-electric-cyan)]">
+          {normalizedScore}
         </span>
       </div>
-      <div className="mt-3 h-3 overflow-hidden rounded-md bg-slate-800">
+      <div
+        className="mt-3 h-3 overflow-hidden rounded-[var(--ra-radius-pill)] border border-[rgba(255,255,255,0.10)] bg-[rgba(255,255,255,0.06)]"
+        role="meter"
+        aria-label={`${label} score`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={normalizedScore}
+      >
         <div
-          className="h-full rounded-md bg-cyan-300"
-          style={{ width: `${score}%` }}
+          className="h-full rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta),var(--ra-gold))] shadow-[0_0_18px_rgba(21,248,255,0.42)]"
+          style={{ width: `${normalizedScore}%` }}
         />
       </div>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{explanation}</p>
+      <p className="mt-3 text-sm leading-6 text-[var(--ra-text-secondary)]">
+        {explanation}
+      </p>
     </div>
   );
 }

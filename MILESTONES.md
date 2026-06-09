@@ -256,7 +256,39 @@ Catatan:
 - QA visual memakai server production lokal di port kosong `3002` karena dev server lama di `3001` sedang aktif.
 - Sprint berikutnya harus menunggu konfirmasi user.
 
-## Milestone 10 - Stabilization
+## Milestone 10 - UI Sprint 6 Result and Delivery Coach
+
+Status: implemented.
+
+Hasil utama:
+
+- Result screen dirombak menjadi Arena Politika result reveal.
+- Hero hasil menampilkan kategori topik, matchup posisi, grade, overall score, jumlah pesan, dan CTA.
+- Kartu share preview lokal dibuat untuk hasil debat.
+- AI Judge report panel diubah ke style HUD: score bars, strongest point, improvement area, strengths, improvements, dan exercise.
+- Delivery Coach ditampilkan untuk sesi voice dengan metrik:
+  - WPM;
+  - pause ratio;
+  - filler count;
+  - response latency;
+  - volume stability;
+  - interruption count.
+- Delivery Coach fallback menjelaskan bahwa mode text-only belum punya sinyal voice.
+- Transcript accordion direstyle menjadi `Transcript Arena`.
+- Test baru:
+  - `src/components/judge/ResultScreen.test.tsx`
+- Visual QA screenshots:
+  - `docs/visual-qa/result-delivery-coach-desktop.png`
+  - `docs/visual-qa/result-delivery-coach-mobile.png`
+- Progress report di `docs/progress/UI_SPRINT_6_REPORT.md`.
+
+Catatan:
+
+- Delivery Coach tetap memakai sinyal teknis pola bicara dan tidak membuat klaim emosi.
+- Share preview masih lokal, belum ekspor gambar.
+- Sprint berikutnya harus menunggu konfirmasi user.
+
+## Milestone 11 - Stabilization
 
 Status: planned.
 
@@ -268,7 +300,7 @@ Fokus:
 - Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
 - Tambah smoke test untuk route API dengan mock provider.
 
-## Milestone 11 - Product Refinement
+## Milestone 12 - Product Refinement
 
 Status: planned.
 

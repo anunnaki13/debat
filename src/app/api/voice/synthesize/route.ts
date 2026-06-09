@@ -1,3 +1,8 @@
+import {
+  classifyOpenRouterFailure,
+  OpenRouterUpstreamError,
+} from "@/lib/openrouter/client";
+import { toOpenRouterApiError } from "@/lib/openrouter/errors";
 import { apiError } from "@/lib/utils/apiError";
 
 function getTtsConfig() {
@@ -68,11 +73,22 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      const openRouterError = toOpenRouterApiError(
+        new OpenRouterUpstreamError(
+          `OpenRouter TTS gagal dengan HTTP ${response.status}.`,
+          classifyOpenRouterFailure(response.status, errorText),
+          response.status,
+          errorText,
+        ),
+        "tts",
+      );
+
       return apiError(
-        "OPENROUTER_ERROR",
-        "Suara AI belum dapat diputar. Respons teks tetap tersedia.",
-        true,
-        502,
+        openRouterError.code,
+        openRouterError.message,
+        openRouterError.retryable,
+        openRouterError.status,
       );
     }
 

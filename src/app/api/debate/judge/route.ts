@@ -14,6 +14,10 @@ import {
   sendOpenRouterChat,
 } from "@/lib/openrouter/client";
 import {
+  isUnsupportedStructuredOutputError,
+  toOpenRouterApiError,
+} from "@/lib/openrouter/errors";
+import {
   buildJudgeInput,
   judgeJsonSchema,
   judgeSystemPrompt,
@@ -47,10 +51,12 @@ async function requestJudgeReport({
   session,
   aiConfig,
   retryInstruction,
+  structuredOutput = true,
 }: {
   session: DebateSession;
   aiConfig: ClientAiConfig;
   retryInstruction?: string;
+  structuredOutput?: boolean;
 }): Promise<{
   report: JudgeReport;
   model?: string;
@@ -96,10 +102,14 @@ async function requestJudgeReport({
       ],
       temperature: 0.2,
       maxCompletionTokens: 1400,
-      responseFormat: {
-        type: "json_schema",
-        json_schema: judgeJsonSchema,
-      },
+      ...(structuredOutput
+        ? {
+            responseFormat: {
+              type: "json_schema",
+              json_schema: judgeJsonSchema,
+            },
+          }
+        : {}),
     });
     const rawReport = parseJudgeJson(result.content);
     const report = normalizeJudgeReport(judgeReportSchema.parse(rawReport));
@@ -121,13 +131,17 @@ async function requestJudgeReport({
     ],
     temperature: 0.2,
     maxCompletionTokens: 1400,
-    responseFormat: {
-      type: "json_schema",
-      json_schema: judgeJsonSchema,
-    },
-    provider: {
-      require_parameters: true,
-    },
+    ...(structuredOutput
+      ? {
+          responseFormat: {
+            type: "json_schema",
+            json_schema: judgeJsonSchema,
+          },
+          provider: {
+            require_parameters: true,
+          },
+        }
+      : {}),
   });
   const rawReport = parseJudgeJson(result.content);
   const report = normalizeJudgeReport(judgeReportSchema.parse(rawReport));
@@ -199,12 +213,17 @@ export async function POST(request: Request) {
       );
     }
 
-    if (firstError instanceof OpenRouterUpstreamError) {
+    if (
+      firstError instanceof OpenRouterUpstreamError &&
+      !isUnsupportedStructuredOutputError(firstError)
+    ) {
+      const openRouterError = toOpenRouterApiError(firstError, "judge");
+
       return apiError(
-        "OPENROUTER_ERROR",
-        "OpenRouter gagal mengembalikan penilaian.",
-        true,
-        502,
+        openRouterError.code,
+        openRouterError.message,
+        openRouterError.retryable,
+        openRouterError.status,
       );
     }
 
@@ -230,8 +249,9 @@ export async function POST(request: Request) {
       const retryResult = await requestJudgeReport({
         session,
         aiConfig: parsed.data.aiConfig,
+        structuredOutput: !isUnsupportedStructuredOutputError(firstError),
         retryInstruction:
-          "Return valid JSON only. No markdown fences. Follow the requested schema exactly.",
+          "Return valid JSON only. No markdown fences. Follow the requested schema exactly. If structured JSON mode is unavailable, still produce the same JSON object as plain text.",
       });
       return NextResponse.json(retryResult);
     } catch (retryError) {
@@ -249,11 +269,13 @@ export async function POST(request: Request) {
       }
 
       if (retryError instanceof OpenRouterUpstreamError) {
+        const openRouterError = toOpenRouterApiError(retryError, "judge");
+
         return apiError(
-          "OPENROUTER_ERROR",
-          "OpenRouter gagal mengembalikan penilaian.",
-          true,
-          502,
+          openRouterError.code,
+          openRouterError.message,
+          openRouterError.retryable,
+          openRouterError.status,
         );
       }
 

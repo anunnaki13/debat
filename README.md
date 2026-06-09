@@ -59,6 +59,8 @@ Konfigurasi OpenRouter tetap dibaca dari `.env.local` melalui `docker-compose.ym
 - AI Opponent dipanggil dari route server `/api/debate/opponent`.
 - AI Judge/wasit dipanggil dari route server `/api/debate/judge`.
 - Prompt menyertakan knowledge base pertandingan: topik, konteks, posisi user, posisi AI yang wajib berlawanan, dan wasit AI terpisah.
+- Error OpenRouter dibedakan untuk key tidak valid, rate limit, model tidak tersedia, kredit kurang, structured output tidak didukung, respons kosong, timeout, dan upstream error umum.
+- AI Judge mencoba fallback JSON plain text bila model murah menolak mode `json_schema` ketat.
 - Session tersimpan di `localStorage` browser.
 - Report bisa dibuka dari history dan diekspor sebagai JSON.
 - Text session masih bisa memakai voice input dan text-to-speech browser sebagai fallback.
@@ -133,4 +135,4 @@ UI Sprint 4 menambahkan:
 
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, `docs/progress/UI_SPRINT_0_REPORT.md`, `docs/progress/UI_SPRINT_1_REPORT.md`, `docs/progress/UI_SPRINT_2_REPORT.md`, `docs/progress/UI_SPRINT_3_REPORT.md`, dan `docs/progress/UI_SPRINT_4_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, laporan `docs/progress/UI_SPRINT_*_REPORT.md`, dan `docs/progress/STABILIZATION_SPRINT_1_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

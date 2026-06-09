@@ -15,6 +15,7 @@ import {
   sendOpenRouterChat,
   type OpenRouterMessage,
 } from "@/lib/openrouter/client";
+import { toOpenRouterApiError } from "@/lib/openrouter/errors";
 import { buildOpponentSystemPrompt } from "@/lib/prompts/opponent";
 import { apiError } from "@/lib/utils/apiError";
 import {
@@ -163,11 +164,13 @@ export async function POST(request: Request) {
     }
 
     if (error instanceof OpenRouterUpstreamError) {
+      const openRouterError = toOpenRouterApiError(error, "opponent");
+
       return apiError(
-        "OPENROUTER_ERROR",
-        "OpenRouter gagal mengembalikan jawaban lawan AI.",
-        true,
-        502,
+        openRouterError.code,
+        openRouterError.message,
+        openRouterError.retryable,
+        openRouterError.status,
       );
     }
 

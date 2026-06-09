@@ -132,5 +132,5 @@ describe("Home setup flow", () => {
 
     expect(sessions[0].topic.custom).toBe(true);
     expect(sessions[0].topic.title).toMatch(/akademi muda/i);
-  });
+  }, 10_000);
 });

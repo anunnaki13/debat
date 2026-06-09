@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-06-09 - Stabilization Sprint 1 OpenRouter Resilience
+
+- Added OpenRouter failure classification for authentication, rate limit, unavailable model, insufficient credits, unsupported response format, empty response, and generic upstream failures.
+- Updated opponent, judge, STT, and TTS API routes to return more specific Indonesian error messages instead of a single generic OpenRouter failure.
+- Added AI Judge fallback from strict `json_schema` response format to plain JSON text when a cheaper OpenRouter model rejects structured output.
+- Added route smoke tests for `/api/debate/opponent` rate-limit handling and `/api/debate/judge` structured-output fallback.
+- Added OpenRouter client tests for failure classification, upstream rejection, and empty assistant content.
+- Added `docs/progress/STABILIZATION_SPRINT_1_REPORT.md`.
+
 ## 2026-06-09 - UI Sprint 6 Result and Delivery Coach
 
 - Reworked the result screen into an Arena Politika result reveal with topic hero, score stats, grade badge, CTA row, and local share preview card.

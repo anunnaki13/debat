@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  classifyOpenRouterFailure,
+  OpenRouterUpstreamError,
+} from "@/lib/openrouter/client";
+import { toOpenRouterApiError } from "@/lib/openrouter/errors";
 import { calculateDeliverySignals } from "@/lib/voice/deliverySignals";
 import { apiError } from "@/lib/utils/apiError";
 
@@ -74,11 +79,22 @@ export async function POST(request: Request) {
     );
 
     if (!response.ok) {
+      const errorText = await response.text();
+      const openRouterError = toOpenRouterApiError(
+        new OpenRouterUpstreamError(
+          `OpenRouter STT gagal dengan HTTP ${response.status}.`,
+          classifyOpenRouterFailure(response.status, errorText),
+          response.status,
+          errorText,
+        ),
+        "stt",
+      );
+
       return apiError(
-        "OPENROUTER_ERROR",
-        "Suara belum berhasil diubah menjadi teks. Coba ulangi atau gunakan ketikan.",
-        true,
-        502,
+        openRouterError.code,
+        openRouterError.message,
+        openRouterError.retryable,
+        openRouterError.status,
       );
     }
 
@@ -91,7 +107,7 @@ export async function POST(request: Request) {
 
     if (!transcript) {
       return apiError(
-        "OPENROUTER_ERROR",
+        "OPENROUTER_EMPTY_RESPONSE",
         "Transkrip kosong. Coba ulangi atau gunakan ketikan.",
         true,
         502,

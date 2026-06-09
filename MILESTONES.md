@@ -290,15 +290,25 @@ Catatan:
 
 ## Milestone 11 - Stabilization
 
-Status: planned.
+Status: partially implemented.
 
 Fokus:
 
-- Uji manual dengan OpenRouter key nyata.
-- Pastikan model gratis dan murah memberi respons yang cukup baik untuk debat Indonesia.
-- Perbaiki error message provider agar lebih spesifik: invalid key, rate limit, unsupported structured output, dan timeout.
-- Tambah mode fallback untuk AI Judge bila model murah tidak patuh JSON schema.
-- Tambah smoke test untuk route API dengan mock provider.
+- Done: perbaiki error message provider agar lebih spesifik: invalid key, rate limit, model tidak tersedia, kredit kurang, unsupported structured output, respons kosong, dan timeout.
+- Done: tambah mode fallback untuk AI Judge bila model murah menolak `json_schema`, lalu minta JSON plain text dengan instruksi ketat.
+- Done: tambah smoke test route API dengan mock provider untuk lawan AI dan AI Judge.
+- Done: tambah test klasifikasi error OpenRouter client.
+- Remaining: uji manual dengan OpenRouter key nyata.
+- Remaining: pastikan model gratis dan murah memberi respons yang cukup baik untuk debat Indonesia.
+- Remaining: perluas smoke test untuk STT/TTS failure path.
+
+Artefak:
+
+- `src/lib/openrouter/errors.ts`
+- `src/lib/openrouter/client.test.ts`
+- `src/app/api/debate/opponent/route.test.ts`
+- `src/app/api/debate/judge/route.test.ts`
+- `docs/progress/STABILIZATION_SPRINT_1_REPORT.md`
 
 ## Milestone 12 - Product Refinement
 

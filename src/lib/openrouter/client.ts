@@ -22,6 +22,15 @@ export interface OpenRouterChatResult {
   usage?: AiUsage;
 }
 
+export type OpenRouterFailureCode =
+  | "AUTHENTICATION"
+  | "RATE_LIMIT"
+  | "MODEL_UNAVAILABLE"
+  | "INSUFFICIENT_CREDITS"
+  | "UNSUPPORTED_RESPONSE_FORMAT"
+  | "EMPTY_RESPONSE"
+  | "UPSTREAM";
+
 export class OpenRouterTimeoutError extends Error {
   constructor() {
     super("OpenRouter request timed out");
@@ -30,10 +39,49 @@ export class OpenRouterTimeoutError extends Error {
 }
 
 export class OpenRouterUpstreamError extends Error {
-  constructor(message: string) {
+  constructor(
+    message: string,
+    public readonly failureCode: OpenRouterFailureCode = "UPSTREAM",
+    public readonly status?: number,
+    public readonly responseText?: string,
+  ) {
     super(message);
     this.name = "OpenRouterUpstreamError";
   }
+}
+
+export function classifyOpenRouterFailure(
+  status: number,
+  responseText: string,
+): OpenRouterFailureCode {
+  const normalized = responseText.toLowerCase();
+
+  if (status === 401 || status === 403) {
+    return "AUTHENTICATION";
+  }
+
+  if (status === 402 || normalized.includes("insufficient credits")) {
+    return "INSUFFICIENT_CREDITS";
+  }
+
+  if (status === 404 || normalized.includes("model not found")) {
+    return "MODEL_UNAVAILABLE";
+  }
+
+  if (status === 429 || normalized.includes("rate limit")) {
+    return "RATE_LIMIT";
+  }
+
+  if (
+    (status === 400 || status === 422) &&
+    /(response_format|json_schema|structured|require_parameters|unsupported parameter|schema)/i.test(
+      responseText,
+    )
+  ) {
+    return "UNSUPPORTED_RESPONSE_FORMAT";
+  }
+
+  return "UPSTREAM";
 }
 
 export async function sendOpenRouterChat({
@@ -77,8 +125,13 @@ export async function sendOpenRouterChat({
 
     if (!response.ok) {
       const errorText = await response.text();
+      const failureCode = classifyOpenRouterFailure(response.status, errorText);
+
       throw new OpenRouterUpstreamError(
         `OpenRouter gagal dengan HTTP ${response.status}: ${errorText.slice(0, 240)}`,
+        failureCode,
+        response.status,
+        errorText,
       );
     }
 
@@ -98,7 +151,10 @@ export async function sendOpenRouterChat({
     const content = data.choices?.[0]?.message?.content;
 
     if (typeof content !== "string" || !content.trim()) {
-      throw new OpenRouterUpstreamError("OpenRouter mengembalikan konten kosong.");
+      throw new OpenRouterUpstreamError(
+        "OpenRouter mengembalikan konten kosong.",
+        "EMPTY_RESPONSE",
+      );
     }
 
     return {

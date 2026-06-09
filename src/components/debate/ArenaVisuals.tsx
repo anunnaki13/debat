@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   AlertTriangle,
   BarChart3,
@@ -16,6 +15,11 @@ import {
 import { AnimatedAvatarRing } from "@/components/arena/ArenaEffects";
 import { Badge, Button, Chip } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import {
+  arenaReferenceAssets,
+  personaCrop,
+  type PersonaCropKey,
+} from "@/lib/arena-reference-assets";
 import type { DebateInputMode, DebateSide, RoundId } from "@/types/debate";
 
 export type ArenaVisualState =
@@ -91,6 +95,18 @@ const roundLabels: Record<RoundId, string> = {
 
 const waveformBars = [24, 42, 30, 58, 36, 64, 46, 28, 52, 34, 60, 40];
 
+const aiPersonaOptions: Array<{
+  name: string;
+  crop: PersonaCropKey;
+  level: string;
+  selected?: boolean;
+}> = [
+  { name: "Ekonom", crop: "fieldCommander", level: "Sulit", selected: true },
+  { name: "Teknis", crop: "strategist", level: "Data" },
+  { name: "Aktivis", crop: "publicVoice", level: "Mudah" },
+  { name: "Kritis", crop: "investigator", level: "Acak" },
+];
+
 export function getArenaStateMeta(state: ArenaVisualState) {
   return stateMeta[state];
 }
@@ -158,7 +174,7 @@ export function UserPodium({
   return (
     <aside
       className={cn(
-        "ra-hud-panel relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(2,12,28,0.86)] shadow-[var(--ra-shadow-card)]",
+        "relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(2,12,28,0.86)] shadow-[var(--ra-shadow-card)]",
         speaking
           ? "border-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
           : "border-[rgba(21,248,255,0.22)]",
@@ -180,14 +196,7 @@ export function UserPodium({
             active={speaking}
             className={compact ? "h-16 w-16" : "h-24 w-24"}
           >
-            <Image
-              src="/assets/arena/user-orator-avatar.svg"
-              alt=""
-              width={compact ? 58 : 86}
-              height={compact ? 58 : 86}
-              className="rounded-[var(--ra-radius-pill)]"
-              aria-hidden="true"
-            />
+            <PersonaDisc crop="reformer" tone="blue" className={compact ? "h-14 w-14" : "h-20 w-20"} />
           </AnimatedAvatarRing>
         </div>
         <Badge
@@ -250,52 +259,75 @@ export function AiOpponentPanel({
   return (
     <aside
       className={cn(
-        "ra-hud-panel relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(20,4,26,0.82)] p-4 shadow-[var(--ra-shadow-card)]",
+        "relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(20,4,26,0.82)] p-4 shadow-[var(--ra-shadow-card)]",
         active
           ? "border-[var(--ra-magenta)] shadow-[var(--ra-glow-esports-magenta)]"
           : "border-[rgba(255,43,214,0.22)]",
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,43,214,0.24),transparent_46%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,43,214,0.20),transparent_46%)]" />
       <div className="absolute right-3 top-3 xl:hidden">
         <UserPodium compact inputMode={inputMode} side={userSide} state={state} className="w-24 bg-[rgba(7,11,19,0.72)] backdrop-blur-lg" />
       </div>
 
-      <div className="relative flex min-h-[300px] flex-col items-center text-center xl:min-h-[390px]">
-        <Badge tone="ai" className="mb-3">
-          AI Lawan
-        </Badge>
-        <div
-          className={cn(
-            "relative grid h-32 w-32 place-items-center rounded-[var(--ra-radius-pill)] border bg-[var(--ra-magenta-soft)]",
-            active ? "border-[var(--ra-magenta)]" : "border-[rgba(255,43,214,0.24)]",
-          )}
-        >
-          {active ? (
-            <span
-              className="absolute inset-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-magenta)]"
-              style={{ animation: "ra-halo-pulse 1.8s ease-in-out infinite" }}
-            />
-          ) : null}
-          <Image
-            src="/assets/arena/ai-opponent-avatar.svg"
-            alt=""
-            width={112}
-            height={112}
-            className="relative rounded-[var(--ra-radius-pill)]"
-            aria-hidden="true"
-          />
+      <div className="relative min-h-[300px] xl:min-h-[390px]">
+        <div className="rounded-[var(--ra-radius-lg)] border border-[rgba(255,255,255,0.10)] bg-[rgba(6,9,22,0.72)] p-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
+              Pilih AI Lawan
+            </p>
+            <Badge tone="ai">Live</Badge>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {aiPersonaOptions.map((option) => (
+              <div
+                key={option.name}
+                className={cn(
+                  "overflow-hidden rounded-[var(--ra-radius-md)] border bg-[rgba(8,12,26,0.84)]",
+                  option.selected
+                    ? "border-[rgba(255,74,88,0.72)] shadow-[0_0_24px_rgba(255,55,70,0.18)]"
+                    : "border-[rgba(255,255,255,0.10)]",
+                )}
+              >
+                <PersonaPanel crop={option.crop} className="h-16" />
+                <div className="p-2">
+                  <p className="text-[11px] font-extrabold leading-tight text-[var(--ra-text-primary)]">
+                    {option.name}
+                  </p>
+                  <p className="mt-0.5 text-[9px] font-black uppercase text-[var(--ra-amber)]">
+                    {option.level}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <Badge tone={speaking ? "ai" : active ? "warning" : "neutral"} className="mt-5">
-          {getArenaStateMeta(state).label}
-        </Badge>
-        <h2 className="mt-3 text-xl font-extrabold text-[var(--ra-text-primary)]">
-          Menteri Klarifikasi
-        </h2>
-        <p className="mt-1 text-xs font-semibold text-[var(--ra-text-muted)]">
-          AI Opponent · Posisi {side}
-        </p>
+        <div className="mt-4 flex flex-col items-center text-center">
+          <Badge tone={speaking ? "ai" : active ? "warning" : "neutral"} className="mb-3">
+            {getArenaStateMeta(state).label}
+          </Badge>
+          <div
+            className={cn(
+              "relative grid h-32 w-32 place-items-center rounded-[var(--ra-radius-pill)] border bg-[var(--ra-magenta-soft)]",
+              active ? "border-[var(--ra-magenta)]" : "border-[rgba(255,43,214,0.24)]",
+            )}
+          >
+            {active ? (
+              <span
+                className="absolute inset-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-magenta)]"
+                style={{ animation: "ra-halo-pulse 1.8s ease-in-out infinite" }}
+              />
+            ) : null}
+            <PersonaDisc crop="fieldCommander" tone="red" className="h-28 w-28" />
+          </div>
+          <h2 className="mt-3 text-xl font-extrabold text-[var(--ra-text-primary)]">
+            Menteri Klarifikasi
+          </h2>
+          <p className="mt-1 text-xs font-semibold text-[var(--ra-text-muted)]">
+            AI Opponent · Posisi {side}
+          </p>
+        </div>
 
         {speaking ? <VoiceWaveform tone="ai" className="mt-5" /> : null}
 
@@ -307,7 +339,7 @@ export function AiOpponentPanel({
 
         <div className="mt-4 w-full rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.50)] p-3 text-left">
           <p className="mb-2 text-xs font-extrabold uppercase tracking-wide text-[var(--ra-text-muted)]">
-            Juri AI
+            AI Coach
           </p>
           <JudgeMetric label="Struktur" value="Baik" tone="positive" />
           <JudgeMetric label="Logika" value="Kuat" tone="positive" />
@@ -316,6 +348,54 @@ export function AiOpponentPanel({
         </div>
       </div>
     </aside>
+  );
+}
+
+function PersonaDisc({
+  crop,
+  tone,
+  className,
+}: {
+  crop: PersonaCropKey;
+  tone: "blue" | "red";
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "relative rounded-[var(--ra-radius-pill)] border bg-cover",
+        tone === "blue"
+          ? "border-[#55dfff] shadow-[0_0_24px_rgba(68,196,255,0.38)]"
+          : "border-[#ff6475] shadow-[0_0_24px_rgba(255,65,83,0.34)]",
+        className,
+      )}
+      style={{
+        backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
+        backgroundPosition: personaCrop[crop].backgroundPosition,
+        backgroundSize: personaCrop[crop].backgroundSize,
+      }}
+      aria-hidden="true"
+    />
+  );
+}
+
+function PersonaPanel({
+  crop,
+  className,
+}: {
+  crop: PersonaCropKey;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn("bg-cover", className)}
+      style={{
+        backgroundImage: `url(${arenaReferenceAssets.personaSheet.src})`,
+        backgroundPosition: personaCrop[crop].backgroundPosition,
+        backgroundSize: personaCrop[crop].backgroundSize,
+      }}
+      aria-hidden="true"
+    />
   );
 }
 

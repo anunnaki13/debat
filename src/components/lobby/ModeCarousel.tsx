@@ -1,5 +1,6 @@
 import { Building2, Flame, Mic2, Skull, Swords } from "lucide-react";
 import { ModeCard } from "@/components/lobby/ModeCard";
+import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import type { DebateMode } from "@/types/debate";
 
 const modes = [
@@ -13,7 +14,8 @@ const modes = [
     estimatedDuration: "8 KA",
     difficulty: "3 ronde",
     badge: "Aktif",
-    artSrc: "/assets/arena/mode-duel-ai.svg",
+    artSrc: arenaReferenceAssets.arenaPoliticsLive.src,
+    artPosition: "center 28%",
     enabled: true,
     comingSoon: false,
   },
@@ -27,7 +29,8 @@ const modes = [
     estimatedDuration: "12 KA",
     difficulty: "Sulit",
     badge: undefined,
-    artSrc: "/assets/arena/mode-kursi-panas.svg",
+    artSrc: arenaReferenceAssets.arenaStoryboard.src,
+    artPosition: "19% 18%",
     enabled: false,
     comingSoon: true,
   },
@@ -41,7 +44,8 @@ const modes = [
     estimatedDuration: "15 KA",
     difficulty: "Viral",
     badge: undefined,
-    artSrc: "/assets/arena/mode-satu-lawan-tribun.svg",
+    artSrc: arenaReferenceAssets.arenaStoryboard.src,
+    artPosition: "84% 78%",
     enabled: false,
     comingSoon: true,
   },
@@ -55,7 +59,8 @@ const modes = [
     estimatedDuration: "10 KA",
     difficulty: "Kebijakan",
     badge: undefined,
-    artSrc: "/assets/arena/mode-majelis-publik.svg",
+    artSrc: arenaReferenceAssets.arenaStageWide.src,
+    artPosition: "center",
     enabled: false,
     comingSoon: true,
   },
@@ -69,7 +74,8 @@ const modes = [
     estimatedDuration: "20 KA",
     difficulty: "Expert",
     badge: undefined,
-    artSrc: "/assets/arena/mode-boss-battle.svg",
+    artSrc: arenaReferenceAssets.verticalArenaFrame.src,
+    artPosition: "center 70%",
     enabled: false,
     comingSoon: true,
   },
@@ -97,6 +103,7 @@ export function ModeCarousel({
             badge={mode.badge}
             artSrc={mode.artSrc}
             artAlt=""
+            artPosition={mode.artPosition}
             selected={value === mode.value}
             disabled={!mode.enabled}
             comingSoon={mode.comingSoon}

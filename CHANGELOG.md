@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-06-09 - Arena Politika Asset Reference Pass
+
+- Imported the newly uploaded `asset/` folder from GitHub into the working branch as active visual reference material.
+- Reworked the lobby and arena direction toward the `ChatGPT Image May 6, 2026, 12_13_33 AM.png` reference: political debate dashboard, live arena panels, AI opponent selector, AI coach, audience reactions, career/ideology/share panels, and darker blue-red cinematic lighting.
+- Replaced the "Pilih match yang sedang panas" card images with topic-relevant Unsplash photos instead of reusing the uploaded mockup/arena assets.
+- Added local challenge images under `public/assets/challenges/` plus source notes.
+- Added visual QA screenshot:
+  - `docs/visual-qa/lobby-arena-politika-unsplash-match-feed-desktop.png`.
+
 ## 2026-06-09 - UI Sprint 4 Esports Arena Overhaul
 
 - Replaced the previous abstract/civic-leaning asset direction with an esports arena visual pass.

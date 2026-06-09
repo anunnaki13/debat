@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Gavel, RotateCcw, Trash2 } from "lucide-react";
+import { Flame, Gavel, HelpCircle, Lightbulb, RotateCcw, ThumbsUp, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
@@ -34,6 +34,7 @@ import {
 } from "@/lib/debate/rules";
 import { createId } from "@/lib/utils/ids";
 import { buildClientAiConfig } from "@/lib/ai/preferences";
+import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import { speakText, stopSpeaking } from "@/lib/speech/speakText";
 import {
   deleteLocalSession,
@@ -54,6 +55,13 @@ import type {
 } from "@/types/debate";
 
 const TURN_SECONDS = 180;
+
+const audienceSignals = [
+  { label: "Setuju", value: "512", icon: ThumbsUp, tone: "text-[var(--ra-emerald)]" },
+  { label: "Butuh Data", value: "218", icon: HelpCircle, tone: "text-[var(--ra-amber)]" },
+  { label: "Tidak Masuk Akal", value: "143", icon: Flame, tone: "text-[var(--ra-coral-bright)]" },
+  { label: "Menarik", value: "89", icon: Lightbulb, tone: "text-[var(--ra-violet)]" },
+] as const;
 
 function readApiError(error: unknown, fallback: string): string {
   if (
@@ -122,6 +130,38 @@ function getMomentum(messages: DebateMessage[]): ArenaMomentum {
   const user = Math.min(66, Math.max(34, Math.round(50 + tilt)));
 
   return { user, ai: 100 - user };
+}
+
+function AudiencePulsePanel() {
+  return (
+    <div className="rounded-[var(--ra-radius-lg)] border border-[rgba(89,137,255,0.24)] bg-[rgba(7,12,27,0.74)] p-3">
+      <p className="text-center text-xs font-black uppercase tracking-[0.18em] text-[#91b8ff]">
+        Reaksi Audiens Real-Time
+      </p>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {audienceSignals.map((signal) => {
+          const Icon = signal.icon;
+
+          return (
+            <div
+              key={signal.label}
+              className="rounded-[var(--ra-radius-md)] border border-[rgba(255,255,255,0.10)] bg-[rgba(255,255,255,0.045)] px-3 py-2"
+            >
+              <div className="flex items-center gap-2">
+                <Icon size={15} aria-hidden="true" className={signal.tone} />
+                <span className={`text-base font-black ${signal.tone}`}>
+                  {signal.value}
+                </span>
+              </div>
+              <p className="mt-1 text-[11px] font-bold text-[var(--ra-text-muted)]">
+                {signal.label}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export function DebateScreen({ sessionId }: { sessionId: string }) {
@@ -532,17 +572,18 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
       <ErrorBanner message={error} />
 
-      <section className="ra-esports-grid ra-laser-sweep relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[image:var(--ra-gradient-esports-arena)] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
+      <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(85,137,255,0.34)] bg-[#050914] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
         <Image
-          src="/assets/arena/arena-backdrop.svg"
+          src={arenaReferenceAssets.arenaStageWide}
           alt=""
           fill
-          className="object-cover opacity-[0.34]"
+          sizes="(min-width: 1024px) calc(100vw - 280px), 100vw"
+          className="object-cover object-center opacity-[0.50]"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(21,248,255,0.20),transparent_34%),radial-gradient(circle_at_84%_26%,rgba(255,43,214,0.20),transparent_32%),linear-gradient(180deg,rgba(2,8,23,0.16),rgba(2,8,23,0.90))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(40,145,255,0.22),transparent_34%),radial-gradient(circle_at_84%_22%,rgba(255,67,82,0.18),transparent_32%),linear-gradient(180deg,rgba(2,8,23,0.22),rgba(2,8,23,0.94))]" />
 
-        <div className="relative grid gap-4 xl:grid-cols-[220px_minmax(420px,1fr)_280px]">
+        <div className="relative grid gap-4 xl:grid-cols-[220px_minmax(420px,1fr)_330px]">
           <div className="hidden xl:block">
             <UserPodium
               inputMode={session.inputMode}
@@ -552,7 +593,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           </div>
 
           <div className="min-w-0 space-y-3">
-            <div className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.22)] bg-[rgba(2,8,23,0.78)] p-4 shadow-[var(--ra-shadow-card)]">
+            <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(89,137,255,0.26)] bg-[rgba(2,8,23,0.78)] p-4 shadow-[var(--ra-shadow-card)]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-extrabold uppercase text-[var(--ra-cyan-bright)]">
@@ -583,6 +624,10 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
               </div>
 
               <div className="mt-4">
+                <AudiencePulsePanel />
+              </div>
+
+              <div className="mt-4">
                 <DebateTranscript messages={session.messages} />
               </div>
               {isLoadingOpponent ? (
@@ -592,7 +637,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
               ) : null}
             </div>
 
-            <div className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(255,255,255,0.14)] bg-[rgba(2,8,23,0.72)] p-3 shadow-[var(--ra-shadow-card)]">
+            <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(89,137,255,0.22)] bg-[rgba(2,8,23,0.72)] p-3 shadow-[var(--ra-shadow-card)]">
               <VoiceWaveform
                 tone={arenaState === "ai_speaking" || arenaState === "ai_thinking" ? "ai" : "user"}
               />

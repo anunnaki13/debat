@@ -53,6 +53,7 @@ export interface ModeCardProps<TValue extends string> {
   badge?: string;
   artSrc?: string;
   artAlt?: string;
+  artPosition?: string;
   selected?: boolean;
   disabled?: boolean;
   comingSoon?: boolean;
@@ -70,6 +71,7 @@ export function ModeCard<TValue extends string>({
   badge,
   artSrc,
   artAlt = "",
+  artPosition = "center",
   selected = false,
   disabled = false,
   comingSoon = false,
@@ -97,6 +99,7 @@ export function ModeCard<TValue extends string>({
           fill
           sizes="190px"
           className="object-cover opacity-[0.94] transition duration-300 group-hover:scale-[1.04]"
+          style={{ objectPosition: artPosition }}
           aria-hidden={artAlt ? undefined : true}
         />
       ) : null}

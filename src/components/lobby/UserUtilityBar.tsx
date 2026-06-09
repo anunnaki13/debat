@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { Bell, Crown, Gift, History, Search, Settings } from "lucide-react";
+import { Bell, Crown, Flame, Gift, History, Search, Settings, Trophy } from "lucide-react";
 import { Badge, IconButton } from "@/components/ui";
 
 export function UserUtilityBar() {
   return (
-    <div className="ra-hud-panel flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.18)] bg-[rgba(2,8,23,0.78)] px-4 py-3 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
-      <label className="group flex min-w-0 flex-1 items-center gap-3 rounded-[var(--ra-radius-pill)] border border-[rgba(255,255,255,0.12)] bg-[rgba(2,8,23,0.76)] px-3 py-2 transition focus-within:border-[var(--ra-electric-cyan)]">
+    <div className="flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(90,142,255,0.22)] bg-[rgba(2,8,23,0.82)] px-4 py-3 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
+      <label className="group flex min-w-0 flex-1 items-center gap-3 rounded-[var(--ra-radius-pill)] border border-[rgba(255,255,255,0.12)] bg-[rgba(2,8,23,0.76)] px-3 py-2 transition focus-within:border-[#55dfff]">
         <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-muted)] group-focus-within:text-[var(--ra-electric-cyan)]">
           <Search size={17} aria-hidden="true" />
         </span>
@@ -13,14 +13,19 @@ export function UserUtilityBar() {
         <input
           type="search"
           disabled
-          placeholder="Cari topik atau tantangan..."
+          placeholder="Cari topik, lawan, atau tantangan..."
           className="min-w-0 flex-1 bg-transparent text-sm font-medium text-[var(--ra-text-primary)] outline-none placeholder:text-[var(--ra-text-muted)] disabled:cursor-not-allowed"
         />
-        <span className="hidden rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] px-2 py-1 text-[11px] font-bold text-[var(--ra-text-muted)] sm:inline">
-          Ctrl K
-        </span>
       </label>
       <div className="flex items-center gap-2">
+        <Badge tone="warning" className="hidden gap-2 md:inline-flex">
+          <Flame size={14} aria-hidden="true" />
+          12 hari
+        </Badge>
+        <Badge tone="user" className="hidden gap-2 md:inline-flex">
+          <Trophy size={14} aria-hidden="true" />
+          #128
+        </Badge>
         <IconButton
           icon={<Bell size={17} aria-hidden="true" />}
           label="Notifikasi belum tersedia"

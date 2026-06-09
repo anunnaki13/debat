@@ -7,11 +7,27 @@ import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import type { DebateTopic } from "@/types/debate";
 
-const challengeArt: Record<string, string> = {
-  "ai-jobs": "/assets/arena/challenge-ai-jobs.svg",
-  "remote-work": "/assets/arena/challenge-remote-work.svg",
-  cashless: "/assets/arena/challenge-cashless.svg",
-  "public-transport": "/assets/arena/challenge-public-transport.svg",
+const challengeArt: Record<string, { src: string; position: string; tone: "blue" | "green" | "gold" | "red" }> = {
+  "ai-jobs": {
+    src: "/assets/challenges/ai-jobs-unsplash.jpg",
+    position: "center",
+    tone: "blue",
+  },
+  "remote-work": {
+    src: "/assets/challenges/remote-work-unsplash.jpg",
+    position: "center",
+    tone: "green",
+  },
+  cashless: {
+    src: "/assets/challenges/cashless-unsplash.jpg",
+    position: "center",
+    tone: "gold",
+  },
+  "public-transport": {
+    src: "/assets/challenges/public-transport-unsplash.jpg",
+    position: "center",
+    tone: "red",
+  },
 };
 
 const waitingCounts: Record<string, string> = {
@@ -58,19 +74,32 @@ export function PopularChallengeStrip({
               className={cn(
                 "ra-hud-panel group relative min-h-[170px] min-w-[260px] snap-start overflow-hidden rounded-[var(--ra-radius-lg)] border p-4 text-left shadow-[var(--ra-shadow-card)] transition duration-150 sm:min-w-[280px] lg:min-w-0 lg:flex-1",
                 selected
-                  ? "border-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
-                  : "border-[rgba(255,255,255,0.13)] hover:border-[var(--ra-electric-cyan)] hover:shadow-[var(--ra-glow-esports-cyan)]",
+                  ? "border-[rgba(89,171,255,0.74)] shadow-[0_0_34px_rgba(55,137,255,0.28)]"
+                  : "border-[rgba(255,255,255,0.13)] hover:border-[rgba(89,171,255,0.54)] hover:shadow-[0_0_34px_rgba(55,137,255,0.20)]",
               )}
             >
               <Image
-                src={challengeArt[topic.id]}
+                src={challengeArt[topic.id].src}
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 25vw, 280px"
                 className="object-cover opacity-95 transition duration-300 group-hover:scale-[1.04]"
+                style={{ objectPosition: challengeArt[topic.id].position }}
                 aria-hidden="true"
               />
-              <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,23,0.04),rgba(2,8,23,0.44)_48%,rgba(2,8,23,0.98))]" />
+              <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,23,0.08),rgba(2,8,23,0.34)_44%,rgba(2,8,23,0.98))]" />
+              <span
+                className={cn(
+                  "absolute inset-x-0 top-0 h-1",
+                  challengeArt[topic.id].tone === "green"
+                    ? "bg-[var(--ra-emerald)]"
+                    : challengeArt[topic.id].tone === "gold"
+                      ? "bg-[var(--ra-gold)]"
+                      : challengeArt[topic.id].tone === "red"
+                        ? "bg-[var(--ra-coral)]"
+                        : "bg-[#48caff]",
+                )}
+              />
               <div className="relative z-[1] flex items-start justify-between gap-3">
                 <Badge tone={topic.difficulty === "lanjutan" ? "warning" : "positive"}>
                   {topic.category.split(" ")[0]}

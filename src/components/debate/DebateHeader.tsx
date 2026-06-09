@@ -3,6 +3,7 @@ import { Camera, Keyboard, LogOut, Mic, Shield, Swords, Volume2 } from "lucide-r
 import { RoundStepper } from "@/components/debate/RoundStepper";
 import { TurnTimer } from "@/components/debate/TurnTimer";
 import { Badge } from "@/components/ui";
+import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import type { DebateSession } from "@/types/debate";
 
 const roundOrder = ["OPENING", "REBUTTAL", "CLOSING"] as const;
@@ -30,19 +31,24 @@ export function DebateHeader({
   const roundLabel = session.currentRound.replace("_", " ");
 
   return (
-    <section className="ra-esports-grid ra-laser-sweep relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[image:var(--ra-gradient-esports-arena)] p-4 shadow-[var(--ra-shadow-elevated)] md:p-5">
+    <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(85,137,255,0.34)] bg-[#050914] p-4 shadow-[var(--ra-shadow-elevated)] md:p-5">
       <Image
-        src="/assets/arena/arena-backdrop.svg"
+        src={arenaReferenceAssets.arenaStageWide}
         alt=""
         fill
         priority
-        className="object-cover opacity-[0.32]"
+        sizes="(min-width: 1024px) calc(100vw - 280px), 100vw"
+        className="object-cover object-center opacity-[0.58]"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(21,248,255,0.16),transparent_32%,rgba(255,43,214,0.16))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(40,145,255,0.24),transparent_32%),radial-gradient(circle_at_80%_22%,rgba(255,67,82,0.18),transparent_30%),linear-gradient(90deg,rgba(2,6,18,0.92),rgba(2,8,23,0.52)_50%,rgba(2,6,18,0.92))]" />
       <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px_minmax(0,1fr)] lg:items-start">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
+            <Badge tone="special" className="gap-2">
+              <span className="h-2 w-2 rounded-[var(--ra-radius-pill)] bg-[#ff3348] shadow-[0_0_12px_rgba(255,51,72,0.9)]" />
+              Debat Langsung
+            </Badge>
             <Badge tone="user" className="gap-2">
               {inputIcon}
               {session.inputMode.replace("_", " + ")}
@@ -56,7 +62,7 @@ export function DebateHeader({
               AI {session.opponentSide}
             </Badge>
           </div>
-          <h1 className="mt-4 max-w-3xl text-xl font-extrabold leading-tight text-[var(--ra-text-primary)] md:text-2xl">
+          <h1 className="mt-4 max-w-3xl text-xl font-black leading-tight text-[var(--ra-text-primary)] md:text-2xl">
             {session.topic.title}
           </h1>
           <p className="mt-2 line-clamp-2 max-w-3xl text-sm leading-6 text-[var(--ra-text-secondary)]">
@@ -64,11 +70,11 @@ export function DebateHeader({
           </p>
         </div>
 
-        <div className="ra-hud-panel rounded-b-[var(--ra-radius-xl)] border border-t-0 border-[rgba(21,248,255,0.36)] bg-[rgba(2,8,23,0.76)] px-5 pb-4 pt-2 text-center shadow-[var(--ra-glow-esports-cyan)]">
+        <div className="rounded-b-[var(--ra-radius-xl)] border border-t-0 border-[rgba(93,151,255,0.42)] bg-[rgba(2,8,23,0.82)] px-5 pb-4 pt-2 text-center shadow-[0_0_36px_rgba(55,137,255,0.26)]">
           <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--ra-text-secondary)]">
             Ronde {roundNumber} / {roundOrder.length}
           </p>
-          <p className="mt-1 text-xs font-bold uppercase text-[var(--ra-cyan-bright)]">
+          <p className="mt-1 text-xs font-bold uppercase text-[#4bd7ff]">
             {roundLabel}
           </p>
           <TurnTimer remainingSeconds={remainingSeconds} />

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, KeyRound } from "lucide-react";
 import { ErrorBanner } from "@/components/common/ErrorBanner";
 import { PageShell } from "@/components/layout/PageShell";
+import { ArenaProgressShowcase } from "@/components/lobby/ArenaProgressShowcase";
 import { LobbyHero } from "@/components/lobby/LobbyHero";
 import { ModeCarousel } from "@/components/lobby/ModeCarousel";
 import { PopularChallengeStrip } from "@/components/lobby/PopularChallengeStrip";
@@ -133,6 +134,8 @@ export default function Home() {
         selectedTopic={selectedTopic}
         onSelect={setSelectedTopic}
       />
+
+      <ArenaProgressShowcase />
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
         <div id="pilih-topik" className="scroll-mt-6 space-y-4">

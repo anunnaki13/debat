@@ -1,0 +1,8 @@
+node_modules
+.next
+coverage
+.git
+.env.local
+npm-debug.log*
+README.md
+REPUBLIK_ARGUMEN_MVP_AI_DEBATE_BLUEPRINT.md

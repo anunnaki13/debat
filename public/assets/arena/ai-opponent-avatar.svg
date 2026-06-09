@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">AI esports opponent avatar</title>
+  <desc id="desc">A magenta AI mech helmet avatar with glowing visor and antenna nodes.</desc>
+  <defs>
+    <radialGradient id="bg" cx=".5" cy=".38" r=".7">
+      <stop offset="0" stop-color="#ff2bd6" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#07101c"/>
+    </radialGradient>
+    <linearGradient id="helmet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff315d"/>
+      <stop offset=".48" stop-color="#7b2cff"/>
+      <stop offset="1" stop-color="#07101c"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <circle cx="80" cy="80" r="78" fill="url(#bg)" stroke="#ff315d" stroke-width="3"/>
+  <circle cx="80" cy="80" r="62" fill="#07101c" stroke="#ff315d" stroke-opacity=".52"/>
+  <g filter="url(#glow)">
+    <path d="M42 82c-2-34 18-57 55-62 25 7 39 25 42 54 4 40-18 65-58 68-32-5-51-24-39-60z" fill="url(#helmet)" stroke="#ff315d" stroke-width="4"/>
+    <path d="M54 78c11-18 31-27 61-27 14 10 21 25 19 45H56z" fill="#090812" stroke="#ff315d" stroke-width="3"/>
+    <path d="M66 78h24M103 78h24" stroke="#15f8ff" stroke-width="8" stroke-linecap="round"/>
+    <path d="M73 101h45" stroke="#ff315d" stroke-width="5" stroke-linecap="round"/>
+    <path d="M34 91h20v29H37c-12-10-13-20-3-29zM129 91h18c10 10 9 20-3 29h-17z" fill="#14091b" stroke="#ff315d" stroke-width="3"/>
+    <path d="M80 21V7M54 30 44 15M111 29l12-15" stroke="#15f8ff" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="80" cy="7" r="5" fill="#15f8ff"/>
+  </g>
+</svg>

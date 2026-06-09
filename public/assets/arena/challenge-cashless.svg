@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="title desc">
+  <title id="title">Esports challenge card gold</title>
+  <desc id="desc">A gold high tech scoreboard with holographic economy data modules.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#271805"/>
+      <stop offset=".55" stop-color="#07101c"/>
+      <stop offset="1" stop-color="#14051c"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="360" height="190" rx="18" fill="url(#bg)"/>
+  <path d="M0 140c70-27 135-29 194-8 62 22 112 12 166-24v82H0z" fill="#02050d"/>
+  <g filter="url(#glow)">
+    <rect x="44" y="38" width="272" height="82" rx="16" fill="#07101c" stroke="#d8aa5c" stroke-width="4"/>
+    <path d="M72 64h74M72 88h52M218 64h70M218 88h44" stroke="#d8aa5c" stroke-width="6" stroke-linecap="round"/>
+    <path d="M166 48h28v64h-28z" fill="#132033" stroke="#15f8ff" stroke-width="3"/>
+    <path d="M116 145h128" stroke="#15f8ff" stroke-width="5" stroke-linecap="round"/>
+    <path d="M134 126l22-18h48l22 18" fill="none" stroke="#ff2bd6" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

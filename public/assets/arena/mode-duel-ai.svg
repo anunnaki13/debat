@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 170" role="img" aria-labelledby="title desc">
+  <title id="title">Duel AI esports mode</title>
+  <desc id="desc">Two neon esports pods facing each other on a high tech debate stage.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#031325"/>
+      <stop offset=".55" stop-color="#06101d"/>
+      <stop offset="1" stop-color="#13041c"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="260" height="170" rx="18" fill="url(#bg)"/>
+  <path d="M0 126c48-22 91-27 129-14 44 15 82 10 131-17v75H0z" fill="#02050d"/>
+  <g opacity=".45">
+    <path d="M24 145h212M48 126h164M74 110h112" stroke="#fff" stroke-opacity=".16"/>
+    <path d="M130 105 34 170M130 105l96 65M130 105v65" stroke="#15f8ff" stroke-opacity=".2"/>
+  </g>
+  <g filter="url(#glow)">
+    <path d="M36 91c9-26 29-39 61-39s52 13 61 39z" fill="#061b34" stroke="#15f8ff" stroke-width="4"/>
+    <path d="M53 60h72l13 37H42z" fill="#07101c" stroke="#15f8ff" stroke-width="3"/>
+    <path d="M66 78h50" stroke="#15f8ff" stroke-width="6" stroke-linecap="round"/>
+    <path d="M130 44l-16 38h23l-14 45 51-62h-23l12-21z" fill="#f0c97d"/>
+    <path d="M138 91c9-26 29-39 61-39s52 13 61 39z" fill="#17091d" stroke="#ff315d" stroke-width="4"/>
+    <path d="M155 60h72l13 37h-96z" fill="#07101c" stroke="#ff315d" stroke-width="3"/>
+    <path d="M168 78h50" stroke="#ff315d" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

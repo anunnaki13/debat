@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 170" role="img" aria-labelledby="title desc">
+  <title id="title">Boss battle AI mode</title>
+  <desc id="desc">A giant AI boss helmet projected above a neon esports stage.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#031226"/>
+      <stop offset=".52" stop-color="#07101c"/>
+      <stop offset="1" stop-color="#19051d"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="260" height="170" rx="18" fill="url(#bg)"/>
+  <path d="M0 128c54-22 108-26 163-10 40 12 73 2 97-22v74H0z" fill="#02050d"/>
+  <g filter="url(#glow)">
+    <path d="M75 76c0-38 22-60 65-66 31 10 48 32 50 66 2 42-22 67-69 74-37-9-53-33-46-74z" fill="#07101c" stroke="#ff315d" stroke-width="5"/>
+    <path d="M94 73c11-22 31-33 61-33 17 10 25 27 24 51H93z" fill="#16091d" stroke="#15f8ff" stroke-width="3"/>
+    <path d="M108 76h24M148 76h24" stroke="#ff315d" stroke-width="7" stroke-linecap="round"/>
+    <path d="M116 105h44" stroke="#f0c97d" stroke-width="5" stroke-linecap="round"/>
+    <path d="M32 142h196" stroke="#15f8ff" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

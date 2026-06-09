@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 190" role="img" aria-labelledby="title desc">
+  <title id="title">Esports challenge card green</title>
+  <desc id="desc">A green high tech tactical display with arena lanes and score modules.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#032219"/>
+      <stop offset=".55" stop-color="#07101c"/>
+      <stop offset="1" stop-color="#051f34"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="360" height="190" rx="18" fill="url(#bg)"/>
+  <path d="M0 140c69-25 136-24 202 2 55 22 108 13 158-25v73H0z" fill="#02050d"/>
+  <g filter="url(#glow)">
+    <path d="M56 130c20-48 62-74 124-74s104 26 124 74" fill="none" stroke="#62d49c" stroke-width="5"/>
+    <path d="M90 122h180M122 101h116M152 82h56" stroke="#15f8ff" stroke-width="5" stroke-linecap="round"/>
+    <rect x="36" y="38" width="72" height="52" rx="10" fill="#07101c" stroke="#62d49c" stroke-width="3"/>
+    <rect x="252" y="38" width="72" height="52" rx="10" fill="#07101c" stroke="#62d49c" stroke-width="3"/>
+    <path d="M54 57h36M270 57h36" stroke="#62d49c" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="180" cy="129" r="18" fill="#07101c" stroke="#d8aa5c" stroke-width="4"/>
+  </g>
+</svg>

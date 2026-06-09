@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title desc">
+  <title id="title">Republik Argumen esports shield mark</title>
+  <desc id="desc">A neon shield and hexagonal arena logo mark.</desc>
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="#07101c" stroke="#15f8ff" stroke-width="4"/>
+  <g filter="url(#glow)" fill="none" stroke-linejoin="round">
+    <path d="M60 17 95 37v40L60 103 25 77V37z" stroke="#15f8ff" stroke-width="5"/>
+    <path d="M60 31 82 44v27L60 86 38 71V44z" stroke="#ff315d" stroke-width="4"/>
+    <path d="M60 44 70 50v17l-10 7-10-7V50z" stroke="#f0c97d" stroke-width="4"/>
+    <path d="M25 37 60 58l35-21M60 58v45" stroke="#15f8ff" stroke-width="3" opacity=".75"/>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Esports rank badge</title>
+  <desc id="desc">A glowing gold esports rank badge with crown geometry.</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0a8"/>
+      <stop offset=".52" stop-color="#d8aa5c"/>
+      <stop offset="1" stop-color="#7b4d13"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <circle cx="80" cy="80" r="72" fill="#07101c" stroke="#d8aa5c" stroke-width="4"/>
+  <g filter="url(#glow)">
+    <path d="M80 18 126 44v58l-46 36-46-36V44z" fill="#111827" stroke="url(#gold)" stroke-width="6"/>
+    <path d="M46 78 60 50l20 23 20-23 14 28-14 35H60z" fill="url(#gold)"/>
+    <path d="M56 120h48" stroke="#15f8ff" stroke-width="6" stroke-linecap="round"/>
+    <path d="M66 91h28" stroke="#07101c" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Neon esports arena backdrop</title>
+  <desc id="desc">A dark esports arena backdrop with LED screens, grid floor, spotlights, and holographic light beams.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020711"/>
+      <stop offset=".55" stop-color="#06142c"/>
+      <stop offset="1" stop-color="#12051f"/>
+    </linearGradient>
+    <radialGradient id="center" cx=".5" cy=".22" r=".52">
+      <stop offset="0" stop-color="#15f8ff" stop-opacity=".28"/>
+      <stop offset=".44" stop-color="#7b2cff" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#7b2cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect width="1200" height="720" fill="url(#center)"/>
+  <path d="M0 456c160-58 302-75 430-50 135 27 250 27 370 0 86-19 153-13 200 18 78 51 149 50 200 28v268H0z" fill="#02050b" opacity=".78"/>
+  <g opacity=".35">
+    <path d="M0 660h1200M80 610h1040M150 560h900M230 515h740M330 478h540" stroke="#ffffff" stroke-opacity=".14"/>
+    <path d="M600 470L50 720M600 470l-260 250M600 470v250M600 470l260 250M600 470l550 250" stroke="#15f8ff" stroke-opacity=".18"/>
+  </g>
+  <g filter="url(#glow)" opacity=".9">
+    <path d="M86 118h252l34 168H52z" fill="#061b34" stroke="#15f8ff" stroke-width="4"/>
+    <path d="M862 118h252l34 168H828z" fill="#19091f" stroke="#ff2bd6" stroke-width="4"/>
+    <path d="M394 92h412l-40 130H434z" fill="#07101c" stroke="#d8aa5c" stroke-width="3"/>
+    <path d="M120 158h206M140 198h164M900 158h206M920 198h164M462 132h276M494 170h212" stroke="#ffffff" stroke-opacity=".42" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#glow)">
+    <path d="M462 418l52-64h172l52 64-60 54H522z" fill="#07101c" stroke="#15f8ff" stroke-width="4"/>
+    <path d="M536 414h128l26 42H510z" fill="#12051f" stroke="#ff2bd6" stroke-width="3"/>
+  </g>
+  <g opacity=".6">
+    <path d="M186 0L92 390M360 0L260 360M1014 0l94 390M840 0l100 360" stroke="#15f8ff" stroke-opacity=".25" stroke-width="3"/>
+    <path d="M514 0l-80 330M686 0l80 330" stroke="#ff2bd6" stroke-opacity=".22" stroke-width="3"/>
+  </g>
+</svg>

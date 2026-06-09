@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-09 - Stabilization Sprint 2 Voice API Smoke Tests
+
+- Added smoke tests for `/api/voice/transcribe` success, missing audio, authentication failure, and empty transcript fallback.
+- Added smoke tests for `/api/voice/synthesize` success, invalid input, missing TTS configuration, and unavailable TTS model fallback.
+- Verified STT success returns transcript usage plus Delivery Signals, and TTS success returns audio with the expected OpenRouter request payload.
+
 ## 2026-06-09 - Stabilization Sprint 1 OpenRouter Resilience
 
 - Added OpenRouter failure classification for authentication, rate limit, unavailable model, insufficient credits, unsupported response format, empty response, and generic upstream failures.

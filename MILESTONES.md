@@ -297,10 +297,10 @@ Fokus:
 - Done: perbaiki error message provider agar lebih spesifik: invalid key, rate limit, model tidak tersedia, kredit kurang, unsupported structured output, respons kosong, dan timeout.
 - Done: tambah mode fallback untuk AI Judge bila model murah menolak `json_schema`, lalu minta JSON plain text dengan instruksi ketat.
 - Done: tambah smoke test route API dengan mock provider untuk lawan AI dan AI Judge.
+- Done: perluas smoke test untuk STT/TTS success dan failure path.
 - Done: tambah test klasifikasi error OpenRouter client.
 - Remaining: uji manual dengan OpenRouter key nyata.
 - Remaining: pastikan model gratis dan murah memberi respons yang cukup baik untuk debat Indonesia.
-- Remaining: perluas smoke test untuk STT/TTS failure path.
 
 Artefak:
 
@@ -308,7 +308,10 @@ Artefak:
 - `src/lib/openrouter/client.test.ts`
 - `src/app/api/debate/opponent/route.test.ts`
 - `src/app/api/debate/judge/route.test.ts`
+- `src/app/api/voice/transcribe/route.test.ts`
+- `src/app/api/voice/synthesize/route.test.ts`
 - `docs/progress/STABILIZATION_SPRINT_1_REPORT.md`
+- `docs/progress/STABILIZATION_SPRINT_2_REPORT.md`
 
 ## Milestone 12 - Product Refinement
 

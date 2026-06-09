@@ -69,6 +69,7 @@ Konfigurasi OpenRouter tetap dibaca dari `.env.local` melalui `docker-compose.ym
 - Auto-speak lawan di mode voice memakai OpenRouter TTS saat dikonfigurasi, lalu fallback ke TTS browser.
 - Server route untuk OpenRouter STT dan TTS.
 - Delivery Signals helper tanpa klaim deteksi emosi.
+- Smoke test API mencakup opponent, judge fallback, STT, dan TTS tanpa memanggil OpenRouter asli.
 
 OpenRouter key yang diisi lewat UI tetap berada di browser lokal, dikirim hanya ke route server lokal saat request AI berjalan, dan tidak masuk ke export session.
 
@@ -135,4 +136,4 @@ UI Sprint 4 menambahkan:
 
 ## Milestones
 
-Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, laporan `docs/progress/UI_SPRINT_*_REPORT.md`, dan `docs/progress/STABILIZATION_SPRINT_1_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.
+Lihat `MILESTONES.md`, `docs/progress/SPRINT_0_6_REPORT.md`, laporan `docs/progress/UI_SPRINT_*_REPORT.md`, dan `docs/progress/STABILIZATION_SPRINT_*_REPORT.md` untuk status MVP saat ini, rencana voice arena, dan milestone lanjutan.

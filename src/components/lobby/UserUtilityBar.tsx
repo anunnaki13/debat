@@ -4,9 +4,9 @@ import { Badge, IconButton } from "@/components/ui";
 
 export function UserUtilityBar() {
   return (
-    <div className="flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-subtle)] bg-[rgba(10,17,29,0.74)] px-4 py-3 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
-      <label className="group flex min-w-0 flex-1 items-center gap-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.72)] px-3 py-2 transition focus-within:border-[var(--ra-cyan)]">
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-muted)] group-focus-within:text-[var(--ra-cyan-bright)]">
+    <div className="ra-hud-panel flex min-h-14 flex-wrap items-center justify-between gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.18)] bg-[rgba(2,8,23,0.78)] px-4 py-3 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
+      <label className="group flex min-w-0 flex-1 items-center gap-3 rounded-[var(--ra-radius-pill)] border border-[rgba(255,255,255,0.12)] bg-[rgba(2,8,23,0.76)] px-3 py-2 transition focus-within:border-[var(--ra-electric-cyan)]">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--ra-radius-pill)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-muted)] group-focus-within:text-[var(--ra-electric-cyan)]">
           <Search size={17} aria-hidden="true" />
         </span>
         <span className="sr-only">Cari topik atau tantangan</span>

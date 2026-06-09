@@ -532,15 +532,15 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
       <ErrorBanner message={error} />
 
-      <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.24)] bg-[rgba(7,11,19,0.88)] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
+      <section className="ra-esports-grid ra-laser-sweep relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[image:var(--ra-gradient-esports-arena)] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
         <Image
           src="/assets/arena/arena-backdrop.svg"
           alt=""
           fill
-          className="object-cover opacity-[0.18]"
+          className="object-cover opacity-[0.34]"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(50,212,209,0.16),transparent_34%),radial-gradient(circle_at_84%_26%,rgba(238,106,100,0.16),transparent_32%),linear-gradient(180deg,rgba(7,11,19,0.12),rgba(7,11,19,0.88))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(21,248,255,0.20),transparent_34%),radial-gradient(circle_at_84%_26%,rgba(255,43,214,0.20),transparent_32%),linear-gradient(180deg,rgba(2,8,23,0.16),rgba(2,8,23,0.90))]" />
 
         <div className="relative grid gap-4 xl:grid-cols-[220px_minmax(420px,1fr)_280px]">
           <div className="hidden xl:block">
@@ -552,11 +552,11 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           </div>
 
           <div className="min-w-0 space-y-3">
-            <div className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[rgba(10,17,29,0.74)] p-4 shadow-[var(--ra-shadow-card)]">
+            <div className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.22)] bg-[rgba(2,8,23,0.78)] p-4 shadow-[var(--ra-shadow-card)]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-extrabold uppercase text-[var(--ra-cyan-bright)]">
-                    Live Transcript
+                    Live Transcript Feed
                   </p>
                   <h2 className="text-xl font-extrabold text-[var(--ra-text-primary)]">
                     Ronde {session.currentRound.toLowerCase()}
@@ -592,7 +592,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
               ) : null}
             </div>
 
-            <div className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[rgba(7,11,19,0.58)] p-3 shadow-[var(--ra-shadow-card)]">
+            <div className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(255,255,255,0.14)] bg-[rgba(2,8,23,0.72)] p-3 shadow-[var(--ra-shadow-card)]">
               <VoiceWaveform
                 tone={arenaState === "ai_speaking" || arenaState === "ai_thinking" ? "ai" : "user"}
               />
@@ -629,7 +629,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           />
         </div>
 
-        <div className="relative mt-4 space-y-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.82)] p-3 shadow-[var(--ra-glow-user)] backdrop-blur-xl">
+        <div className="ra-hud-panel relative mt-4 space-y-3 rounded-[var(--ra-radius-xl)] border border-[var(--ra-electric-cyan)] bg-[rgba(2,8,23,0.84)] p-3 shadow-[var(--ra-glow-esports-cyan)] backdrop-blur-xl">
           {session.status === "IN_PROGRESS" ? (
             <DebateComposer
               round={session.currentRound}

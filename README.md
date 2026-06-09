@@ -1,6 +1,6 @@
 # Republik Argumen
 
-Personal MVP untuk debat tiga ronde melawan AI Opponent, lalu dinilai oleh AI Judge. Blueprint aktif sekarang adalah Voice Arena untuk gameplay/voice/backend dan UI/UX Style Blueprint untuk visual implementation.
+Personal MVP untuk debat tiga ronde melawan AI Opponent, lalu dinilai oleh AI Judge. Blueprint aktif sekarang adalah Voice Arena untuk gameplay/voice/backend dan UI/UX Style Blueprint untuk visual implementation. Arah visual aktif saat ini adalah esports debate arena: high-tech HUD, neon cyan/magenta glow, player pod, AI opponent pod, dan broadcast-style match screen.
 
 ## Local Setup
 
@@ -118,14 +118,18 @@ UI Sprint 3 menambahkan:
 
 UI Sprint 4 menambahkan:
 
-- game-style asset pack berdasarkan dua mockup PNG terbaru;
+- esports/high-tech arena asset pack berdasarkan dua mockup PNG terbaru dan follow-up feedback user;
 - design reference di `docs/design-reference/`;
 - SVG arena assets di `public/assets/arena/`;
 - CSS animation utilities dan reusable arena effects;
 - development-only `/dev/mock-arena`;
-- mockup-aligned lobby dengan hero duel, profile/rank card, compact mode strip, dan popular challenge feed;
-- real arena layout dengan match HUD, user podium, transcript center, AI panel, waveform, momentum meter, action bar, dan input dock;
-- screenshot QA mock arena, lobby mockup-aligned, dan real arena.
+- esports lobby dengan hero duel stage, profile/rank HUD, compact mode strip, dan live arena feed;
+- real arena layout dengan match HUD, user pod, transcript center, AI opponent pod, waveform, momentum meter, action bar, dan input dock;
+- screenshot QA mock arena, lobby mockup-aligned, real arena, dan esports overhaul:
+  - `docs/visual-qa/lobby-esports-overhaul-desktop.png`;
+  - `docs/visual-qa/lobby-esports-overhaul-mobile.png`;
+  - `docs/visual-qa/arena-esports-overhaul-desktop.png`;
+  - `docs/visual-qa/arena-esports-overhaul-mobile.png`.
 
 ## Milestones
 

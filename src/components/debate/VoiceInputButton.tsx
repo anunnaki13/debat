@@ -28,8 +28,8 @@ export function VoiceInputButton({
       className={cn(
         "inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-pill)] border px-5 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60",
         isListening
-          ? "border-[var(--ra-coral)] bg-[var(--ra-coral-soft)] text-[var(--ra-coral-bright)] shadow-[var(--ra-glow-ai)] hover:bg-[var(--ra-coral-soft)]"
-          : "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-user)] hover:bg-[var(--ra-blue-soft)]",
+          ? "border-[var(--ra-magenta)] bg-[var(--ra-magenta-soft)] text-[var(--ra-magenta-bright)] shadow-[var(--ra-glow-esports-magenta)] hover:bg-[var(--ra-magenta-soft)]"
+          : "border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] text-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)] hover:bg-[var(--ra-neon-blue-soft)]",
       )}
     >
       {isListening ? <MicOff size={17} aria-hidden="true" /> : <Mic size={17} aria-hidden="true" />}

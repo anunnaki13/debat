@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-06-09 - UI Sprint 4 Esports Arena Overhaul
+
+- Replaced the previous abstract/civic-leaning asset direction with an esports arena visual pass.
+- Rebuilt the arena SVG pack around high-tech stage geometry, cyan/magenta neon glow, helmet avatars, player/AI pods, HUD frames, laser sweeps, and broadcast panels.
+- Retuned design tokens with electric cyan, neon blue, magenta accents, esports gradients, and glow shadows.
+- Added esports HUD/grid/laser motion utilities in `src/styles/motion.css`.
+- Reworked the lobby hero into a match-entry scene with player-vs-AI composition and live match HUD.
+- Reworked mode cards and popular challenge cards into neon broadcast tiles instead of abstract illustrations.
+- Reworked the real debate arena with esports match header, player pod, AI opponent pod, momentum HUD, action bar, voice control, and cockpit-style input dock.
+- Updated sidebar, top utility bar, and app shell backgrounds to match the esports arena direction.
+- Added visual QA screenshots for the new direction:
+  - `docs/visual-qa/lobby-esports-overhaul-desktop.png`;
+  - `docs/visual-qa/lobby-esports-overhaul-mobile.png`;
+  - `docs/visual-qa/arena-esports-overhaul-desktop.png`;
+  - `docs/visual-qa/arena-esports-overhaul-mobile.png`.
+
 ## 2026-06-09 — UI Sprint 4 Game Arena Assets
 
 - Added the two uploaded PNG mockups as design references under `docs/design-reference/`.

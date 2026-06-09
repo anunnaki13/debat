@@ -1,11 +1,20 @@
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="128" height="128" rx="28" fill="#07101C"/>
-  <path d="M64 12L104 35V81L64 104L24 81V35L64 12Z" stroke="#32D4D1" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M64 25L91 40V71L64 87L37 71V40L64 25Z" stroke="#EE6A64" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M64 38L79 47V64L64 73L49 64V47L64 38Z" fill="#132033" stroke="#D8AA5C" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M64 12V38" stroke="#5BE7E1" stroke-width="4" stroke-linecap="round"/>
-  <path d="M24 35L49 47" stroke="#5BE7E1" stroke-width="4" stroke-linecap="round"/>
-  <path d="M104 35L79 47" stroke="#FF8179" stroke-width="4" stroke-linecap="round"/>
-  <path d="M64 104V73" stroke="#D8AA5C" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="64" cy="56" r="7" fill="#F6F2E9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title desc">
+  <title id="title">Republik Argumen esports shield mark</title>
+  <desc id="desc">A neon shield and hexagonal arena logo mark.</desc>
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="26" fill="#07101c" stroke="#15f8ff" stroke-width="4"/>
+  <g filter="url(#glow)" fill="none" stroke-linejoin="round">
+    <path d="M60 17 95 37v40L60 103 25 77V37z" stroke="#15f8ff" stroke-width="5"/>
+    <path d="M60 31 82 44v27L60 86 38 71V44z" stroke="#ff315d" stroke-width="4"/>
+    <path d="M60 44 70 50v17l-10 7-10-7V50z" stroke="#f0c97d" stroke-width="4"/>
+    <path d="M25 37 60 58l35-21M60 58v45" stroke="#15f8ff" stroke-width="3" opacity=".75"/>
+  </g>
 </svg>

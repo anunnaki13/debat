@@ -175,9 +175,9 @@ Catatan:
 - Permission denied matrix perangkat fisik masih masuk fase stabilisasi.
 - Sprint berikutnya harus menunggu konfirmasi user, sesuai UI/UX Style Blueprint.
 
-## Milestone 8 - UI Sprint 4 Game Arena Assets and Base
+## Milestone 8 - UI Sprint 4 Esports Arena Assets and Base
 
-Status: implemented.
+Status: implemented with esports overhaul.
 
 Hasil utama:
 
@@ -186,8 +186,15 @@ Hasil utama:
   - `docs/design-reference/mockup-product-system.png`
 - SVG asset pack dibuat di `public/assets/arena/`.
 - Asset manifest dibuat di `public/assets/arena/assets-manifest.md`.
-- Hero duel scene, compact mode art, boss battle card, dan popular challenge art dibuat sebagai SVG repo-native.
-- CSS animation utilities ditambahkan untuk neon border, waveform, orbit ring, scanline, particle rise, floating card, dan energy sweep.
+- Asset abstrak sebelumnya diganti dengan arah esports arena/high-tech:
+  - neon stage geometry;
+  - cyan player helmet;
+  - magenta AI mech helmet;
+  - player pod dan AI opponent pod;
+  - HUD broadcast panels;
+  - laser sweep dan arena grid.
+- Hero duel scene, compact mode art, boss battle card, dan popular challenge art dibuat ulang sebagai SVG repo-native.
+- CSS animation utilities ditambahkan untuk neon border, waveform, orbit ring, scanline, particle rise, floating card, energy sweep, esports grid, HUD ping, dan laser sweep.
 - Reusable arena effects dibuat di `src/components/arena/ArenaEffects.tsx`.
 - `/dev/mock-arena` dibuat untuk simulasi state visual tanpa API call.
 - Real debate arena memakai:
@@ -210,10 +217,15 @@ Hasil utama:
   - `docs/visual-qa/lobby-mockup-aligned-mobile.png`
   - `docs/visual-qa/arena-mockup-aligned-desktop.png`
   - `docs/visual-qa/arena-mockup-aligned-mobile.png`
+  - `docs/visual-qa/lobby-esports-overhaul-desktop.png`
+  - `docs/visual-qa/lobby-esports-overhaul-mobile.png`
+  - `docs/visual-qa/arena-esports-overhaul-desktop.png`
+  - `docs/visual-qa/arena-esports-overhaul-mobile.png`
 - Progress report di `docs/progress/UI_SPRINT_4_REPORT.md`.
 
 Catatan:
 
+- User menolak pass visual sebelumnya karena asset terasa abstrak/tidak relevan; pass terbaru merombak total surface utama ke arah esports arena, high-tech HUD, dan glow.
 - Asset raster AI native tidak dibuat karena tool image generation tidak tersedia di sesi ini; pengganti yang dipakai adalah SVG/CSS repo-native agar ringan dan stabil.
 - Mockup PNG dipakai sebagai reference, bukan sebagai background produk mentah.
 - Sprint berikutnya harus menunggu konfirmasi user.

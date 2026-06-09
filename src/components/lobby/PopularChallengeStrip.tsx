@@ -36,12 +36,12 @@ export function PopularChallengeStrip({
     <section aria-labelledby="popular-challenge-title" className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <Badge tone="prestige">Tantangan Populer Hari Ini</Badge>
+          <Badge tone="prestige">Live Arena Feed</Badge>
           <h2
             id="popular-challenge-title"
-            className="mt-3 text-xl font-extrabold text-[var(--ra-text-primary)]"
+            className="mt-3 text-xl font-black uppercase tracking-wide text-[var(--ra-text-primary)]"
           >
-            Pilih isu yang sedang panas
+            Pilih match yang sedang panas
           </h2>
         </div>
       </div>
@@ -56,10 +56,10 @@ export function PopularChallengeStrip({
               aria-pressed={selected}
               onClick={() => onSelect(topic)}
               className={cn(
-                "group relative min-h-[170px] min-w-[260px] snap-start overflow-hidden rounded-[var(--ra-radius-lg)] border p-4 text-left shadow-[var(--ra-shadow-card)] transition duration-150 sm:min-w-[280px] lg:min-w-0 lg:flex-1",
+                "ra-hud-panel group relative min-h-[170px] min-w-[260px] snap-start overflow-hidden rounded-[var(--ra-radius-lg)] border p-4 text-left shadow-[var(--ra-shadow-card)] transition duration-150 sm:min-w-[280px] lg:min-w-0 lg:flex-1",
                 selected
-                  ? "border-[var(--ra-cyan)] shadow-[var(--ra-glow-user)]"
-                  : "border-[var(--ra-border-default)] hover:border-[var(--ra-border-strong)]",
+                  ? "border-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
+                  : "border-[rgba(255,255,255,0.13)] hover:border-[var(--ra-electric-cyan)] hover:shadow-[var(--ra-glow-esports-cyan)]",
               )}
             >
               <Image
@@ -70,7 +70,7 @@ export function PopularChallengeStrip({
                 className="object-cover opacity-95 transition duration-300 group-hover:scale-[1.04]"
                 aria-hidden="true"
               />
-              <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,19,0.10),rgba(7,11,19,0.56)_54%,rgba(7,11,19,0.96))]" />
+              <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,23,0.04),rgba(2,8,23,0.44)_48%,rgba(2,8,23,0.98))]" />
               <div className="relative z-[1] flex items-start justify-between gap-3">
                 <Badge tone={topic.difficulty === "lanjutan" ? "warning" : "positive"}>
                   {topic.category.split(" ")[0]}
@@ -85,7 +85,7 @@ export function PopularChallengeStrip({
               </div>
 
               <div className="relative z-[1] mt-14">
-                <h3 className="line-clamp-2 text-[15px] font-extrabold leading-snug text-[var(--ra-text-primary)]">
+                <h3 className="line-clamp-2 text-[15px] font-black leading-snug text-[var(--ra-text-primary)]">
                   {topic.title}
                 </h3>
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-bold text-[var(--ra-text-secondary)]">

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown, Crown, Flame, Sparkles, Swords, Trophy, Zap } from "lucide-react";
+import { ArrowDown, Flame, RadioTower, Swords, Trophy, Zap } from "lucide-react";
 import type { ReactNode } from "react";
 import { ArenaParticleField, EnergyDivider } from "@/components/arena/ArenaEffects";
 import { Button } from "@/components/ui";
@@ -10,38 +10,38 @@ export function LobbyHero({
   onPrimaryAction: () => void;
 }) {
   return (
-    <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.24)] bg-[linear-gradient(135deg,#071321_0%,#0a1430_48%,#10091d_100%)] shadow-[var(--ra-shadow-elevated)]">
+    <section className="ra-esports-grid ra-laser-sweep relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.32)] bg-[image:var(--ra-gradient-esports-arena)] shadow-[var(--ra-shadow-elevated)]">
       <Image
         src="/assets/arena/hero-duel-scene.svg"
         alt=""
         fill
         priority
-        className="object-cover object-center opacity-90"
+        className="object-cover object-center opacity-[0.92]"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,11,19,0.96)_0%,rgba(7,11,19,0.8)_38%,rgba(7,11,19,0.34)_70%,rgba(7,11,19,0.76)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_18%,rgba(50,212,209,0.14),transparent_28%),radial-gradient(circle_at_78%_28%,rgba(238,106,100,0.16),transparent_30%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,8,23,0.95)_0%,rgba(2,8,23,0.78)_34%,rgba(2,8,23,0.20)_68%,rgba(2,8,23,0.76)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_20%,rgba(21,248,255,0.20),transparent_28%),radial-gradient(circle_at_82%_28%,rgba(255,43,214,0.20),transparent_30%)]" />
       <ArenaParticleField density={24} />
 
       <div className="relative grid gap-6 p-5 sm:p-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:p-7 xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-h-[340px] flex-col justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <p className="inline-flex min-h-8 items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[var(--ra-gold)] bg-[rgba(216,170,92,0.16)] px-3 text-xs font-bold text-[var(--ra-gold-bright)]">
-                <Sparkles size={14} aria-hidden="true" />
-                Selamat datang kembali, Budi!
+              <p className="inline-flex min-h-8 items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[var(--ra-electric-cyan)] bg-[rgba(21,248,255,0.14)] px-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]">
+                <RadioTower size={14} aria-hidden="true" />
+                Live Debate Arena
               </p>
-              <span className="inline-flex min-h-8 items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)] bg-[rgba(50,212,209,0.13)] px-3 text-xs font-bold text-[var(--ra-cyan-bright)]">
+              <span className="inline-flex min-h-8 items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[var(--ra-magenta)] bg-[var(--ra-magenta-soft)] px-3 text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--ra-magenta-bright)]">
                 <Flame size={14} aria-hidden="true" />
-                Streak 12 hari
+                High Tech Match
               </span>
             </div>
-            <h1 className="mt-5 max-w-[760px] text-[2rem] font-extrabold leading-[1.08] text-[var(--ra-text-primary)] sm:text-[2.65rem] lg:text-[3rem]">
-              Mau menguji argumen apa hari ini?
+            <h1 className="mt-5 max-w-[780px] text-[2rem] font-black uppercase leading-[0.98] tracking-wide text-[var(--ra-text-primary)] drop-shadow-[0_0_24px_rgba(21,248,255,0.25)] sm:text-[2.7rem] lg:text-[3.15rem]">
+              Masuk Arena. Adu Argumen Melawan AI.
             </h1>
             <p className="mt-4 max-w-2xl text-sm font-medium leading-6 text-[var(--ra-text-secondary)] sm:text-base">
-              Latih tesis, bicara di arena, lalu biarkan lawan AI dan wasit AI
-              menguji logika, data, struktur, rebuttal, dan integritas argumen.
+              Pilih topik, nyalakan mode voice, lalu bertanding dalam HUD
+              kompetitif dengan lawan AI, momentum meter, dan wasit objektif.
             </p>
             <EnergyDivider className="mt-5 max-w-xl" />
           </div>
@@ -66,64 +66,78 @@ export function LobbyHero({
         </div>
 
         <div className="relative hidden min-h-[330px] lg:block">
-          <div className="absolute right-0 top-0 w-full rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.24)] bg-[rgba(7,11,19,0.72)] p-4 shadow-[var(--ra-shadow-card)] backdrop-blur-xl">
-            <div className="flex items-start gap-3">
-              <Image
-                src="/assets/arena/user-orator-avatar.svg"
-                alt=""
-                width={58}
-                height={58}
-                className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)] bg-[var(--ra-bg-deep)]"
-                aria-hidden="true"
-              />
-              <div className="min-w-0">
-                <p className="text-sm font-extrabold text-[var(--ra-text-primary)]">
-                  Budi Hidayat
-                </p>
-                <p className="text-xs font-semibold text-[var(--ra-text-muted)]">
-                  Menteri Klarifikasi
-                </p>
-                <span className="mt-2 inline-flex min-h-7 items-center gap-1 rounded-[var(--ra-radius-pill)] border border-[var(--ra-gold)] bg-[var(--ra-gold-soft)] px-2 text-[11px] font-bold text-[var(--ra-gold-bright)]">
-                  <Crown size={12} aria-hidden="true" />
-                  Orator Muda
-                </span>
+          <div className="ra-hud-panel absolute right-0 top-0 w-full rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.32)] bg-[rgba(2,8,23,0.72)] p-4 shadow-[var(--ra-glow-esports-cyan)] backdrop-blur-xl">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--ra-electric-cyan)]">
+              Arena Match HUD
+            </p>
+            <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+              <HeroFighter src="/assets/arena/user-orator-avatar.svg" tone="cyan" label="Player" />
+              <div className="grid h-16 w-16 place-items-center rounded-[var(--ra-radius-pill)] border border-[var(--ra-gold)] bg-[rgba(216,170,92,0.15)] text-[var(--ra-gold-bright)] shadow-[var(--ra-glow-gold)]">
+                <Swords size={30} aria-hidden="true" />
               </div>
+              <HeroFighter src="/assets/arena/ai-opponent-avatar.svg" tone="magenta" label="AI" />
             </div>
 
-            <div className="mt-4 rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[rgba(19,32,51,0.74)] p-3">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs font-bold text-[var(--ra-text-muted)]">
-                    Reputasi
-                  </p>
-                  <p className="mt-1 text-xl font-extrabold text-[var(--ra-text-primary)]">
-                    2.450
-                  </p>
-                </div>
-                <Image
-                  src="/assets/arena/rank-orator-badge.svg"
-                  alt=""
-                  width={52}
-                  height={52}
-                  aria-hidden="true"
-                />
+            <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[rgba(255,255,255,0.10)] bg-[rgba(7,16,28,0.82)] p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold uppercase text-[var(--ra-electric-cyan)]">
+                  Momentum
+                </span>
+                <span className="text-xs font-extrabold uppercase text-[var(--ra-magenta-bright)]">
+                  AI Pressure
+                </span>
+              </div>
+              <div className="mt-3 grid h-3 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.08)]" style={{ gridTemplateColumns: "58fr 42fr" }}>
+                <span className="bg-[var(--ra-electric-cyan)] shadow-[0_0_20px_rgba(21,248,255,0.85)]" />
+                <span className="bg-[var(--ra-magenta)] shadow-[0_0_20px_rgba(255,43,214,0.75)]" />
               </div>
               <div className="mt-4 space-y-2">
-                <RankMetric label="Logika" value={82} />
+                <RankMetric label="Logic" value={82} />
                 <RankMetric label="Data" value={79} />
                 <RankMetric label="Rebuttal" value={86} />
-                <RankMetric label="Integritas" value={91} />
+                <RankMetric label="Integrity" value={91} />
               </div>
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <HeroMiniMetric icon={<Zap size={15} aria-hidden="true" />} label="140 KA" copy="Kredit Arena" />
-              <HeroMiniMetric icon={<Trophy size={15} aria-hidden="true" />} label="#128" copy="Peringkat" />
+              <HeroMiniMetric icon={<Zap size={15} aria-hidden="true" />} label="140 KA" copy="Arena Energy" />
+              <HeroMiniMetric icon={<Trophy size={15} aria-hidden="true" />} label="#128" copy="Ranked Ladder" />
             </div>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function HeroFighter({
+  src,
+  tone,
+  label,
+}: {
+  src: string;
+  tone: "cyan" | "magenta";
+  label: string;
+}) {
+  return (
+    <div className="text-center">
+      <div
+        className={`mx-auto grid h-24 w-24 place-items-center rounded-[var(--ra-radius-pill)] border bg-[rgba(7,16,28,0.82)] ${
+          tone === "cyan"
+            ? "border-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
+            : "border-[var(--ra-magenta)] shadow-[var(--ra-glow-esports-magenta)]"
+        }`}
+      >
+        <Image src={src} alt="" width={78} height={78} aria-hidden="true" />
+      </div>
+      <p
+        className={`mt-3 text-xs font-black uppercase tracking-[0.16em] ${
+          tone === "cyan" ? "text-[var(--ra-electric-cyan)]" : "text-[var(--ra-magenta-bright)]"
+        }`}
+      >
+        {label}
+      </p>
+    </div>
   );
 }
 

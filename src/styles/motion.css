@@ -131,6 +131,45 @@
   }
 }
 
+@keyframes ra-grid-pan {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 48px 48px, -48px 48px;
+  }
+}
+
+@keyframes ra-laser-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%) skewX(-18deg);
+  }
+
+  18% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(120%) skewX(-18deg);
+  }
+}
+
+@keyframes ra-hud-ping {
+  0%,
+  100% {
+    opacity: 0.36;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.025);
+  }
+}
+
 .ra-animated-frame {
   position: relative;
 }
@@ -206,6 +245,74 @@
   );
   content: "";
   animation: ra-energy-sweep 2.8s ease-in-out infinite;
+}
+
+.ra-esports-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.ra-esports-grid::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(21, 248, 255, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 43, 214, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, transparent, #000 16%, #000 78%, transparent);
+  content: "";
+  opacity: 0.42;
+  animation: ra-grid-pan 18s linear infinite;
+}
+
+.ra-laser-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.ra-laser-sweep::after {
+  position: absolute;
+  inset-block: -30%;
+  left: 0;
+  width: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(21, 248, 255, 0.18),
+    rgba(255, 43, 214, 0.22),
+    transparent
+  );
+  content: "";
+  animation: ra-laser-sweep 5.4s ease-in-out infinite;
+}
+
+.ra-hud-panel {
+  position: relative;
+}
+
+.ra-hud-panel::before,
+.ra-hud-panel::after {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+  content: "";
+}
+
+.ra-hud-panel::before {
+  left: 10px;
+  top: 10px;
+  border-left: 1px solid rgba(21, 248, 255, 0.62);
+  border-top: 1px solid rgba(21, 248, 255, 0.62);
+}
+
+.ra-hud-panel::after {
+  right: 10px;
+  bottom: 10px;
+  border-right: 1px solid rgba(255, 43, 214, 0.52);
+  border-bottom: 1px solid rgba(255, 43, 214, 0.52);
 }
 
 @media (prefers-reduced-motion: reduce) {

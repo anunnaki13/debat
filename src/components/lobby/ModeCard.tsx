@@ -17,10 +17,10 @@ const accentClasses: Record<
 > = {
   cyan: {
     border:
-      "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] shadow-[var(--ra-glow-user)]",
-    icon: "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)]",
+      "border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] shadow-[var(--ra-glow-esports-cyan)]",
+    icon: "border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] text-[var(--ra-electric-cyan)]",
     badge: "user",
-    price: "text-[var(--ra-cyan-bright)]",
+    price: "text-[var(--ra-electric-cyan)]",
   },
   amber: {
     border: "border-[var(--ra-amber)] bg-[var(--ra-amber-soft)]",
@@ -84,10 +84,10 @@ export function ModeCard<TValue extends string>({
       aria-pressed={selected}
       onClick={() => onSelect(value)}
       className={cn(
-        "group relative flex h-full min-h-[164px] flex-col overflow-hidden rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-70",
+    "group relative flex h-full min-h-[164px] flex-col overflow-hidden rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-70",
         selected
           ? tone.border
-          : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] hover:border-[var(--ra-border-strong)] hover:bg-[var(--ra-bg-panel-strong)]",
+          : "border-[rgba(255,255,255,0.12)] bg-[rgba(7,16,28,0.82)] hover:border-[var(--ra-electric-cyan)] hover:bg-[rgba(7,16,28,0.95)] hover:shadow-[var(--ra-glow-esports-cyan)]",
       )}
     >
       {artSrc ? (
@@ -100,7 +100,8 @@ export function ModeCard<TValue extends string>({
           aria-hidden={artAlt ? undefined : true}
         />
       ) : null}
-      <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,11,19,0.02),rgba(7,11,19,0.36)_48%,rgba(7,11,19,0.95))]" />
+      <span className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,8,23,0.02),rgba(2,8,23,0.32)_45%,rgba(2,8,23,0.98))]" />
+      <span className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,var(--ra-electric-cyan),var(--ra-magenta),transparent)] opacity-70" />
       <div className="flex items-start justify-between gap-3">
         <span
           className={cn(
@@ -123,7 +124,7 @@ export function ModeCard<TValue extends string>({
       </div>
 
       <div className="relative z-[1] mt-auto pt-12">
-        <h3 className="text-[15px] font-extrabold leading-tight text-[var(--ra-text-primary)]">
+        <h3 className="text-[15px] font-black uppercase leading-tight tracking-wide text-[var(--ra-text-primary)]">
           {title}
         </h3>
         <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--ra-text-secondary)]">

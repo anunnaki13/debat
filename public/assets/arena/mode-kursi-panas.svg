@@ -1,18 +1,25 @@
-<svg width="420" height="260" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="420" height="260" rx="24" fill="#07101C"/>
-  <rect x="1" y="1" width="418" height="258" rx="23" stroke="#E6A247" stroke-opacity="0.82" stroke-width="2"/>
-  <path d="M0 0H420V260H0V0Z" fill="url(#paint0_radial)"/>
-  <path d="M165 190H285L273 109C270 91 254 78 236 78H214C196 78 180 91 177 109L165 190Z" fill="#5A2716" stroke="#F0C97D" stroke-width="5"/>
-  <path d="M151 190H299V215H151V190Z" fill="#132033" stroke="#D8AA5C" stroke-width="4"/>
-  <path d="M124 214H326" stroke="#E6A247" stroke-width="5" stroke-linecap="round"/>
-  <path d="M210 48C188 64 193 86 214 100C207 76 229 72 230 49C238 68 259 75 246 101C275 83 266 53 236 33" stroke="#FF8179" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M44 42H177" stroke="#F0C97D" stroke-width="3" stroke-linecap="round"/>
-  <path d="M44 61H130" stroke="#F6F2E9" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 170" role="img" aria-labelledby="title desc">
+  <title id="title">Hot seat esports mode</title>
+  <desc id="desc">A neon hot seat throne under arena spotlights with challenger panels around it.</desc>
   <defs>
-    <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 130) rotate(118) scale(225 284)">
-      <stop stop-color="#7B301A"/>
-      <stop offset="0.55" stop-color="#251321" stop-opacity="0.86"/>
-      <stop offset="1" stop-color="#07101C" stop-opacity="0"/>
-    </radialGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b0b08"/>
+      <stop offset=".54" stop-color="#07101c"/>
+      <stop offset="1" stop-color="#15051e"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
+  <rect width="260" height="170" rx="18" fill="url(#bg)"/>
+  <path d="M0 128c54-22 105-26 154-12 44 12 76 3 106-18v72H0z" fill="#02050d"/>
+  <g opacity=".5" stroke="#ff315d">
+    <path d="M54 18 86 95M206 18l-36 95" stroke-opacity=".28"/>
+    <path d="M20 145h220M48 124h164" stroke-opacity=".18"/>
+  </g>
+  <g filter="url(#glow)">
+    <path d="M88 116V76c0-33 18-51 42-51s42 18 42 51v40" fill="#17091d" stroke="#ff315d" stroke-width="5"/>
+    <path d="M74 122h112l-12 28H86z" fill="#07101c" stroke="#f0c97d" stroke-width="4"/>
+    <path d="M106 78c7-13 15-20 24-20s17 7 24 20v30h-48z" fill="#2a1014" stroke="#f0c97d" stroke-width="3"/>
+    <path d="M42 70h34M184 70h34M34 96h32M194 96h32" stroke="#15f8ff" stroke-width="5" stroke-linecap="round"/>
+    <path d="M130 22v24M111 30l12 20M149 30l-12 20" stroke="#ff315d" stroke-width="4" stroke-linecap="round"/>
+  </g>
 </svg>

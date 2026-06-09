@@ -34,9 +34,9 @@ export function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[var(--ra-border-subtle)] bg-[rgba(7,11,19,0.92)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
+    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[rgba(21,248,255,0.18)] bg-[rgba(2,8,23,0.94)] px-4 py-5 backdrop-blur-xl lg:flex lg:flex-col">
       <Link href="/" className="flex min-h-14 items-center gap-3 rounded-[var(--ra-radius-md)] px-2">
-        <span className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] shadow-[var(--ra-glow-user)]">
+        <span className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] shadow-[var(--ra-glow-esports-cyan)]">
           <Image
             src="/assets/arena/logo-mark.svg"
             alt=""
@@ -58,14 +58,14 @@ export function DesktopSidebar() {
         </span>
       </Link>
 
-      <div className="mt-6 rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-subtle)] bg-[rgba(19,32,51,0.58)] p-3">
+      <div className="ra-hud-panel mt-6 rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.22)] bg-[rgba(7,16,28,0.74)] p-3">
         <div className="flex items-center gap-3">
           <Image
             src="/assets/arena/user-orator-avatar.svg"
             alt=""
             width={48}
             height={48}
-            className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)] bg-[var(--ra-bg-deep)]"
+            className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-electric-cyan)] bg-[var(--ra-bg-deep)] shadow-[var(--ra-glow-esports-cyan)]"
             aria-hidden="true"
           />
           <div className="min-w-0">
@@ -87,7 +87,7 @@ export function DesktopSidebar() {
             <span>3.450 XP</span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.08)]">
-            <div className="h-full w-[64%] rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-cyan),var(--ra-gold))]" />
+            <div className="h-full w-[64%] rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta),var(--ra-gold))]" />
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ export function DesktopSidebar() {
               className={cn(
                 "flex min-h-11 items-center gap-3 rounded-[var(--ra-radius-md)] border px-3 text-sm font-semibold transition duration-150",
                 active
-                  ? "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)]"
+                  ? "border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] text-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
                   : "border-transparent text-[var(--ra-text-secondary)] hover:border-[var(--ra-border-default)] hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)]",
               )}
             >
@@ -118,12 +118,12 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.28)] bg-[linear-gradient(135deg,rgba(50,212,209,0.12),rgba(216,170,92,0.13))] p-3 shadow-[var(--ra-shadow-card)]">
-        <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[rgba(7,11,19,0.48)] p-3">
+      <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(216,170,92,0.28)] bg-[linear-gradient(135deg,rgba(21,248,255,0.14),rgba(255,43,214,0.10),rgba(216,170,92,0.13))] p-3 shadow-[var(--ra-shadow-card)]">
+        <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-electric-cyan)] bg-[rgba(2,8,23,0.62)] p-3">
           <p className="text-xs font-semibold text-[var(--ra-text-muted)]">
             Kredit Arena
           </p>
-          <p className="mt-1 font-serif text-2xl font-bold text-[var(--ra-cyan-bright)]">
+          <p className="mt-1 font-serif text-2xl font-bold text-[var(--ra-electric-cyan)]">
             140 KA
           </p>
         </div>

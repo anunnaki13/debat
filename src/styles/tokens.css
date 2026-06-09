@@ -20,8 +20,12 @@
   --ra-cyan: #32D4D1;
   --ra-cyan-bright: #5BE7E1;
   --ra-cyan-soft: rgba(50, 212, 209, 0.14);
+  --ra-electric-cyan: #15F8FF;
+  --ra-electric-cyan-soft: rgba(21, 248, 255, 0.18);
   --ra-blue: #4E9CFF;
   --ra-blue-soft: rgba(78, 156, 255, 0.14);
+  --ra-neon-blue: #127BFF;
+  --ra-neon-blue-soft: rgba(18, 123, 255, 0.18);
 
   /* Prestige */
   --ra-gold: #D8AA5C;
@@ -32,6 +36,9 @@
   --ra-coral: #EE6A64;
   --ra-coral-bright: #FF8179;
   --ra-coral-soft: rgba(238, 106, 100, 0.14);
+  --ra-magenta: #FF2BD6;
+  --ra-magenta-bright: #FF6BE8;
+  --ra-magenta-soft: rgba(255, 43, 214, 0.16);
 
   /* Success and agreement */
   --ra-emerald: #62D49C;
@@ -82,10 +89,17 @@
     radial-gradient(circle at 50% 18%, rgba(216, 170, 92, 0.20), transparent 34%),
     linear-gradient(180deg, #111B2B 0%, #09111C 100%);
   --ra-gradient-game-arena:
-    radial-gradient(circle at 50% 0%, rgba(78, 156, 255, 0.24), transparent 34%),
-    radial-gradient(circle at 18% 32%, rgba(50, 212, 209, 0.16), transparent 28%),
-    radial-gradient(circle at 82% 38%, rgba(238, 106, 100, 0.16), transparent 30%),
-    linear-gradient(180deg, #081329 0%, #070B13 72%);
+    radial-gradient(circle at 50% 0%, rgba(21, 248, 255, 0.30), transparent 34%),
+    radial-gradient(circle at 18% 32%, rgba(18, 123, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 82% 38%, rgba(255, 43, 214, 0.18), transparent 30%),
+    linear-gradient(180deg, #030B19 0%, #070B13 72%);
+  --ra-gradient-esports-arena:
+    radial-gradient(circle at 26% 18%, rgba(21, 248, 255, 0.26), transparent 32%),
+    radial-gradient(circle at 82% 24%, rgba(255, 43, 214, 0.22), transparent 34%),
+    radial-gradient(circle at 50% 70%, rgba(216, 170, 92, 0.12), transparent 38%),
+    linear-gradient(135deg, #020817 0%, #06152F 48%, #120728 100%);
+  --ra-gradient-hud:
+    linear-gradient(135deg, rgba(21, 248, 255, 0.18), rgba(255, 43, 214, 0.10));
   --ra-gradient-card-blue:
     linear-gradient(145deg, rgba(50, 212, 209, 0.24), rgba(78, 156, 255, 0.10));
   --ra-gradient-card-orange:
@@ -102,6 +116,8 @@
   --ra-glow-user: 0 0 0 1px rgba(50, 212, 209, 0.28), 0 0 28px rgba(50, 212, 209, 0.16);
   --ra-glow-ai: 0 0 0 1px rgba(238, 106, 100, 0.26), 0 0 28px rgba(238, 106, 100, 0.14);
   --ra-glow-gold: 0 0 0 1px rgba(216, 170, 92, 0.30), 0 0 32px rgba(216, 170, 92, 0.16);
+  --ra-glow-esports-cyan: 0 0 0 1px rgba(21, 248, 255, 0.42), 0 0 34px rgba(21, 248, 255, 0.28), 0 0 72px rgba(18, 123, 255, 0.14);
+  --ra-glow-esports-magenta: 0 0 0 1px rgba(255, 43, 214, 0.36), 0 0 34px rgba(255, 43, 214, 0.24), 0 0 72px rgba(238, 106, 100, 0.13);
 
   /* Radius */
   --ra-radius-xs: 6px;

@@ -6,12 +6,21 @@ Date: 2026-06-09
 
 UI Sprint 4 mengubah arah arena berdasarkan dua mockup PNG terbaru yang diunggah user. Setelah review visual pertama, implementasi dirombak lagi agar lebih literal mengikuti mockup: sidebar/profile lebih padat, hero duel besar, mode cards horizontal, challenge feed, dan arena debate berbentuk match screen dengan panel peserta kiri/tengah/kanan.
 
+Follow-up terbaru: user menilai asset mockup-aligned sebelumnya masih tidak relevan dan terlalu abstrak. Asset dan surface utama kemudian dirombak total ke arah **esports arena, high-tech HUD, neon glow, helmet/pod silhouettes, broadcast panels, dan stage geometry**.
+
 Fokus yang selesai:
 
 - dua mockup PNG dipindahkan menjadi design reference;
 - arena SVG asset pack dibuat di `public/assets/arena/`;
 - hero duel, challenge card, dan boss battle art ditambahkan agar lobby lebih dekat dengan mockup;
+- asset abstrak/ilustratif lama diganti menjadi esports/high-tech:
+  - neon stage;
+  - cyan player helmet;
+  - magenta AI mech helmet;
+  - broadcast challenge panels;
+  - high-tech mode cards;
 - animation utilities ditambahkan ke `src/styles/motion.css`;
+- esports HUD utilities ditambahkan ke `src/styles/motion.css`;
 - reusable animation components dibuat di `src/components/arena/ArenaEffects.tsx`;
 - `/dev/mock-arena` dibuat untuk simulasi visual state tanpa API call;
 - real debate arena memakai match HUD, user podium, AI opponent panel, transcript tengah, waveform, momentum meter, action bar, dan input dock baru;
@@ -80,6 +89,10 @@ Fokus yang selesai:
 - `docs/visual-qa/lobby-mockup-aligned-mobile.png` — revised mobile lobby after mockup-aligned overhaul.
 - `docs/visual-qa/arena-mockup-aligned-desktop.png` — revised seeded arena after mockup-aligned overhaul.
 - `docs/visual-qa/arena-mockup-aligned-mobile.png` — revised mobile arena after mockup-aligned overhaul.
+- `docs/visual-qa/lobby-esports-overhaul-desktop.png` — esports/high-tech lobby overhaul.
+- `docs/visual-qa/lobby-esports-overhaul-mobile.png` — esports/high-tech mobile lobby overhaul.
+- `docs/visual-qa/arena-esports-overhaul-desktop.png` — esports/high-tech arena overhaul.
+- `docs/visual-qa/arena-esports-overhaul-mobile.png` — esports/high-tech mobile arena overhaul.
 
 ## 5. State Yang Diuji
 
@@ -94,6 +107,7 @@ Fokus yang selesai:
 - Desktop sidebar game profile/card.
 - Lobby hero duel backdrop, profile card, compact mode cards, and popular challenge feed.
 - Arena match HUD, participant panels, waveform, action bar, and composer dock.
+- Esports stage visuals, helmet avatars, neon cyan/magenta glow, HUD corner frames, laser sweep, and animated grid.
 
 ## 6. Responsive Breakpoint Yang Diuji
 
@@ -121,7 +135,7 @@ Fokus yang selesai:
 
 - The two uploaded PNG mockups are reference images only and are not used as full-screen UI backgrounds.
 - The mobile bottom nav remains fixed, so full-page screenshots show it in the viewport while content scrolls behind it.
-- Persona/avatar and challenge artwork are SVG placeholder art, not final brand illustration.
+- Persona/avatar and challenge artwork are SVG HUD assets, not final raster brand illustration.
 - Full-page mobile screenshots include the fixed bottom navigation at the viewport position; this is a capture artifact of fixed-position UI.
 
 ## 10. Next Sprint Recommendation

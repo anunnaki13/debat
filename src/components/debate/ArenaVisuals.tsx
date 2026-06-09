@@ -158,19 +158,19 @@ export function UserPodium({
   return (
     <aside
       className={cn(
-        "relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(7,18,34,0.82)] shadow-[var(--ra-shadow-card)]",
+        "ra-hud-panel relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(2,12,28,0.86)] shadow-[var(--ra-shadow-card)]",
         speaking
-          ? "border-[var(--ra-cyan)] shadow-[var(--ra-glow-user)]"
-          : "border-[var(--ra-border-default)]",
+          ? "border-[var(--ra-electric-cyan)] shadow-[var(--ra-glow-esports-cyan)]"
+          : "border-[rgba(21,248,255,0.22)]",
         compact ? "p-3" : "p-4",
         className,
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_14%,rgba(50,212,209,0.18),transparent_46%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_14%,rgba(21,248,255,0.22),transparent_46%)]" />
       <div
         className={cn(
           "relative overflow-hidden rounded-[var(--ra-radius-lg)] border bg-[linear-gradient(145deg,rgba(19,32,51,0.84),rgba(7,11,19,0.90))]",
-          speaking ? "border-[var(--ra-cyan)]" : "border-[var(--ra-border-subtle)]",
+          speaking ? "border-[var(--ra-electric-cyan)]" : "border-[rgba(21,248,255,0.20)]",
           compact ? "aspect-[4/3]" : "aspect-[4/3]",
         )}
       >
@@ -208,8 +208,8 @@ export function UserPodium({
         <div className="relative mt-4">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs font-extrabold uppercase text-[var(--ra-cyan-bright)]">
-                Anda
+              <p className="text-xs font-extrabold uppercase text-[var(--ra-electric-cyan)]">
+                Player Pod
               </p>
               <h2 className="mt-1 text-lg font-extrabold text-[var(--ra-text-primary)]">
                 Budi Hidayat
@@ -218,12 +218,12 @@ export function UserPodium({
                 Posisi {side} · {inputModeLabels[inputMode]}
               </p>
             </div>
-            <span className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] px-2 py-1 text-xs font-extrabold text-[var(--ra-cyan-bright)]">
+            <span className="rounded-[var(--ra-radius-pill)] border border-[var(--ra-electric-cyan)] bg-[var(--ra-electric-cyan-soft)] px-2 py-1 text-xs font-extrabold text-[var(--ra-electric-cyan)]">
               58%
             </span>
           </div>
           <div className="mt-4 h-2 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.08)]">
-            <div className="h-full w-[58%] rounded-[var(--ra-radius-pill)] bg-[var(--ra-cyan)]" />
+            <div className="h-full w-[58%] rounded-[var(--ra-radius-pill)] bg-[var(--ra-electric-cyan)] shadow-[0_0_18px_rgba(21,248,255,0.8)]" />
           </div>
         </div>
       )}
@@ -250,13 +250,13 @@ export function AiOpponentPanel({
   return (
     <aside
       className={cn(
-        "relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(20,9,19,0.78)] p-4 shadow-[var(--ra-shadow-card)]",
+        "ra-hud-panel relative overflow-hidden rounded-[var(--ra-radius-xl)] border bg-[rgba(20,4,26,0.82)] p-4 shadow-[var(--ra-shadow-card)]",
         active
-          ? "border-[var(--ra-coral)] shadow-[var(--ra-glow-ai)]"
-          : "border-[var(--ra-border-default)]",
+          ? "border-[var(--ra-magenta)] shadow-[var(--ra-glow-esports-magenta)]"
+          : "border-[rgba(255,43,214,0.22)]",
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(238,106,100,0.20),transparent_46%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,43,214,0.24),transparent_46%)]" />
       <div className="absolute right-3 top-3 xl:hidden">
         <UserPodium compact inputMode={inputMode} side={userSide} state={state} className="w-24 bg-[rgba(7,11,19,0.72)] backdrop-blur-lg" />
       </div>
@@ -267,24 +267,24 @@ export function AiOpponentPanel({
         </Badge>
         <div
           className={cn(
-            "relative grid h-32 w-32 place-items-center rounded-[var(--ra-radius-pill)] border bg-[var(--ra-coral-soft)]",
-            active ? "border-[var(--ra-coral)]" : "border-[var(--ra-border-default)]",
+            "relative grid h-32 w-32 place-items-center rounded-[var(--ra-radius-pill)] border bg-[var(--ra-magenta-soft)]",
+            active ? "border-[var(--ra-magenta)]" : "border-[rgba(255,43,214,0.24)]",
           )}
         >
           {active ? (
             <span
-              className="absolute inset-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-coral)]"
+              className="absolute inset-3 rounded-[var(--ra-radius-pill)] border border-[var(--ra-magenta)]"
               style={{ animation: "ra-halo-pulse 1.8s ease-in-out infinite" }}
             />
           ) : null}
-            <Image
-              src="/assets/arena/ai-opponent-avatar.svg"
-              alt=""
-              width={112}
-              height={112}
-              className="relative rounded-[var(--ra-radius-pill)]"
-              aria-hidden="true"
-            />
+          <Image
+            src="/assets/arena/ai-opponent-avatar.svg"
+            alt=""
+            width={112}
+            height={112}
+            className="relative rounded-[var(--ra-radius-pill)]"
+            aria-hidden="true"
+          />
         </div>
 
         <Badge tone={speaking ? "ai" : active ? "warning" : "neutral"} className="mt-5">
@@ -299,9 +299,9 @@ export function AiOpponentPanel({
 
         {speaking ? <VoiceWaveform tone="ai" className="mt-5" /> : null}
 
-        <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[rgba(238,106,100,0.24)] bg-[rgba(7,11,19,0.55)] p-3">
+        <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[rgba(255,43,214,0.28)] bg-[rgba(7,11,19,0.62)] p-3">
           <p className="max-h-28 max-w-[34ch] overflow-y-auto text-sm leading-6 text-[var(--ra-text-secondary)]">
-          {latestCaption || "AI akan menampilkan bantahan terbaru di sini."}
+            {latestCaption || "AI akan menampilkan bantahan terbaru di sini."}
           </p>
         </div>
 
@@ -344,24 +344,24 @@ function JudgeMetric({
 
 export function MomentumMeter({ momentum }: { momentum: ArenaMomentum }) {
   return (
-    <section className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] p-4 shadow-[var(--ra-shadow-card)]">
+    <section className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.22)] bg-[rgba(2,8,23,0.78)] p-4 shadow-[var(--ra-shadow-card)]">
       <div className="flex items-center justify-between gap-3 text-sm font-semibold">
-        <span className="text-[var(--ra-cyan-bright)]">Anda {momentum.user}%</span>
+        <span className="text-[var(--ra-electric-cyan)]">Anda {momentum.user}%</span>
         <span className="text-[var(--ra-text-muted)]" title="Momentum adalah indikator dinamika debat, bukan penilaian akhir.">
           Momentum
         </span>
-        <span className="text-[var(--ra-coral-bright)]">AI {momentum.ai}%</span>
+        <span className="text-[var(--ra-magenta-bright)]">AI {momentum.ai}%</span>
       </div>
       <div
         className="mt-3 grid h-3 overflow-hidden rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-subtle)] bg-[var(--ra-bg-panel)]"
         style={{ gridTemplateColumns: `${momentum.user}fr ${momentum.ai}fr` }}
       >
         <span
-          className="bg-[var(--ra-cyan)] transition-[width] duration-300"
+          className="bg-[var(--ra-electric-cyan)] shadow-[0_0_18px_rgba(21,248,255,0.8)] transition-[width] duration-300"
           style={{ gridColumn: "1 / 2" }}
         />
         <span
-          className="bg-[var(--ra-coral)] transition-[width] duration-300"
+          className="bg-[var(--ra-magenta)] shadow-[0_0_18px_rgba(255,43,214,0.72)] transition-[width] duration-300"
           style={{ gridColumn: "2 / 3" }}
         />
       </div>
@@ -385,7 +385,7 @@ export function ArenaActionBar({
   const interruptActive = state === "ai_speaking" || state === "ai_thinking";
 
   return (
-    <section className="flex gap-2 overflow-x-auto rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] p-2 shadow-[var(--ra-shadow-card)]">
+    <section className="ra-hud-panel grid grid-cols-2 gap-2 rounded-[var(--ra-radius-xl)] border border-[rgba(255,255,255,0.14)] bg-[rgba(2,8,23,0.78)] p-2 shadow-[var(--ra-shadow-card)] md:flex md:overflow-x-visible">
       <ArenaActionButton
         icon={Pause}
         label="Interupsi"
@@ -427,8 +427,8 @@ function ArenaActionButton({
 }) {
   const toneClasses = {
     neutral: "border-[var(--ra-border-default)] text-[var(--ra-text-secondary)] hover:bg-[var(--ra-bg-panel)]",
-    cyan: "border-[var(--ra-cyan)] text-[var(--ra-cyan-bright)] hover:bg-[var(--ra-cyan-soft)]",
-    coral: "border-[var(--ra-coral)] text-[var(--ra-coral-bright)] hover:bg-[var(--ra-coral-soft)]",
+    cyan: "border-[var(--ra-electric-cyan)] text-[var(--ra-electric-cyan)] hover:bg-[var(--ra-electric-cyan-soft)]",
+    coral: "border-[var(--ra-magenta)] text-[var(--ra-magenta-bright)] hover:bg-[var(--ra-magenta-soft)]",
     amber: "border-[var(--ra-amber)] text-[var(--ra-amber)] hover:bg-[var(--ra-amber-soft)]",
     emerald: "border-[var(--ra-emerald)] text-[var(--ra-emerald)] hover:bg-[var(--ra-emerald-soft)]",
   }[tone];
@@ -438,7 +438,7 @@ function ArenaActionButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border bg-[var(--ra-bg-panel)] px-4 text-sm font-semibold transition active:translate-y-px",
+        "inline-flex min-h-11 w-full min-w-0 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border bg-[var(--ra-bg-panel)] px-3 text-sm font-semibold transition active:translate-y-px md:w-auto md:shrink-0 md:px-4",
         toneClasses,
       )}
     >
@@ -462,7 +462,7 @@ export function VoiceWaveform({
           key={`${height}-${index}`}
           className={cn(
             "w-2 rounded-[var(--ra-radius-pill)]",
-            tone === "user" ? "bg-[var(--ra-cyan)]" : "bg-[var(--ra-coral)]",
+            tone === "user" ? "bg-[var(--ra-electric-cyan)]" : "bg-[var(--ra-magenta)]",
           )}
           style={{
             height: `${height}%`,

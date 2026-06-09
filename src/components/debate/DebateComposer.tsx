@@ -41,7 +41,7 @@ export function DebateComposer({
   const overLimit = value.length > limit;
 
   return (
-    <section className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-subtle)] bg-[rgba(10,17,29,0.70)] p-3">
+    <section className="rounded-[var(--ra-radius-lg)] border border-[rgba(21,248,255,0.20)] bg-[rgba(2,8,23,0.74)] p-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-[var(--ra-text-primary)]">
@@ -62,7 +62,7 @@ export function DebateComposer({
           {value.length}/{limit}
         </span>
       </div>
-      <div className="mt-3 grid gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(50,212,209,0.28)] bg-[rgba(7,11,19,0.76)] p-3 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-end">
+      <div className="mt-3 grid gap-3 rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.36)] bg-[rgba(2,8,23,0.82)] p-3 shadow-[inset_0_0_28px_rgba(21,248,255,0.08)] md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-end">
         <VoiceInputButton
           isSupported={isVoiceSupported}
           isListening={isListening}

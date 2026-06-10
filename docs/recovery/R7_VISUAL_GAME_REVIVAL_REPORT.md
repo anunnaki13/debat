@@ -30,6 +30,10 @@ This sprint pauses the text debate engine work and restores the product feel fir
 - Play desktop: `docs/visual-qa/game-revival-play-desktop.png`
 - Topics desktop: `docs/visual-qa/game-revival-topics-desktop.png`
 - Topics mobile: `docs/visual-qa/game-revival-topics-mobile.png`
+- Asset replacement lobby desktop: `docs/visual-qa/asset-replacement-final-lobby-desktop.png`
+- Asset replacement play desktop: `docs/visual-qa/asset-replacement-final2-play-desktop.png`
+- Asset replacement topics desktop: `docs/visual-qa/asset-replacement-final2-topics-desktop.png`
+- Asset replacement topics mobile: `docs/visual-qa/asset-replacement-final-topics-mobile.png`
 
 ## Validation
 
@@ -41,6 +45,15 @@ Passed:
 - `npm run build` - 21 static pages generated
 - Visual QA screenshots captured from production server on `3001`
 - Smoke test on `3001`: `/`, `/play`, `/topics`, and `/api/health` returned HTTP 200
+
+## Follow-Up Asset Correction
+
+After user feedback, the abstract SVG-style player, AI, mode, and topic visuals were replaced with more concrete assets:
+
+- HUD player and AI avatars now use character-style persona PNG crops.
+- Mode cards now use persona/crowd imagery instead of abstract geometric mode SVGs.
+- Topic cards now use local Unsplash-derived JPGs for AI, work, education, city/environment, privacy, transport, and arena themes.
+- New challenge images are documented in `public/assets/challenges/README.md`.
 
 ## Notes
 

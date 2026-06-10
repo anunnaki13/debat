@@ -279,7 +279,7 @@ function LobbyIntro({
               <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                 <DuelHudAvatar
                   label="Player"
-                  src="/assets/arena/user-orator-avatar.svg"
+                  src="/assets/arena/personas/field-commander.png"
                   tone="user"
                 />
                 <div className="grid h-14 w-14 place-items-center rounded-[var(--ra-radius-pill)] border border-[rgba(216,170,92,0.44)] bg-[rgba(216,170,92,0.12)] text-[var(--ra-gold-bright)] shadow-[var(--ra-glow-gold)]">
@@ -287,7 +287,7 @@ function LobbyIntro({
                 </div>
                 <DuelHudAvatar
                   label="AI"
-                  src="/assets/arena/ai-opponent-avatar.svg"
+                  src="/assets/arena/personas/strategist.png"
                   tone="ai"
                 />
               </div>
@@ -347,7 +347,7 @@ function DuelHudAvatar({
           alt=""
           width={92}
           height={92}
-          className="rounded-[var(--ra-radius-pill)]"
+          className="h-[92px] w-[92px] rounded-[var(--ra-radius-pill)] object-cover"
           aria-hidden="true"
         />
       </AnimatedAvatarRing>

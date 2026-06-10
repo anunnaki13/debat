@@ -12,26 +12,36 @@ const difficultyTone = {
 } as const;
 
 const topicVisuals: Partial<Record<string, string>> = {
-  "ai-jobs": "/assets/arena/challenge-ai-jobs.svg",
-  "remote-work": "/assets/arena/challenge-remote-work.svg",
-  cashless: "/assets/arena/challenge-cashless.svg",
-  "public-transport": "/assets/arena/challenge-public-transport.svg",
+  "ai-jobs": "/assets/challenges/ai-jobs-unsplash.jpg",
+  "remote-work": "/assets/challenges/remote-work-unsplash.jpg",
+  cashless: "/assets/challenges/cashless-unsplash.jpg",
+  "public-transport": "/assets/challenges/public-transport-unsplash.jpg",
+  "ai-schoolwork": "/assets/challenges/education-tech-unsplash.jpg",
 };
 
 const categoryVisuals: Record<string, string> = {
-  Pekerjaan: "/assets/arena/challenge-remote-work.svg",
-  "Ekonomi Digital": "/assets/arena/challenge-cashless.svg",
-  "Kebijakan Kota": "/assets/arena/challenge-public-transport.svg",
-  "Energi & Transportasi": "/assets/arena/challenge-public-transport.svg",
-  "Teknologi & Pekerjaan": "/assets/arena/challenge-ai-jobs.svg",
-  "Teknologi & Sosial": "/assets/arena/challenge-ai-jobs.svg",
+  Pekerjaan: "/assets/challenges/remote-work-unsplash.jpg",
+  "Ekonomi Digital": "/assets/challenges/cashless-unsplash.jpg",
+  "Kebijakan Kota": "/assets/challenges/public-transport-unsplash.jpg",
+  "Energi & Transportasi": "/assets/challenges/public-transport-unsplash.jpg",
+  "Teknologi & Pekerjaan": "/assets/challenges/ai-jobs-unsplash.jpg",
+  "Teknologi & Sosial": "/assets/challenges/cybersecurity-unsplash.jpg",
+  Pendidikan: "/assets/challenges/education-tech-unsplash.jpg",
+  "Pendidikan & Karier": "/assets/challenges/education-tech-unsplash.jpg",
+  "Pendidikan & Teknologi": "/assets/challenges/education-tech-unsplash.jpg",
+  "Pendidikan & Kota": "/assets/challenges/education-tech-unsplash.jpg",
+  "Lingkungan & Kota": "/assets/challenges/city-park-unsplash.jpg",
+  "Lingkungan & Konsumsi": "/assets/challenges/city-park-unsplash.jpg",
+  "Lingkungan & Pariwisata": "/assets/challenges/city-park-unsplash.jpg",
+  "Teknologi & Privasi": "/assets/challenges/cybersecurity-unsplash.jpg",
+  "Olahraga & Manajemen": "/assets/challenges/arena-crowd-unsplash.jpg",
 };
 
 function getTopicVisual(topic: DebateTopic) {
   return (
     topicVisuals[topic.id] ??
     categoryVisuals[topic.category] ??
-    "/assets/arena/challenge-ai-jobs.svg"
+    "/assets/challenges/arena-crowd-unsplash.jpg"
   );
 }
 

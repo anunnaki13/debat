@@ -57,11 +57,11 @@ export function DesktopSidebar() {
       <div className="mt-4 overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[rgba(7,13,30,0.88)] p-3 shadow-[var(--ra-shadow-nav-card)]">
         <div className="flex items-center gap-3">
           <Image
-            src="/assets/arena/user-orator-avatar.svg"
+            src="/assets/arena/personas/field-commander.png"
             alt=""
             width={58}
             height={58}
-            className="rounded-[var(--ra-radius-pill)]"
+            className="h-[58px] w-[58px] rounded-[var(--ra-radius-pill)] object-cover"
             aria-hidden="true"
           />
           <div className="min-w-0">

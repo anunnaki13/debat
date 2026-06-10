@@ -114,11 +114,11 @@ export function PlaySetupScreen() {
               </CardTitle>
             </div>
             <Image
-              src="/assets/arena/ai-opponent-avatar.svg"
+              src="/assets/arena/personas/strategist.png"
               alt=""
               width={58}
               height={58}
-              className="rounded-[var(--ra-radius-pill)] shadow-[var(--ra-glow-esports-magenta)]"
+              className="h-[58px] w-[58px] rounded-[var(--ra-radius-pill)] object-cover shadow-[var(--ra-glow-esports-magenta)]"
               aria-hidden="true"
             />
           </div>

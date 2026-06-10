@@ -7,6 +7,16 @@ describe("debateTopics", () => {
     expect(debateTopics.length).toBeGreaterThanOrEqual(20);
   });
 
+  it("covers many categories without becoming politics-only", () => {
+    const categories = new Set(debateTopics.map((topic) => topic.category));
+    const politicsOnlyTopics = debateTopics.filter((topic) =>
+      /politik|pemilu|partai/i.test(`${topic.title} ${topic.category}`),
+    );
+
+    expect(categories.size).toBeGreaterThanOrEqual(8);
+    expect(politicsOnlyTopics).toHaveLength(0);
+  });
+
   it("keeps topic IDs unique", () => {
     const ids = debateTopics.map((topic) => topic.id);
 

@@ -1,107 +1,43 @@
 "use client";
 
-import { AlertTriangle, WandSparkles } from "lucide-react";
+import { AlertTriangle, ShieldCheck, WandSparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { RefinerComparisonCard } from "@/components/topics/RefinerComparisonCard";
 import { SpiceMeter } from "@/components/topics/SpiceMeter";
 import { Badge, Button, Card, CardDescription, CardTitle, Chip, Textarea } from "@/components/ui";
+import {
+  buildRefinedTopic,
+  createSafeFallbackDraft,
+  customTopicCategories,
+  detectSensitiveTopic,
+  difficultyForSpice,
+  normalizeThesis,
+  type CustomTopicCategory,
+} from "@/lib/topics/topicSafety";
 import { createId } from "@/lib/utils/ids";
 import type { DebateTopic, SideSelection } from "@/types/debate";
-
-const categories = [
-  "Olahraga",
-  "Teknologi",
-  "Bisnis",
-  "Pendidikan",
-  "Lifestyle",
-  "Hiburan",
-  "Isu Publik Ringan",
-  "Absurd dan Santai",
-] as const;
-
-const sensitiveTerms = [
-  "pemilu",
-  "pilpres",
-  "capres",
-  "caleg",
-  "partai",
-  "agama",
-  "suku",
-  "ras",
-  "etnis",
-  "kebencian",
-  "kekerasan",
-];
-
-function detectSensitiveTopic(text: string): string | null {
-  const normalized = text.toLowerCase();
-  const matchedTerm = sensitiveTerms.find((term) => normalized.includes(term));
-
-  if (matchedTerm) {
-    return `Topik mengandung kata "${matchedTerm}". Untuk MVP, pilih isu yang lebih ringan dan tidak menyerang kelompok tertentu.`;
-  }
-
-  return null;
-}
-
-function normalizeThesis(thesis: string): string {
-  const cleaned = thesis.trim().replace(/\s+/g, " ");
-
-  if (/^(apakah|haruskah|perlukah)\b/i.test(cleaned)) {
-    return cleaned.endsWith("?") ? cleaned : `${cleaned}?`;
-  }
-
-  return `Apakah ${cleaned.charAt(0).toLowerCase()}${cleaned.slice(1)}?`;
-}
-
-function buildRefinedTopic({
-  thesis,
-  category,
-  context,
-}: {
-  thesis: string;
-  category: string;
-  context: string;
-}): string {
-  const normalized = normalizeThesis(thesis);
-  const contextHint = context.trim()
-    ? ` Bahas dengan mempertimbangkan konteks: ${context.trim().replace(/\s+/g, " ")}`
-    : "";
-
-  return `${normalized} Fokus pada kategori ${category}.${contextHint}`;
-}
-
-function difficultyForSpice(spiceLevel: 1 | 2 | 3 | 4): DebateTopic["difficulty"] {
-  if (spiceLevel <= 2) {
-    return "pemula";
-  }
-
-  if (spiceLevel === 3) {
-    return "menengah";
-  }
-
-  return "lanjutan";
-}
 
 export function CustomTopicForm({
   onUseTopic,
   onSideChange,
+  refinerFirst = false,
 }: {
   onUseTopic: (topic: DebateTopic) => void;
   onSideChange: (side: SideSelection) => void;
+  refinerFirst?: boolean;
 }) {
   const [thesis, setThesis] = useState("");
-  const [category, setCategory] = useState<(typeof categories)[number]>("Olahraga");
+  const [category, setCategory] = useState<CustomTopicCategory>("Olahraga");
   const [spiceLevel, setSpiceLevel] = useState<1 | 2 | 3 | 4>(2);
   const [side, setSide] = useState<SideSelection>("PRO");
   const [context, setContext] = useState("");
-  const [showRefiner, setShowRefiner] = useState(false);
-  const sensitiveMessage = useMemo(
+  const [showRefiner, setShowRefiner] = useState(refinerFirst);
+  const safety = useMemo(
     () => detectSensitiveTopic(`${thesis} ${context}`),
     [context, thesis],
   );
   const thesisTooShort = thesis.trim().length > 0 && thesis.trim().length < 18;
-  const canUseTopic = thesis.trim().length >= 18 && !sensitiveMessage;
+  const canUseTopic = thesis.trim().length >= 18 && !safety.message;
   const refined = buildRefinedTopic({ thesis, category, context });
 
   function buildTopic(title: string): DebateTopic {
@@ -134,6 +70,16 @@ export function CustomTopicForm({
 
     onSideChange(side);
     onUseTopic(buildTopic(refined));
+    setShowRefiner(false);
+  }
+
+  function useSafeFallback() {
+    const fallback = createSafeFallbackDraft(safety.matchedTerm ?? "");
+
+    setThesis(fallback.thesis);
+    setCategory(fallback.category);
+    setContext(fallback.context);
+    setSpiceLevel(2);
     setShowRefiner(false);
   }
 
@@ -173,11 +119,11 @@ export function CustomTopicForm({
             <select
               value={category}
               onChange={(event) =>
-                setCategory(event.target.value as (typeof categories)[number])
+                setCategory(event.target.value as CustomTopicCategory)
               }
               className="min-h-11 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-3 py-2 text-sm text-[var(--ra-text-primary)]"
             >
-              {categories.map((item) => (
+              {customTopicCategories.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
@@ -239,7 +185,7 @@ export function CustomTopicForm({
         />
       </div>
 
-      {sensitiveMessage || thesisTooShort ? (
+      {safety.message || thesisTooShort ? (
         <div className="mt-4 flex items-start gap-3 rounded-[var(--ra-radius-md)] border border-[var(--ra-amber)] bg-[var(--ra-amber-soft)] p-3 text-sm leading-6 text-[var(--ra-text-secondary)]">
           <AlertTriangle
             size={17}
@@ -247,27 +193,61 @@ export function CustomTopicForm({
             className="mt-1 shrink-0 text-[var(--ra-amber)]"
           />
           <p>
-            {sensitiveMessage ||
+            {safety.message ||
               "Tesis masih terlalu pendek. Buat klaim minimal 18 karakter agar mudah diperdebatkan."}
           </p>
         </div>
       ) : null}
 
-      <div className="mt-5 flex flex-wrap gap-3">
+      {safety.message ? (
+        <div className="mt-4 rounded-[var(--ra-radius-lg)] border border-[var(--ra-emerald)] bg-[var(--ra-emerald-soft)] p-4">
+          <div className="flex items-start gap-3">
+            <ShieldCheck
+              size={18}
+              aria-hidden="true"
+              className="mt-1 shrink-0 text-[var(--ra-emerald)]"
+            />
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-[var(--ra-text-primary)]">
+                Fallback aman tersedia
+              </p>
+              <p className="mt-1 text-sm leading-6 text-[var(--ra-text-secondary)]">
+                Gunakan versi aman yang tetap bisa diperdebatkan tanpa menyerang
+                identitas atau kelompok tertentu.
+              </p>
+              <Button
+                variant="secondary"
+                className="mt-3 w-full sm:w-auto"
+                onClick={useSafeFallback}
+              >
+                Gunakan Fallback Aman
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap">
         <Button
           variant="prestige"
           leadingIcon={<WandSparkles size={17} aria-hidden="true" />}
           disabled={!canUseTopic}
           onClick={() => setShowRefiner(true)}
+          className="w-full sm:w-auto"
         >
-          Rapikan dengan AI
+          Rapikan Topik
         </Button>
-        <Button variant="secondary" disabled={!canUseTopic} onClick={useDirectTopic}>
+        <Button
+          variant="secondary"
+          disabled={!canUseTopic}
+          onClick={useDirectTopic}
+          className="w-full sm:w-auto"
+        >
           Gunakan Langsung
         </Button>
       </div>
 
-      {showRefiner ? (
+      {showRefiner && canUseTopic ? (
         <div className="mt-5">
           <RefinerComparisonCard
             original={thesis}

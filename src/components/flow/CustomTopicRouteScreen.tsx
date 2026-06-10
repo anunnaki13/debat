@@ -61,6 +61,7 @@ export function CustomTopicRouteScreen({
       <CustomTopicForm
         onUseTopic={useTopic}
         onSideChange={handleSideChange}
+        refinerFirst={refined}
       />
     </PageShell>
   );

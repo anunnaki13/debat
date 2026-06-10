@@ -54,6 +54,8 @@ import type {
 } from "@/types/debate";
 
 const TURN_SECONDS = 180;
+const OPPONENT_STREAM_INTERVAL_MS = process.env.NODE_ENV === "test" ? 1 : 18;
+const OPPONENT_STREAM_STEPS = 30;
 
 const audienceSignals = [
   { label: "Setuju", value: "512", icon: ThumbsUp, tone: "text-[var(--ra-emerald)]" },
@@ -82,6 +84,7 @@ function getArenaVisualState({
   isLoadingJudge,
   awaitingOpponent,
   isLoadingOpponent,
+  isStreamingOpponent,
   isListening,
   opponentVoiceState,
   status,
@@ -90,6 +93,7 @@ function getArenaVisualState({
   isLoadingJudge: boolean;
   awaitingOpponent: boolean;
   isLoadingOpponent: boolean;
+  isStreamingOpponent: boolean;
   isListening: boolean;
   opponentVoiceState: OpponentVoiceState;
   status: DebateSession["status"];
@@ -108,6 +112,10 @@ function getArenaVisualState({
 
   if (opponentVoiceState === "speaking") {
     return "ai_speaking";
+  }
+
+  if (isStreamingOpponent) {
+    return "ai_streaming_text";
   }
 
   if (awaitingOpponent || isLoadingOpponent || opponentVoiceState === "preparing") {
@@ -177,6 +185,8 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [isLoadingOpponent, setIsLoadingOpponent] = useState(false);
+  const [streamingOpponentMessage, setStreamingOpponentMessage] =
+    useState<DebateMessage | null>(null);
   const [isLoadingJudge, setIsLoadingJudge] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(TURN_SECONDS);
   const [preferences, setPreferences] =
@@ -189,6 +199,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
   const ttsAbortRef = useRef<AbortController | null>(null);
+  const streamTokenRef = useRef(0);
 
   const appendBrowserTranscript = useCallback((text: string) => {
     setInput((current) => [current, text].filter(Boolean).join(" ").trimStart());
@@ -245,6 +256,43 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     onTranscript: appendOpenRouterTranscript,
     sessionId: session?.id,
   });
+
+  const streamOpponentText = useCallback(async (message: DebateMessage) => {
+    const content = message.content.trim();
+    const token = streamTokenRef.current + 1;
+    streamTokenRef.current = token;
+
+    if (!content) {
+      setStreamingOpponentMessage({ ...message, content: "" });
+      return true;
+    }
+
+    const chunkSize = Math.max(
+      8,
+      Math.ceil(content.length / OPPONENT_STREAM_STEPS),
+    );
+    setStreamingOpponentMessage({
+      ...message,
+      content: content.slice(0, chunkSize),
+    });
+
+    for (let visible = chunkSize; visible < content.length; visible += chunkSize) {
+      await new Promise<void>((resolve) => {
+        window.setTimeout(resolve, OPPONENT_STREAM_INTERVAL_MS);
+      });
+
+      if (streamTokenRef.current !== token) {
+        return false;
+      }
+
+      setStreamingOpponentMessage({
+        ...message,
+        content: content.slice(0, Math.min(visible + chunkSize, content.length)),
+      });
+    }
+
+    return true;
+  }, []);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -410,6 +458,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
   useEffect(
     () => () => {
+      streamTokenRef.current += 1;
       stopOpenRouterAudio();
       stopSpeaking();
     },
@@ -418,6 +467,8 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
   async function callOpponent(nextSession: DebateSession) {
     setError("");
+    setArenaNotice("");
+    setStreamingOpponentMessage(null);
     setIsLoadingOpponent(true);
 
     try {
@@ -447,6 +498,15 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         content: payload.content.trim(),
         createdAt: new Date().toISOString(),
       };
+
+      setIsLoadingOpponent(false);
+      setArenaNotice("AI menulis bantahan ke transcript...");
+      const streamCompleted = await streamOpponentText(opponentMessage);
+
+      if (!streamCompleted) {
+        return;
+      }
+
       const nextRound = getNextRound(nextSession.currentRound);
       const updatedSession: DebateSession = {
         ...nextSession,
@@ -455,11 +515,17 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         status: nextRound ? "IN_PROGRESS" : "AWAITING_JUDGE",
       };
 
+      setStreamingOpponentMessage(null);
       persistSession(updatedSession);
       trackLocalEvent(
         nextRound ? "round_completed" : "debate_completed",
         { round: nextSession.currentRound },
         nextSession.id,
+      );
+      setArenaNotice(
+        nextRound
+          ? "Giliran Anda. Susun balasan berikutnya."
+          : "Semua ronde selesai. Minta penilaian dari AI Judge.",
       );
 
       if (preferences.autoSpeakOpponent) {
@@ -470,6 +536,8 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         }
       }
     } catch (requestError) {
+      streamTokenRef.current += 1;
+      setStreamingOpponentMessage(null);
       setError(
         readApiError(
           requestError,
@@ -604,6 +672,12 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
   }
 
   const canJudge = session.status === "AWAITING_JUDGE" && canRequestJudge(session.messages);
+  const isStreamingOpponent = Boolean(streamingOpponentMessage);
+  const transcriptMessages = streamingOpponentMessage
+    ? [...session.messages, streamingOpponentMessage]
+    : session.messages;
+  const latestOpponentCaption =
+    streamingOpponentMessage?.content || latestOpponentMessage?.content;
   const useOpenRouterVoice = session.inputMode !== "TEXT";
   const voiceInput = useOpenRouterVoice
     ? {
@@ -631,11 +705,12 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
     isLoadingJudge,
     awaitingOpponent,
     isLoadingOpponent,
+    isStreamingOpponent,
     isListening: voiceInput.isListening,
     opponentVoiceState,
     status: session.status,
   });
-  const momentum = getMomentum(session.messages);
+  const momentum = getMomentum(transcriptMessages);
 
   return (
     <PageShell className="space-y-5">
@@ -708,18 +783,30 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
               ) : null}
 
               <div className="mt-4">
-                <DebateTranscript messages={session.messages} />
+                <DebateTranscript
+                  messages={transcriptMessages}
+                  streamingMessageId={streamingOpponentMessage?.id}
+                />
               </div>
-              {isLoadingOpponent ? (
+              {isLoadingOpponent || isStreamingOpponent ? (
                 <div className="mt-4">
-                  <RoundTransitionCard round={session.currentRound} state="ai_thinking" />
+                  <RoundTransitionCard
+                    round={session.currentRound}
+                    state={isStreamingOpponent ? "ai_streaming_text" : "ai_thinking"}
+                  />
                 </div>
               ) : null}
             </div>
 
             <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(89,137,255,0.22)] bg-[rgba(2,8,23,0.72)] p-3 shadow-[var(--ra-shadow-card)]">
               <VoiceWaveform
-                tone={arenaState === "ai_speaking" || arenaState === "ai_thinking" ? "ai" : "user"}
+                tone={
+                  arenaState === "ai_speaking" ||
+                  arenaState === "ai_thinking" ||
+                  arenaState === "ai_streaming_text"
+                    ? "ai"
+                    : "user"
+                }
               />
               <div className="mt-2 flex items-center justify-between text-xs font-bold text-[var(--ra-text-muted)]">
                 <span>Input ketik atau voice</span>
@@ -733,7 +820,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
             userSide={session.userSide}
             inputMode={session.inputMode}
             state={arenaState}
-            latestCaption={latestOpponentMessage?.content}
+            latestCaption={latestOpponentCaption}
           />
         </div>
 
@@ -783,7 +870,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           ) : null}
 
           <div className="flex flex-wrap gap-2">
-            {awaitingOpponent && !isLoadingOpponent ? (
+            {awaitingOpponent && !isLoadingOpponent && !isStreamingOpponent ? (
               <Button
                 variant="outline"
                 leadingIcon={<RotateCcw size={16} aria-hidden="true" />}

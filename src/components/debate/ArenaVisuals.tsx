@@ -25,6 +25,7 @@ export type ArenaVisualState =
   | "ready"
   | "user_speaking"
   | "ai_thinking"
+  | "ai_streaming_text"
   | "ai_speaking"
   | "recoverable_error"
   | "judging"
@@ -57,6 +58,11 @@ const stateMeta: Record<
     label: "AI berpikir",
     copy: "AI menyiapkan bantahan...",
     tone: "warning",
+  },
+  ai_streaming_text: {
+    label: "AI mengetik",
+    copy: "AI menulis bantahan ke transcript...",
+    tone: "ai",
   },
   ai_speaking: {
     label: "AI berbicara",
@@ -134,7 +140,9 @@ export function ArenaStatusBanner({
         >
           {state === "recoverable_error" ? (
             <AlertTriangle size={18} aria-hidden="true" />
-          ) : state === "ai_speaking" || state === "ai_thinking" ? (
+          ) : state === "ai_speaking" ||
+            state === "ai_thinking" ||
+            state === "ai_streaming_text" ? (
             <Bot size={18} aria-hidden="true" />
           ) : (
             <Mic size={18} aria-hidden="true" />
@@ -252,8 +260,12 @@ export function AiOpponentPanel({
   inputMode: DebateInputMode;
   userSide: DebateSide;
 }) {
-  const active = state === "ai_speaking" || state === "ai_thinking";
+  const active =
+    state === "ai_speaking" ||
+    state === "ai_thinking" ||
+    state === "ai_streaming_text";
   const speaking = state === "ai_speaking";
+  const streaming = state === "ai_streaming_text";
 
   return (
     <aside
@@ -328,7 +340,7 @@ export function AiOpponentPanel({
           </p>
         </div>
 
-        {speaking ? <VoiceWaveform tone="ai" className="mt-5" /> : null}
+        {speaking || streaming ? <VoiceWaveform tone="ai" className="mt-5" /> : null}
 
         <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[rgba(255,43,214,0.28)] bg-[rgba(7,11,19,0.62)] p-3">
           <p className="max-h-28 max-w-[34ch] overflow-y-auto text-sm leading-6 text-[var(--ra-text-secondary)]">
@@ -461,7 +473,10 @@ export function ArenaActionBar({
   onMarkFactCheck: () => void;
   onMarkCommonGround: () => void;
 }) {
-  const interruptActive = state === "ai_speaking" || state === "ai_thinking";
+  const interruptActive =
+    state === "ai_speaking" ||
+    state === "ai_thinking" ||
+    state === "ai_streaming_text";
 
   return (
     <section className="ra-hud-panel grid grid-cols-2 gap-2 rounded-[var(--ra-radius-xl)] border border-[rgba(255,255,255,0.14)] bg-[rgba(2,8,23,0.78)] p-2 shadow-[var(--ra-shadow-card)] md:flex md:overflow-x-visible">
@@ -599,6 +614,7 @@ export function MockArenaStateControls({
     "ready",
     "user_speaking",
     "ai_thinking",
+    "ai_streaming_text",
     "ai_speaking",
     "recoverable_error",
   ];

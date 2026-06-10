@@ -47,6 +47,7 @@ const stateNotice: Record<ArenaVisualState, string> = {
   ready: "Tahan mikrofon atau ketik argumen pembuka Anda.",
   user_speaking: "Mikrofon menangkap argumen Anda.",
   ai_thinking: "AI sedang menyiapkan bantahan yang relevan.",
+  ai_streaming_text: "AI sedang menulis bantahan ke transcript.",
   ai_speaking: "AI sedang berbicara. Interupsi tersedia.",
   recoverable_error: "Respons AI sempat gagal. Flow tetap bisa dicoba ulang.",
   judging: "Majelis AI sedang menilai debat.",

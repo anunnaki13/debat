@@ -5,7 +5,13 @@ import { SpeakResponseButton } from "@/components/debate/SpeakResponseButton";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
-export function MessageBubble({ message }: { message: DebateMessage }) {
+export function MessageBubble({
+  message,
+  isStreaming = false,
+}: {
+  message: DebateMessage;
+  isStreaming?: boolean;
+}) {
   const isUser = message.speaker === "USER";
 
   return (
@@ -37,15 +43,27 @@ export function MessageBubble({ message }: { message: DebateMessage }) {
             <p className="text-sm font-semibold text-[var(--ra-text-primary)]">
               {isUser ? "Anda" : "AI Opponent"}
             </p>
-            <Badge tone={isUser ? "user" : "ai"} className="mt-1">
-              {ROUND_DEFINITIONS[message.round].label}
-            </Badge>
+            <div className="mt-1 flex flex-wrap gap-2">
+              <Badge tone={isUser ? "user" : "ai"}>
+                {ROUND_DEFINITIONS[message.round].label}
+              </Badge>
+              {isStreaming ? <Badge tone="warning">Streaming</Badge> : null}
+            </div>
           </div>
         </div>
-        {!isUser ? <SpeakResponseButton text={message.content} /> : null}
+        {!isUser && !isStreaming ? (
+          <SpeakResponseButton text={message.content} />
+        ) : null}
       </div>
       <p className="mt-4 whitespace-pre-wrap text-sm leading-7 text-[var(--ra-text-primary)]">
         {message.content}
+        {isStreaming ? (
+          <span
+            className="ml-1 inline-block h-4 w-2 translate-y-0.5 bg-[var(--ra-coral-bright)] align-baseline"
+            style={{ animation: "ra-halo-pulse 0.9s ease-in-out infinite" }}
+            aria-hidden="true"
+          />
+        ) : null}
       </p>
     </article>
   );

@@ -54,8 +54,8 @@ import type {
 } from "@/types/debate";
 
 const TURN_SECONDS = 180;
-const OPPONENT_STREAM_INTERVAL_MS = process.env.NODE_ENV === "test" ? 1 : 18;
-const OPPONENT_STREAM_STEPS = 30;
+const OPPONENT_STREAM_INTERVAL_MS = process.env.NODE_ENV === "test" ? 4 : 18;
+const OPPONENT_STREAM_STEPS = process.env.NODE_ENV === "test" ? 8 : 30;
 
 const audienceSignals = [
   { label: "Setuju", value: "512", icon: ThumbsUp, tone: "text-[var(--ra-emerald)]" },

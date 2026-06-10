@@ -216,6 +216,77 @@ export function DeviceCheckScreen({
     [cleanupMedia, clearSpeakerTimer],
   );
 
+  const startMicMeter = useCallback((stream: MediaStream) => {
+    const AudioContextCtor =
+      window.AudioContext ??
+      (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
+
+    if (!AudioContextCtor || stream.getAudioTracks().length === 0) {
+      return;
+    }
+
+    const context = new AudioContextCtor();
+    const analyser = context.createAnalyser();
+    analyser.fftSize = 512;
+    const source = context.createMediaStreamSource(stream);
+    const data = new Uint8Array(analyser.fftSize);
+
+    source.connect(analyser);
+    audioContextRef.current = context;
+
+    const tick = () => {
+      analyser.getByteTimeDomainData(data);
+      const rms = Math.sqrt(
+        data.reduce((sum, value) => {
+          const normalized = (value - 128) / 128;
+          return sum + normalized * normalized;
+        }, 0) / data.length,
+      );
+      setLevel(Math.min(1, rms * 3.5));
+      animationRef.current = requestAnimationFrame(tick);
+    };
+
+    tick();
+  }, []);
+
+  const applyGrantedStream = useCallback(
+    async ({
+      stream,
+      cameraRequested,
+      cameraUnavailable = false,
+    }: {
+      stream: MediaStream;
+      cameraRequested: boolean;
+      cameraUnavailable?: boolean;
+    }) => {
+      streamRef.current = stream;
+
+      const hasMic = stream.getAudioTracks().length > 0;
+      const hasCamera = stream.getVideoTracks().length > 0;
+      setMicGranted(hasMic);
+      setCameraGranted(hasCamera);
+      setMicDenied(!hasMic);
+      setCameraDenied(cameraRequested && (cameraUnavailable || !hasCamera));
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = hasCamera ? stream : null;
+      }
+
+      if (hasMic) {
+        trackLocalEvent("mic_permission_granted", {}, session?.id);
+      }
+
+      if (hasCamera) {
+        trackLocalEvent("camera_permission_granted", {}, session?.id);
+      }
+
+      startMicMeter(stream);
+      await refreshDevices();
+    },
+    [refreshDevices, session?.id, startMicMeter],
+  );
+
   async function startDeviceCheck(forceCamera = cameraEnabled) {
     setError("");
     setIsChecking(true);
@@ -253,65 +324,59 @@ export function DeviceCheckScreen({
           ? withDeviceId(videoConstraints, selectedCameraId)
           : false,
       });
-      streamRef.current = stream;
-
-      const hasMic = stream.getAudioTracks().length > 0;
-      const hasCamera = stream.getVideoTracks().length > 0;
-      setMicGranted(hasMic);
-      setCameraGranted(hasCamera);
-      setMicDenied(!hasMic);
-      setCameraDenied(forceCamera && !hasCamera);
-
-      if (hasMic) {
-        trackLocalEvent("mic_permission_granted", {}, session?.id);
-      }
-
-      if (hasCamera) {
-        trackLocalEvent("camera_permission_granted", {}, session?.id);
-      }
-
-      const AudioContextCtor =
-        window.AudioContext ??
-        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
-          .webkitAudioContext;
-
-      if (AudioContextCtor && hasMic) {
-        const context = new AudioContextCtor();
-        const analyser = context.createAnalyser();
-        analyser.fftSize = 512;
-        const source = context.createMediaStreamSource(stream);
-        const data = new Uint8Array(analyser.fftSize);
-
-        source.connect(analyser);
-        audioContextRef.current = context;
-
-        const tick = () => {
-          analyser.getByteTimeDomainData(data);
-          const rms = Math.sqrt(
-            data.reduce((sum, value) => {
-              const normalized = (value - 128) / 128;
-              return sum + normalized * normalized;
-            }, 0) / data.length,
-          );
-          setLevel(Math.min(1, rms * 3.5));
-          animationRef.current = requestAnimationFrame(tick);
-        };
-
-        tick();
-      }
-
-      await refreshDevices();
+      await applyGrantedStream({ stream, cameraRequested: forceCamera });
     } catch (deviceError) {
-      const wantsCamera = forceCamera;
-      const message = wantsCamera
-        ? "Kamera atau mikrofon belum diizinkan. Anda tetap dapat melanjutkan dengan suara saja atau teks."
-        : "Mikrofon belum diizinkan. Anda tetap dapat bermain melalui teks.";
+      if (forceCamera) {
+        setCameraDenied(true);
+        setCameraGranted(false);
+        trackLocalEvent(
+          "camera_permission_denied",
+          {
+            reason:
+              deviceError instanceof Error ? deviceError.name : "unknown_error",
+          },
+          session?.id,
+        );
 
-      setError(message);
+        try {
+          const audioOnlyStream = await navigator.mediaDevices.getUserMedia({
+            audio: withDeviceId(audioConstraints, selectedMicId),
+            video: false,
+          });
+          await applyGrantedStream({
+            stream: audioOnlyStream,
+            cameraRequested: true,
+            cameraUnavailable: true,
+          });
+          setError(
+            "Kamera belum diizinkan. Mode suara saja aktif; Anda tetap dapat masuk arena atau gunakan teks.",
+          );
+          return;
+        } catch (audioError) {
+          setMicDenied(true);
+          setCameraDenied(true);
+          setError(
+            "Kamera dan mikrofon belum diizinkan. Anda tetap dapat bermain melalui teks.",
+          );
+          trackLocalEvent(
+            "mic_permission_denied",
+            {
+              reason:
+                audioError instanceof Error ? audioError.name : "unknown_error",
+            },
+            session?.id,
+          );
+          return;
+        }
+      }
+
+      setError(
+        "Mikrofon belum diizinkan. Anda tetap dapat bermain melalui teks.",
+      );
       setMicDenied(true);
-      setCameraDenied(wantsCamera);
+      setCameraDenied(false);
       trackLocalEvent(
-        wantsCamera ? "camera_permission_denied" : "mic_permission_denied",
+        "mic_permission_denied",
         {
           reason:
             deviceError instanceof Error ? deviceError.name : "unknown_error",
@@ -394,7 +459,8 @@ export function DeviceCheckScreen({
     isSpeakerTesting,
     speakerTested,
   });
-  const arenaMode: DebateInputMode = cameraEnabled ? "VOICE_CAMERA" : "VOICE";
+  const arenaMode: DebateInputMode =
+    cameraEnabled && cameraGranted ? "VOICE_CAMERA" : "VOICE";
 
   return (
     <PageShell className="space-y-6">
@@ -444,6 +510,10 @@ export function DeviceCheckScreen({
             </div>
             <p className="mt-2 text-sm leading-6 text-[var(--ra-text-muted)]">
               Pilih perangkat sebelum memunculkan dialog izin browser.
+            </p>
+            <p className="mt-2 text-xs leading-5 text-[var(--ra-text-muted)]">
+              Catatan HTTPS: izin kamera dan mikrofon hanya bisa diminta di
+              koneksi aman atau localhost.
             </p>
           </div>
 

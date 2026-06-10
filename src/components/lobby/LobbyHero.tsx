@@ -3,7 +3,6 @@ import { ArrowDown, Bot, Gavel, Mic2, PenLine, Swords } from "lucide-react";
 import { ArenaParticleField } from "@/components/arena/ArenaEffects";
 import { Button } from "@/components/ui";
 import {
-  arenaReferenceAssets,
   personaPortraits,
   type PersonaCropKey,
 } from "@/lib/arena-reference-assets";
@@ -17,13 +16,15 @@ const arenaSteps = [
 
 export function LobbyHero({
   onPrimaryAction,
+  onSecondaryAction,
 }: {
   onPrimaryAction: () => void;
+  onSecondaryAction: () => void;
 }) {
   return (
     <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(90,142,255,0.34)] bg-[#050914] shadow-[var(--ra-shadow-elevated)]">
       <Image
-        src={arenaReferenceAssets.arenaStageWide}
+        src="/assets/arena/hero-duel-scene.svg"
         alt=""
         fill
         priority
@@ -73,13 +74,7 @@ export function LobbyHero({
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => {
-                  window.location.hash = "custom-topic";
-                  document.getElementById("pilih-topik")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
+                onClick={onSecondaryAction}
                 leadingIcon={<PenLine size={18} aria-hidden="true" />}
               >
                 Buat Topik Sendiri

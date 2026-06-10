@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 
 const navItems = [
-  { id: "home", label: "Beranda", href: "/", icon: Home, match: "/", primary: false },
-  { id: "play", label: "Main", href: "/#setup-debat", icon: Swords, match: "/debate", primary: false },
-  { id: "create", label: "Buat", href: "/#custom-topic", icon: Plus, match: "/topics/new", primary: true },
-  { id: "topics", label: "Topik", href: "/#pilih-topik", icon: Compass, match: "/topics", primary: false },
-  { id: "history", label: "Riwayat", href: "/history", icon: History, match: "/history", primary: false },
+  { id: "home", label: "Beranda", href: "/", icon: Home, matches: ["/"], primary: false },
+  { id: "play", label: "Main", href: "/play", icon: Swords, matches: ["/play", "/device-check", "/arena"], primary: false },
+  { id: "create", label: "Buat", href: "/topics/new", icon: Plus, matches: ["/topics/new"], primary: true },
+  { id: "topics", label: "Topik", href: "/topics", icon: Compass, matches: ["/topics"], primary: false },
+  { id: "history", label: "Riwayat", href: "/history", icon: History, matches: ["/history", "/results"], primary: false },
 ] as const;
 
 export function MobileBottomNav() {
@@ -24,10 +24,9 @@ export function MobileBottomNav() {
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active =
-            item.match === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.match);
+          const active = item.matches.some((match) =>
+            match === "/" ? pathname === "/" : pathname.startsWith(match),
+          );
 
           return (
             <Link

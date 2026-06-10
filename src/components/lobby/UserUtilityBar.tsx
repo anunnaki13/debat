@@ -18,7 +18,7 @@ export function UserUtilityBar() {
       </label>
       <div className="flex w-full min-w-0 items-center justify-between gap-1.5 sm:justify-end md:w-auto md:flex-none md:gap-2">
         <Link
-          href="/#setup-debat"
+          href="/play"
           className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] px-3 text-sm font-semibold text-[var(--ra-text-secondary)] transition hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)] sm:min-h-10"
         >
           <Swords size={16} aria-hidden="true" />
@@ -32,7 +32,7 @@ export function UserUtilityBar() {
           <span className="hidden sm:inline">Riwayat</span>
         </Link>
         <Link
-          href="/#setup-debat"
+          href="/settings"
           aria-label="Pengaturan arena"
           className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] text-[var(--ra-text-secondary)] transition hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)] sm:h-11 sm:w-11"
         >

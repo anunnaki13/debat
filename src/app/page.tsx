@@ -1,38 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, PenLine, Route, Swords } from "lucide-react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
 import { LobbyHero } from "@/components/lobby/LobbyHero";
-import { ModeCarousel } from "@/components/lobby/ModeCarousel";
-import { PopularChallengeStrip } from "@/components/lobby/PopularChallengeStrip";
 import { ProgressResumeCard } from "@/components/lobby/ProgressResumeCard";
 import { UserUtilityBar } from "@/components/lobby/UserUtilityBar";
-import { InputModeSelector } from "@/components/topics/InputModeSelector";
-import { SideSelector } from "@/components/topics/SideSelector";
-import { TopicExplorer } from "@/components/topics/TopicExplorer";
-import { Badge, Button, Card, CardDescription, CardTitle } from "@/components/ui";
-import { debateTopics } from "@/data/topics";
-import { createDebateSession } from "@/lib/debate/session";
-import {
-  getLocalSessions,
-  upsertLocalSession,
-} from "@/lib/storage/localSessions";
-import type {
-  DebateInputMode,
-  DebateMode,
-  DebateTopic,
-  SideSelection,
-} from "@/types/debate";
-import { useEffect, useState } from "react";
+import { Badge, Card, CardDescription, CardTitle } from "@/components/ui";
+import { getLocalSessions } from "@/lib/storage/localSessions";
 
 export default function Home() {
   const router = useRouter();
-  const [selectedTopic, setSelectedTopic] = useState<DebateTopic>(debateTopics[0]);
-  const [debateMode, setDebateMode] =
-    useState<DebateMode>("DUEL_WACANA_AI");
-  const [inputMode, setInputMode] = useState<DebateInputMode>("TEXT");
-  const [sideSelection, setSideSelection] = useState<SideSelection>("PRO");
   const [completedCount, setCompletedCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
 
@@ -48,138 +29,39 @@ export default function Home() {
     });
   }, []);
 
-  function startDebate() {
-    const session = createDebateSession(selectedTopic, sideSelection, {
-      mode: debateMode,
-      inputMode,
-    });
-    upsertLocalSession(session);
-
-    if (inputMode === "TEXT") {
-      router.push(`/debate/${session.id}`);
-    } else {
-      router.push(
-        `/debate/device-check?sessionId=${encodeURIComponent(session.id)}&input=${inputMode}`,
-      );
-    }
-  }
-
-  function focusSetup() {
-    document.getElementById("setup-debat")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-
   return (
     <PageShell className="space-y-6">
       <UserUtilityBar />
-      <LobbyHero onPrimaryAction={focusSetup} />
-
-      <section aria-labelledby="mode-title" className="space-y-4">
-        <div>
-          <Badge tone="user">Pilih Mode Permainan</Badge>
-          <h2
-            id="mode-title"
-            className="mt-3 font-serif text-2xl font-bold text-[var(--ra-text-primary)]"
-          >
-            Format arena hari ini
-          </h2>
-        </div>
-        <ModeCarousel value={debateMode} onChange={setDebateMode} />
-      </section>
-
-      <PopularChallengeStrip
-        topics={debateTopics}
-        selectedTopic={selectedTopic}
-        onSelect={setSelectedTopic}
+      <LobbyHero
+        onPrimaryAction={() => router.push("/play")}
+        onSecondaryAction={() => router.push("/topics/new")}
       />
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-start">
-        <div id="pilih-topik" className="scroll-mt-6 space-y-4">
-          <TopicExplorer
-            topics={debateTopics}
-            selectedTopic={selectedTopic}
-            onSelect={setSelectedTopic}
-            onSideChange={setSideSelection}
-          />
-        </div>
-
-        <Card
-          id="setup-debat"
-          variant="elevated"
-          className="scroll-mt-6 xl:sticky xl:top-7"
-        >
-          <Badge tone="user">Setup Arena</Badge>
-          <CardTitle className="mt-4">Masuk ke debat</CardTitle>
-          <CardDescription className="mt-2">
-            Pilih posisi dan cara input, lalu mulai ronde pertama.
-          </CardDescription>
-
-          <div className="mt-6 space-y-5">
-            <div>
-              <p className="mb-3 text-sm font-semibold text-[var(--ra-text-secondary)]">
-                Posisi
-              </p>
-              <SideSelector value={sideSelection} onChange={setSideSelection} />
-            </div>
-
-            <div>
-              <p className="mb-3 text-sm font-semibold text-[var(--ra-text-secondary)]">
-                Input Arena
-              </p>
-              <InputModeSelector value={inputMode} onChange={setInputMode} />
-            </div>
-
-            <div>
-              <div className="rounded-[var(--ra-radius-lg)] border border-[rgba(50,212,209,0.28)] bg-[rgba(50,212,209,0.09)] p-4">
-                <div className="flex items-start gap-3">
-                  <ShieldCheck
-                    size={18}
-                    aria-hidden="true"
-                    className="mt-0.5 shrink-0 text-[var(--ra-cyan-bright)]"
-                  />
-                  <div>
-                    <p className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
-                      Aturan AI
-                    </p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
-                      Lawan AI akan mengambil posisi berseberangan dengan Anda.
-                      Wasit AI menilai ketajaman argumen, bukti, logika, dan
-                      respons terhadap topik terpilih.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4">
-                <Button
-                  size="lg"
-                  onClick={startDebate}
-                  trailingIcon={<ArrowRight size={18} aria-hidden="true" />}
-                  className="w-full"
-                >
-                  Mulai Debat
-                </Button>
-              </div>
-              <p className="mt-2 text-xs leading-5 text-[var(--ra-text-muted)]">
-                Konfigurasi model disiapkan di lingkungan dev/server, bukan di
-                lobby pemain.
-              </p>
-            </div>
-
-            <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] p-4">
-              <p className="text-sm font-semibold text-[var(--ra-cyan-bright)]">
-                Topik Terpilih
-              </p>
-              <p className="mt-2 text-base font-bold leading-6 text-[var(--ra-text-primary)]">
-                {selectedTopic.title}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
-                {selectedTopic.shortContext}
-              </p>
-            </div>
-          </div>
-        </Card>
+      <section className="grid gap-4 lg:grid-cols-3">
+        <RouteCard
+          icon={<Swords size={19} aria-hidden="true" />}
+          label="Step 1"
+          title="Pilih mode"
+          description="Mulai dari format debat dan input arena, lalu lanjut ke topik."
+          href="/play"
+          cta="Mulai Flow"
+        />
+        <RouteCard
+          icon={<Route size={19} aria-hidden="true" />}
+          label="Step 2"
+          title="Pilih topik"
+          description="Masuk langsung ke daftar topik jika mode/input sudah cocok."
+          href="/topics"
+          cta="Buka Topik"
+        />
+        <RouteCard
+          icon={<PenLine size={19} aria-hidden="true" />}
+          label="Privat"
+          title="Buat tesis sendiri"
+          description="Tulis topik privat atau rapikan tesis sebelum debat."
+          href="/topics/new"
+          cta="Buat Topik"
+        />
       </section>
 
       <ProgressResumeCard
@@ -187,5 +69,41 @@ export default function Home() {
         activeCount={activeCount}
       />
     </PageShell>
+  );
+}
+
+function RouteCard({
+  icon,
+  label,
+  title,
+  description,
+  href,
+  cta,
+}: {
+  icon: ReactNode;
+  label: string;
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+}) {
+  return (
+    <Card variant="outline" className="bg-[var(--ra-bg-glass)]">
+      <div className="flex items-center justify-between gap-3">
+        <Badge tone="user">{label}</Badge>
+        <span className="grid h-10 w-10 place-items-center rounded-[var(--ra-radius-md)] border border-[rgba(50,212,209,0.28)] bg-[rgba(50,212,209,0.10)] text-[var(--ra-cyan-bright)]">
+          {icon}
+        </span>
+      </div>
+      <CardTitle className="mt-4 text-lg">{title}</CardTitle>
+      <CardDescription className="mt-2">{description}</CardDescription>
+      <Link
+        href={href}
+        className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] px-4 text-sm font-semibold text-[var(--ra-text-primary)] transition hover:border-[var(--ra-cyan)] hover:bg-[var(--ra-cyan-soft)]"
+      >
+        {cta}
+        <ArrowRight size={16} aria-hidden="true" />
+      </Link>
+    </Card>
   );
 }

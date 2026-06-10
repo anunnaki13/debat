@@ -1,4 +1,4 @@
-import { DebateScreen } from "@/components/debate/DebateScreen";
+import { redirect } from "next/navigation";
 
 export default async function DebatePage({
   params,
@@ -6,5 +6,5 @@ export default async function DebatePage({
   params: Promise<{ sessionId: string }>;
 }) {
   const { sessionId } = await params;
-  return <DebateScreen sessionId={sessionId} />;
+  redirect(`/arena/${sessionId}`);
 }

@@ -50,7 +50,7 @@ export function LocalHistoryList({
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
-                href={`/result/${session.id}`}
+                href={`/results/${session.id}`}
                 className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-cyan-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
               >
                 <ExternalLink size={16} aria-hidden="true" />

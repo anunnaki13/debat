@@ -18,7 +18,7 @@ import { JudgeReportPanel } from "@/components/judge/JudgeReportPanel";
 import { TranscriptAccordion } from "@/components/judge/TranscriptAccordion";
 import { PageShell } from "@/components/layout/PageShell";
 import { Badge, Button } from "@/components/ui";
-import { arenaReferenceAssets, personaPortraits } from "@/lib/arena-reference-assets";
+import { personaPortraits } from "@/lib/arena-reference-assets";
 import { createDebateSession } from "@/lib/debate/session";
 import {
   createExportFilename,
@@ -90,7 +90,7 @@ export function ResultScreen({ sessionId }: { sessionId: string }) {
       <PageShell className="space-y-4">
         <ErrorBanner message="Sesi ini belum memiliki laporan AI Judge." />
         <Link
-          href={`/debate/${session.id}`}
+          href={`/arena/${session.id}`}
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] px-4 py-2 text-sm font-semibold text-[var(--ra-text-primary)] transition hover:bg-[var(--ra-bg-panel)]"
         >
           <ArrowLeft size={16} aria-hidden="true" />
@@ -107,16 +107,19 @@ export function ResultScreen({ sessionId }: { sessionId: string }) {
       return;
     }
 
-    const nextSession = createDebateSession(session.topic, session.userSide);
+    const nextSession = createDebateSession(session.topic, session.userSide, {
+      mode: session.mode,
+      inputMode: session.inputMode,
+    });
     upsertLocalSession(nextSession);
-    router.push(`/debate/${nextSession.id}`);
+    router.push(`/arena/${nextSession.id}`);
   }
 
   return (
     <PageShell className="space-y-6">
       <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(90,142,255,0.34)] bg-[#050914] p-4 shadow-[var(--ra-shadow-elevated)] md:p-6">
         <Image
-          src={arenaReferenceAssets.arenaStageWide}
+          src="/assets/arena/arena-backdrop.svg"
           alt=""
           fill
           sizes="(min-width: 1024px) calc(100vw - 280px), 100vw"
@@ -166,11 +169,18 @@ export function ResultScreen({ sessionId }: { sessionId: string }) {
                 Debat Lagi
               </Button>
               <Link
-                href="/"
+                href="/topics"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[rgba(7,11,19,0.62)] px-5 py-3 text-base font-semibold text-[var(--ra-text-primary)] transition hover:bg-[var(--ra-bg-panel)]"
               >
                 <Swords size={18} aria-hidden="true" />
                 Pilih Topik Baru
+              </Link>
+              <Link
+                href={`/results/${session.id}/coach`}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[rgba(156,124,255,0.42)] bg-[rgba(156,124,255,0.14)] px-5 py-3 text-base font-semibold text-[var(--ra-text-primary)] transition hover:bg-[rgba(156,124,255,0.22)]"
+              >
+                <Medal size={18} aria-hidden="true" />
+                Delivery Coach
               </Link>
               <button
                 type="button"

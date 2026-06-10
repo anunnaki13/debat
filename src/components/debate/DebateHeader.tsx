@@ -3,7 +3,6 @@ import { Camera, Keyboard, LogOut, Mic, Shield, Swords, Volume2 } from "lucide-r
 import { RoundStepper } from "@/components/debate/RoundStepper";
 import { TurnTimer } from "@/components/debate/TurnTimer";
 import { Badge } from "@/components/ui";
-import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import type { DebateSession } from "@/types/debate";
 
 const roundOrder = ["OPENING", "REBUTTAL", "CLOSING"] as const;
@@ -33,7 +32,7 @@ export function DebateHeader({
   return (
     <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(85,137,255,0.34)] bg-[#050914] p-4 shadow-[var(--ra-shadow-elevated)] md:p-5">
       <Image
-        src={arenaReferenceAssets.arenaStageWide}
+        src="/assets/arena/arena-backdrop.svg"
         alt=""
         fill
         priority

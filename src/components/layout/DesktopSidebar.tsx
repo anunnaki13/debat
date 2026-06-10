@@ -13,11 +13,11 @@ import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 const navItems = [
-  { label: "Beranda", href: "/", icon: Home, match: "/" },
-  { label: "Main", href: "/#setup-debat", icon: Swords, match: "/debate" },
-  { label: "Topik", href: "/#pilih-topik", icon: Compass, match: "/topics" },
-  { label: "Riwayat", href: "/history", icon: History, match: "/history" },
-  { label: "Pengaturan", href: "/#setup-debat", icon: Settings, match: "/settings" },
+  { label: "Beranda", href: "/", icon: Home, matches: ["/"] },
+  { label: "Main", href: "/play", icon: Swords, matches: ["/play", "/device-check", "/arena"] },
+  { label: "Topik", href: "/topics", icon: Compass, matches: ["/topics"] },
+  { label: "Riwayat", href: "/history", icon: History, matches: ["/history", "/results"] },
+  { label: "Pengaturan", href: "/settings", icon: Settings, matches: ["/settings"] },
 ] as const;
 
 export function DesktopSidebar() {
@@ -53,10 +53,9 @@ export function DesktopSidebar() {
       <nav className="mt-4 flex flex-1 flex-col gap-1.5" aria-label="Navigasi utama">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const active =
-            item.match === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.match);
+          const active = item.matches.some((match) =>
+            match === "/" ? pathname === "/" : pathname.startsWith(match),
+          );
 
           return (
             <Link

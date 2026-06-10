@@ -364,7 +364,7 @@ export function DeviceCheckScreen({
       { inputMode },
       session.id,
     );
-    router.push(`/debate/${session.id}`);
+    router.push(`/arena/${session.id}`);
   }
 
   if (!session) {

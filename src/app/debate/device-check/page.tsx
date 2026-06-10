@@ -1,13 +1,4 @@
-import { DeviceCheckScreen } from "@/components/device/DeviceCheckScreen";
-import type { DebateInputMode } from "@/types/debate";
-
-function parseInputMode(value: string | undefined): DebateInputMode {
-  if (value === "VOICE" || value === "VOICE_CAMERA" || value === "TEXT") {
-    return value;
-  }
-
-  return "VOICE";
-}
+import { redirect } from "next/navigation";
 
 export default async function DeviceCheckPage({
   searchParams,
@@ -15,11 +6,15 @@ export default async function DeviceCheckPage({
   searchParams: Promise<{ sessionId?: string; input?: string }>;
 }) {
   const params = await searchParams;
+  const query = new URLSearchParams();
 
-  return (
-    <DeviceCheckScreen
-      sessionId={params.sessionId ?? ""}
-      requestedInputMode={parseInputMode(params.input)}
-    />
-  );
+  if (params.sessionId) {
+    query.set("sessionId", params.sessionId);
+  }
+
+  if (params.input) {
+    query.set("input", params.input);
+  }
+
+  redirect(`/device-check${query.size ? `?${query.toString()}` : ""}`);
 }

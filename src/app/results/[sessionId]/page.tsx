@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { ResultScreen } from "@/components/judge/ResultScreen";
 
 export default async function ResultPage({
   params,
@@ -6,5 +6,5 @@ export default async function ResultPage({
   params: Promise<{ sessionId: string }>;
 }) {
   const { sessionId } = await params;
-  redirect(`/results/${sessionId}`);
+  return <ResultScreen sessionId={sessionId} />;
 }

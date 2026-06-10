@@ -4,7 +4,6 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
-import { SESSIONS_STORAGE_KEY } from "@/lib/storage/localSessions";
 
 const pushMock = vi.fn();
 
@@ -19,7 +18,7 @@ vi.mock("next/image", () => ({
   default: () => null,
 }));
 
-describe("Home setup flow", () => {
+describe("Home route entry", () => {
   beforeEach(() => {
     pushMock.mockClear();
     window.localStorage.clear();
@@ -30,24 +29,13 @@ describe("Home setup flow", () => {
     vi.unstubAllGlobals();
   });
 
-  it("starts a debate session from the setup button without user-facing AI config", () => {
+  it("routes the primary CTA to the play flow", () => {
     render(<Home />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Mulai Debat AI/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock.mock.calls[0][0]).toMatch(/^\/debate\/debate-/);
-
-    const sessions = JSON.parse(
-      window.localStorage.getItem(SESSIONS_STORAGE_KEY) ?? "[]",
-    ) as Array<{ status: string; userSide: string; opponentSide: string }>;
-
-    expect(sessions).toHaveLength(1);
-    expect(sessions[0]).toMatchObject({
-      status: "IN_PROGRESS",
-      userSide: "PRO",
-      opponentSide: "CONTRA",
-    });
+    expect(pushMock).toHaveBeenCalledWith("/play");
   });
 
   it("hides API config, fake metrics, and future monetization clutter from the lobby", () => {
@@ -68,39 +56,20 @@ describe("Home setup flow", () => {
     expect(screen.queryByText(/menunggu/i)).not.toBeInTheDocument();
   });
 
-  it("routes voice mode through device check before the debate arena", () => {
+  it("links to route-based flow entry points", () => {
     render(<Home />);
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: /VoiceGunakan mikrofon/i,
-      }),
+    expect(screen.getByRole("link", { name: /Mulai Flow/i })).toHaveAttribute(
+      "href",
+      "/play",
     );
-    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
-
-    expect(pushMock).toHaveBeenCalledTimes(1);
-    expect(pushMock.mock.calls[0][0]).toContain("/debate/device-check");
-    expect(pushMock.mock.calls[0][0]).toContain("input=VOICE");
+    expect(screen.getByRole("link", { name: /Buka Topik/i })).toHaveAttribute(
+      "href",
+      "/topics",
+    );
+    expect(screen.getByRole("link", { name: /Buat Topik/i })).toHaveAttribute(
+      "href",
+      "/topics/new",
+    );
   });
-
-  it("uses a custom topic for the created debate session", async () => {
-    render(<Home />);
-
-    fireEvent.click(screen.getByRole("button", { name: /Buat Topik Privat/i }));
-    fireEvent.change(await screen.findByLabelText(/Tesis utama/i), {
-      target: {
-        value:
-          "Klub sepak bola lokal sebaiknya membatasi transfer mahal dan fokus ke akademi muda",
-      },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Gunakan Langsung/i }));
-    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
-
-    const sessions = JSON.parse(
-      window.localStorage.getItem(SESSIONS_STORAGE_KEY) ?? "[]",
-    ) as Array<{ topic: { custom?: boolean; title: string } }>;
-
-    expect(sessions[0].topic.custom).toBe(true);
-    expect(sessions[0].topic.title).toMatch(/akademi muda/i);
-  }, 10_000);
 });

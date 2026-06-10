@@ -49,7 +49,7 @@ export default function HistoryPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
-            href="/"
+            href="/topics"
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/10 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:bg-white/10"
           >
             <ArrowLeft size={16} aria-hidden="true" />

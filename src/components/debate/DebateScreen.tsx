@@ -34,7 +34,6 @@ import {
 } from "@/lib/debate/rules";
 import { createId } from "@/lib/utils/ids";
 import { buildClientAiConfig } from "@/lib/ai/preferences";
-import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import { featureFlags } from "@/lib/features/flags";
 import { speakText, stopSpeaking } from "@/lib/speech/speakText";
 import {
@@ -586,7 +585,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         report: payload.report,
       };
       persistSession(completedSession);
-      router.push(`/result/${completedSession.id}`);
+      router.push(`/results/${completedSession.id}`);
     } catch (requestError) {
       setError(
         readApiError(
@@ -656,7 +655,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
 
       <section className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(85,137,255,0.34)] bg-[#050914] p-3 shadow-[var(--ra-shadow-elevated)] md:p-4">
         <Image
-          src={arenaReferenceAssets.arenaStageWide}
+          src="/assets/arena/arena-backdrop.svg"
           alt=""
           fill
           sizes="(min-width: 1024px) calc(100vw - 280px), 100vw"
@@ -816,7 +815,7 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           onConfirm={() => {
             deleteLocalSession(session.id);
             stopOpponentVoice();
-            router.push("/");
+            router.push("/play");
           }}
         />
       ) : null}

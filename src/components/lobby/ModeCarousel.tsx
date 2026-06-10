@@ -1,6 +1,5 @@
 import { Flame, PenLine, Swords } from "lucide-react";
 import { ModeCard } from "@/components/lobby/ModeCard";
-import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
 import { featureFlags } from "@/lib/features/flags";
 import type { DebateMode } from "@/types/debate";
 
@@ -15,7 +14,7 @@ const modes = [
     estimatedDuration: "3 ronde",
     difficulty: "Text atau voice",
     badge: "Aktif",
-    artSrc: arenaReferenceAssets.arenaPoliticsLive.src,
+    artSrc: "/assets/arena/mode-duel-ai.svg",
     artPosition: "center 28%",
     enabled: true,
     comingSoon: false,
@@ -30,7 +29,7 @@ const modes = [
     estimatedDuration: "Multi ronde",
     difficulty: "Eksperimen",
     badge: "Beta",
-    artSrc: arenaReferenceAssets.arenaStoryboard.src,
+    artSrc: "/assets/arena/mode-kursi-panas.svg",
     artPosition: "19% 18%",
     enabled: featureFlags.enableHotSeatAi,
     comingSoon: false,
@@ -45,7 +44,7 @@ const modes = [
     estimatedDuration: "3 ronde",
     difficulty: "Custom",
     badge: "Aktif",
-    artSrc: arenaReferenceAssets.arenaStageWide.src,
+    artSrc: "/assets/arena/mode-satu-lawan-tribun.svg",
     artPosition: "center",
     enabled: true,
     comingSoon: false,

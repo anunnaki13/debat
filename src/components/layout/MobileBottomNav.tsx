@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Compass, Home, Plus, Swords, UserCircle } from "lucide-react";
+import { Compass, History, Home, Plus, Swords } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 
 const navItems = [
-  { label: "Beranda", href: "/", icon: Home, match: "/", primary: false },
-  { label: "Arena", href: "/#setup-debat", icon: Swords, match: "/debate", primary: false },
-  { label: "Topik", href: "/#custom-topic", icon: Plus, match: "/topics/new", primary: true },
-  { label: "Jelajah", href: "/#pilih-topik", icon: Compass, match: "/topics", primary: false },
-  { label: "Profil", href: "/history", icon: UserCircle, match: "/history", primary: false },
+  { id: "home", label: "Beranda", href: "/", icon: Home, match: "/", primary: false },
+  { id: "play", label: "Main", href: "/#setup-debat", icon: Swords, match: "/debate", primary: false },
+  { id: "create", label: "Buat", href: "/#custom-topic", icon: Plus, match: "/topics/new", primary: true },
+  { id: "topics", label: "Topik", href: "/#pilih-topik", icon: Compass, match: "/topics", primary: false },
+  { id: "history", label: "Riwayat", href: "/history", icon: History, match: "/history", primary: false },
 ] as const;
 
 export function MobileBottomNav() {
@@ -31,7 +31,7 @@ export function MobileBottomNav() {
 
           return (
             <Link
-              key={item.label}
+              key={item.id}
               href={item.href}
               className={cn(
                 "flex min-h-[56px] flex-col items-center justify-center gap-1 rounded-[var(--ra-radius-md)] px-1 text-[11px] font-semibold transition",

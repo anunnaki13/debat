@@ -253,7 +253,7 @@ function SharePreviewCard({
           />
           <div>
             <p className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
-              Arena Politika
+              Republik Argumen
             </p>
             <p className="mt-1 text-sm font-semibold text-[var(--ra-text-secondary)]">
               {grade.copy}

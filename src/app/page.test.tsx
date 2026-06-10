@@ -1,13 +1,10 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
-import {
-  PREFERENCES_STORAGE_KEY,
-  SESSIONS_STORAGE_KEY,
-} from "@/lib/storage/localSessions";
+import { SESSIONS_STORAGE_KEY } from "@/lib/storage/localSessions";
 
 const pushMock = vi.fn();
 
@@ -33,19 +30,10 @@ describe("Home setup flow", () => {
     vi.unstubAllGlobals();
   });
 
-  it("saves the OpenRouter key and starts a debate session from the setup button", async () => {
+  it("starts a debate session from the setup button without user-facing AI config", () => {
     render(<Home />);
 
-    await waitFor(() => {
-      expect(screen.getByLabelText("OpenRouter API Key")).toBeInTheDocument();
-    });
-
-    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
-      target: { value: "sk-or-dummy-free-router-key-123456" },
-    });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock.mock.calls[0][0]).toMatch(/^\/debate\/debate-/);
@@ -53,14 +41,6 @@ describe("Home setup flow", () => {
     const sessions = JSON.parse(
       window.localStorage.getItem(SESSIONS_STORAGE_KEY) ?? "[]",
     ) as Array<{ status: string; userSide: string; opponentSide: string }>;
-    const preferences = JSON.parse(
-      window.localStorage.getItem(PREFERENCES_STORAGE_KEY) ?? "{}",
-    ) as {
-      aiProvider?: string;
-      openRouterApiKey?: string;
-      openRouterOpponentModel?: string;
-      openRouterJudgeModel?: string;
-    };
 
     expect(sessions).toHaveLength(1);
     expect(sessions[0]).toMatchObject({
@@ -68,71 +48,35 @@ describe("Home setup flow", () => {
       userSide: "PRO",
       opponentSide: "CONTRA",
     });
-    expect(preferences).toMatchObject({
-      aiProvider: "openrouter",
-      openRouterApiKey: "sk-or-dummy-free-router-key-123456",
-      openRouterOpponentModel: "openrouter/free",
-      openRouterJudgeModel: "openrouter/free",
-    });
-  }, 10_000);
-
-  it("does not start without an OpenRouter key", async () => {
-    render(<Home />);
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
-    );
-
-    expect(pushMock).not.toHaveBeenCalled();
-    expect(
-      await screen.findByText("Isi OpenRouter API key dulu sebelum mulai debat."),
-    ).toBeInTheDocument();
   });
 
-  it("tests OpenRouter connection before starting debate", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () =>
-        Response.json({
-          status: "ready",
-          checkedModels: ["openrouter/free"],
-          message: "OpenRouter siap. Model openrouter/free bisa merespons.",
-        }),
-      ),
-    );
-
+  it("hides API config, fake metrics, and future monetization clutter from the lobby", () => {
     render(<Home />);
-
-    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
-      target: { value: "sk-or-dummy-free-router-key-123456" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Tes OpenRouter/i }));
 
     expect(
-      await screen.findByText(/OpenRouter siap\. Model openrouter\/free/i),
-    ).toBeInTheDocument();
-    expect(fetch).toHaveBeenCalledWith(
-      "/api/ai/openrouter-check",
-      expect.objectContaining({
-        method: "POST",
-      }),
-    );
+      screen.queryByLabelText("OpenRouter API Key"),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Model lawan/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Tes OpenRouter/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Premium Club/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Live Arena Feed/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Karir Politik/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Profil Ideologi/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Arena Politika/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/menunggu/i)).not.toBeInTheDocument();
   });
 
-  it("routes voice mode through device check before the debate arena", async () => {
+  it("routes voice mode through device check before the debate arena", () => {
     render(<Home />);
 
-    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
-      target: { value: "sk-or-dummy-free-router-key-123456" },
-    });
     fireEvent.click(
       screen.getByRole("button", {
         name: /VoiceGunakan mikrofon/i,
       }),
     );
-    fireEvent.click(
-      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock.mock.calls[0][0]).toContain("/debate/device-check");
@@ -150,12 +94,7 @@ describe("Home setup flow", () => {
       },
     });
     fireEvent.click(screen.getByRole("button", { name: /Gunakan Langsung/i }));
-    fireEvent.change(screen.getByLabelText("OpenRouter API Key"), {
-      target: { value: "sk-or-dummy-free-router-key-123456" },
-    });
-    fireEvent.click(
-      screen.getByRole("button", { name: /Simpan & Mulai Debat/i }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /^Mulai Debat$/i }));
 
     const sessions = JSON.parse(
       window.localStorage.getItem(SESSIONS_STORAGE_KEY) ?? "[]",

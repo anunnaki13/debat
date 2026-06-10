@@ -35,6 +35,7 @@ import {
 import { createId } from "@/lib/utils/ids";
 import { buildClientAiConfig } from "@/lib/ai/preferences";
 import { arenaReferenceAssets } from "@/lib/arena-reference-assets";
+import { featureFlags } from "@/lib/features/flags";
 import { speakText, stopSpeaking } from "@/lib/speech/speakText";
 import {
   deleteLocalSession,
@@ -704,9 +705,11 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
                 </div>
               </div>
 
-              <div className="mt-4">
-                <AudiencePulsePanel />
-              </div>
+              {featureFlags.enableSpectator ? (
+                <div className="mt-4">
+                  <AudiencePulsePanel />
+                </div>
+              ) : null}
 
               <div className="mt-4">
                 <DebateTranscript messages={session.messages} />

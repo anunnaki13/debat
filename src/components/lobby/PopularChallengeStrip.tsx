@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CheckCircle2, Users, Zap } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { SpiceMeter } from "@/components/topics/SpiceMeter";
 import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -30,13 +30,6 @@ const challengeArt: Record<string, { src: string; position: string; tone: "blue"
   },
 };
 
-const waitingCounts: Record<string, string> = {
-  "ai-jobs": "612 menunggu",
-  "remote-work": "210 menunggu",
-  cashless: "428 menunggu",
-  "public-transport": "518 menunggu",
-};
-
 export function PopularChallengeStrip({
   topics,
   selectedTopic,
@@ -52,12 +45,12 @@ export function PopularChallengeStrip({
     <section aria-labelledby="popular-challenge-title" className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <Badge tone="prestige">Live Arena Feed</Badge>
+          <Badge tone="user">Topik Pilihan</Badge>
           <h2
             id="popular-challenge-title"
             className="mt-3 text-xl font-black uppercase tracking-wide text-[var(--ra-text-primary)]"
           >
-            Pilih match yang sedang panas
+            Pilih arena yang ingin dipanasi
           </h2>
         </div>
       </div>
@@ -119,12 +112,7 @@ export function PopularChallengeStrip({
                 </h3>
                 <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] font-bold text-[var(--ra-text-secondary)]">
                   <span className="inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] bg-[rgba(7,11,19,0.70)] px-2 py-1">
-                    <Users size={12} aria-hidden="true" />
-                    {waitingCounts[topic.id] ?? "180 menunggu"}
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] bg-[rgba(7,11,19,0.70)] px-2 py-1 text-[var(--ra-amber)]">
-                    <Zap size={12} aria-hidden="true" />
-                    Panas
+                    {topic.difficulty === "lanjutan" ? "Lanjutan" : "Pemula"}
                   </span>
                   <SpiceMeter level={topic.spiceLevel ?? 2} compact />
                 </div>

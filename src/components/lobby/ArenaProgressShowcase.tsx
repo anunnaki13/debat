@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui";
 import { arenaReferenceAssets, personaPortraits } from "@/lib/arena-reference-assets";
 
 const careerSteps = [
-  { label: "Aktivis", range: "0 - 1.000 XP", active: true },
-  { label: "Ketua OSIS", range: "1.000 - 3.000 XP", active: true },
-  { label: "Caleg DPRD", range: "3.000 - 8.000 XP", active: true },
-  { label: "Presiden", range: "20.000+ XP", active: false },
+  { label: "Penyimak", range: "0 - 1.000 XP", active: true },
+  { label: "Penanggap", range: "1.000 - 3.000 XP", active: true },
+  { label: "Orator Muda", range: "3.000 - 8.000 XP", active: true },
+  { label: "Debater Tangguh", range: "20.000+ XP", active: false },
 ] as const;
 
 export function ArenaProgressShowcase() {
@@ -27,7 +27,7 @@ export function ArenaProgressShowcase() {
           <div className="flex items-center gap-2">
             <Trophy size={18} aria-hidden="true" className="text-[var(--ra-gold)]" />
             <h2 className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
-              Karir Politikmu
+              Jejak Latihan
             </h2>
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-4">
@@ -70,16 +70,16 @@ export function ArenaProgressShowcase() {
         />
         <div className="relative">
           <h2 className="text-sm font-black uppercase tracking-wide text-[var(--ra-text-primary)]">
-            Profil Ideologi
+            Profil Argumen
           </h2>
           <div className="mt-4 grid grid-cols-[130px_minmax(0,1fr)] gap-4">
             <div className="grid aspect-square place-items-center rounded-[var(--ra-radius-lg)] border border-[rgba(157,98,255,0.32)] bg-[radial-gradient(circle,rgba(129,77,255,0.24),rgba(3,8,20,0.86))]">
               <div className="h-20 w-20 rotate-45 border border-[rgba(188,120,255,0.60)] bg-[rgba(123,66,255,0.22)] shadow-[0_0_30px_rgba(123,66,255,0.34)]" />
             </div>
             <div>
-              <Badge tone="special">Tipe Anda</Badge>
+              <Badge tone="special">Gaya Anda</Badge>
               <p className="mt-3 text-xl font-black text-[#e49aff]">
-                Pragmatic Reformis
+                Reformis Praktis
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
                 Seimbang antara idealisme dan realisme, fokus pada solusi praktis.
@@ -108,7 +108,7 @@ export function ArenaProgressShowcase() {
           />
           <div>
             <p className="text-base font-black leading-tight text-[var(--ra-text-primary)]">
-              Saya baru saja debat di Arena Politika!
+              Saya baru saja debat di Republik Argumen!
             </p>
             <p className="mt-2 text-xs font-bold text-[var(--ra-text-secondary)]">
               Skor sementara 78/100

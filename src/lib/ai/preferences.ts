@@ -3,6 +3,10 @@ import { DEFAULT_OPENROUTER_MODEL } from "@/lib/openrouter/defaults";
 import type { UserPreferences } from "@/types/debate";
 
 export function buildClientAiConfig(preferences: UserPreferences) {
+  if (process.env.NODE_ENV === "production") {
+    return undefined;
+  }
+
   if (preferences.aiProvider === "openrouter") {
     const apiKey = preferences.openRouterApiKey.trim();
 

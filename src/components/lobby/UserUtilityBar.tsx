@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Bell, Crown, Flame, Gift, History, Search, Settings, Trophy } from "lucide-react";
-import { Badge, IconButton } from "@/components/ui";
+import { History, Search, Settings, Swords } from "lucide-react";
 
 export function UserUtilityBar() {
   return (
@@ -13,35 +12,18 @@ export function UserUtilityBar() {
         <input
           type="search"
           disabled
-          placeholder="Cari topik, lawan, atau tantangan..."
+          placeholder="Cari topik debat..."
           className="min-w-0 flex-1 bg-transparent text-sm font-medium text-[var(--ra-text-primary)] outline-none placeholder:text-[var(--ra-text-muted)] disabled:cursor-not-allowed"
         />
       </label>
       <div className="flex w-full min-w-0 items-center justify-between gap-1.5 sm:justify-end md:w-auto md:flex-none md:gap-2">
-        <Badge tone="warning" className="!hidden gap-2 md:!inline-flex">
-          <Flame size={14} aria-hidden="true" />
-          12 hari
-        </Badge>
-        <Badge tone="user" className="!hidden gap-2 md:!inline-flex">
-          <Trophy size={14} aria-hidden="true" />
-          #128
-        </Badge>
-        <IconButton
-          icon={<Bell size={17} aria-hidden="true" />}
-          label="Notifikasi belum tersedia"
-          className="h-10 w-10 shrink-0 sm:h-11 sm:w-11"
-          disabled
-        />
-        <IconButton
-          icon={<Gift size={17} aria-hidden="true" />}
-          label="Hadiah belum tersedia"
-          className="!hidden shrink-0 sm:!inline-flex"
-          disabled
-        />
-        <Badge tone="prestige" className="!hidden gap-2 sm:!inline-flex">
-          <Crown size={14} aria-hidden="true" />
-          Premium Club
-        </Badge>
+        <Link
+          href="/#setup-debat"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] px-3 text-sm font-semibold text-[var(--ra-text-secondary)] transition hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)] sm:min-h-10"
+        >
+          <Swords size={16} aria-hidden="true" />
+          <span>Mulai</span>
+        </Link>
         <Link
           href="/history"
           className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] px-0 text-sm font-semibold text-[var(--ra-text-secondary)] transition hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)] sm:min-h-10 sm:w-auto sm:px-3"
@@ -49,12 +31,13 @@ export function UserUtilityBar() {
           <History size={16} aria-hidden="true" />
           <span className="hidden sm:inline">Riwayat</span>
         </Link>
-        <IconButton
-          icon={<Settings size={17} aria-hidden="true" />}
-          label="Pengaturan belum tersedia"
-          className="h-10 w-10 shrink-0 sm:h-11 sm:w-11"
-          disabled
-        />
+        <Link
+          href="/#setup-debat"
+          aria-label="Pengaturan arena"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] text-[var(--ra-text-secondary)] transition hover:bg-[var(--ra-bg-panel)] hover:text-[var(--ra-text-primary)] sm:h-11 sm:w-11"
+        >
+          <Settings size={17} aria-hidden="true" />
+        </Link>
       </div>
     </div>
   );

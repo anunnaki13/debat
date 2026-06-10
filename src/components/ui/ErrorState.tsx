@@ -2,6 +2,7 @@ import { AlertTriangle } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { uiTextClasses } from "./styles";
 
 export interface ErrorStateProps {
   title: string;
@@ -25,10 +26,10 @@ export function ErrorState({
           <AlertTriangle size={20} aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-xl font-bold leading-tight text-[var(--ra-text-primary)]">
+          <h3 className={`${uiTextClasses.title} text-xl`}>
             {title}
           </h3>
-          <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
+          <p className={`mt-2 ${uiTextClasses.description}`}>
             {description}
           </p>
           {actionLabel || secondaryAction ? (

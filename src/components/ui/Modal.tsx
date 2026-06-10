@@ -5,6 +5,12 @@ import type { ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { IconButton } from "@/components/ui/IconButton";
 import { cn } from "@/lib/cn";
+import {
+  uiDialogFooterClasses,
+  uiDialogPanelClasses,
+  uiOverlayClasses,
+  uiTextClasses,
+} from "./styles";
 
 export interface ModalProps {
   open: boolean;
@@ -63,7 +69,7 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-[var(--ra-bg-overlay)] px-4"
+      className={cn(uiOverlayClasses, "flex items-center justify-center px-4")}
       style={{ zIndex: "var(--ra-z-modal)" }}
       role="presentation"
       onMouseDown={(event) => {
@@ -79,7 +85,8 @@ export function Modal({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         className={cn(
-          "w-full max-w-lg rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-5 text-[var(--ra-text-primary)] shadow-[var(--ra-shadow-overlay)]",
+          uiDialogPanelClasses,
+          "w-full max-w-lg rounded-[var(--ra-radius-xl)] p-5",
           className,
         )}
       >
@@ -87,14 +94,14 @@ export function Modal({
           <div className="space-y-2">
             <h2
               id={titleId}
-              className="font-serif text-2xl font-bold leading-tight"
+              className={cn(uiTextClasses.title, "text-2xl")}
             >
               {title}
             </h2>
             {description ? (
               <p
                 id={descriptionId}
-                className="text-sm leading-6 text-[var(--ra-text-secondary)]"
+                className={uiTextClasses.description}
               >
                 {description}
               </p>
@@ -107,7 +114,7 @@ export function Modal({
           />
         </div>
         <div className="mt-5">{children}</div>
-        {footer ? <div className="mt-6 flex flex-wrap gap-3">{footer}</div> : null}
+        {footer ? <div className={uiDialogFooterClasses}>{footer}</div> : null}
       </div>
     </div>
   );

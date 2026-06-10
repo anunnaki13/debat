@@ -5,6 +5,12 @@ import type { ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { IconButton } from "@/components/ui/IconButton";
 import { cn } from "@/lib/cn";
+import {
+  uiDialogFooterClasses,
+  uiDialogPanelClasses,
+  uiOverlayClasses,
+  uiTextClasses,
+} from "./styles";
 
 export interface BottomSheetProps {
   open: boolean;
@@ -63,7 +69,7 @@ export function BottomSheet({
 
   return (
     <div
-      className="fixed inset-0 flex items-end bg-[var(--ra-bg-overlay)]"
+      className={cn(uiOverlayClasses, "flex items-end")}
       style={{ zIndex: "var(--ra-z-modal)" }}
       role="presentation"
       onMouseDown={(event) => {
@@ -79,20 +85,21 @@ export function BottomSheet({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         className={cn(
-          "max-h-[88vh] w-full overflow-y-auto rounded-t-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-5 pb-[calc(var(--ra-space-5)+env(safe-area-inset-bottom))] text-[var(--ra-text-primary)] shadow-[var(--ra-shadow-overlay)]",
+          uiDialogPanelClasses,
+          "max-h-[88vh] w-full overflow-y-auto rounded-t-[var(--ra-radius-xl)] p-5 pb-[calc(var(--ra-space-5)+env(safe-area-inset-bottom))]",
           className,
         )}
       >
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-[var(--ra-radius-pill)] bg-[var(--ra-border-strong)]" />
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <h2 id={titleId} className="font-serif text-2xl font-bold leading-tight">
+            <h2 id={titleId} className={cn(uiTextClasses.title, "text-2xl")}>
               {title}
             </h2>
             {description ? (
               <p
                 id={descriptionId}
-                className="text-sm leading-6 text-[var(--ra-text-secondary)]"
+                className={uiTextClasses.description}
               >
                 {description}
               </p>
@@ -105,7 +112,7 @@ export function BottomSheet({
           />
         </div>
         <div className="mt-5">{children}</div>
-        {footer ? <div className="mt-6 flex flex-wrap gap-3">{footer}</div> : null}
+        {footer ? <div className={uiDialogFooterClasses}>{footer}</div> : null}
       </div>
     </div>
   );

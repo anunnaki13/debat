@@ -1,5 +1,10 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import {
+  uiControlBaseClasses,
+  uiControlDisabledClasses,
+  uiControlMotionClasses,
+} from "./styles";
 
 type ButtonVariant =
   | "primary"
@@ -57,7 +62,10 @@ export function Button({
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border font-semibold transition-[background,border-color,color,box-shadow,transform,filter] duration-150 ease-out active:translate-y-px disabled:border-[var(--ra-border-subtle)] disabled:bg-[var(--ra-bg-panel)] disabled:text-[var(--ra-text-disabled)] disabled:shadow-none",
+        uiControlBaseClasses,
+        uiControlMotionClasses,
+        uiControlDisabledClasses,
+        "rounded-[var(--ra-radius-md)] active:translate-y-px",
         variantClasses[variant],
         sizeClasses[size],
         className,

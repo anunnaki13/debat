@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
+import { uiTextClasses } from "./styles";
 
 type CardVariant = "surface" | "elevated" | "outline" | "selected";
 
@@ -52,7 +53,8 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "font-serif text-xl font-bold leading-tight text-[var(--ra-text-primary)]",
+        uiTextClasses.title,
+        "text-xl",
         className,
       )}
       {...props}
@@ -65,10 +67,7 @@ export function CardDescription({
   ...props
 }: HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p
-      className={cn("text-sm leading-6 text-[var(--ra-text-secondary)]", className)}
-      {...props}
-    />
+    <p className={cn(uiTextClasses.description, className)} {...props} />
   );
 }
 

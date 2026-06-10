@@ -1,5 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { uiFeedbackSurfaceClasses, uiTextClasses } from "./styles";
 
 type ToastTone = "info" | "success" | "warning" | "error";
 
@@ -28,8 +29,10 @@ export function Toast({
   return (
     <div
       role="status"
+      aria-label={title}
       className={cn(
-        "flex max-w-md items-start gap-3 rounded-[var(--ra-radius-lg)] border p-4 text-[var(--ra-text-primary)] shadow-[var(--ra-shadow-card)]",
+        uiFeedbackSurfaceClasses,
+        "flex max-w-md items-start gap-3 p-4",
         toneClasses[tone],
         className,
       )}
@@ -38,11 +41,7 @@ export function Toast({
       {icon ? <span className="mt-0.5 shrink-0">{icon}</span> : null}
       <div className="space-y-1">
         <p className="text-sm font-bold">{title}</p>
-        {description ? (
-          <p className="text-sm leading-6 text-[var(--ra-text-secondary)]">
-            {description}
-          </p>
-        ) : null}
+        {description ? <p className={uiTextClasses.description}>{description}</p> : null}
       </div>
     </div>
   );

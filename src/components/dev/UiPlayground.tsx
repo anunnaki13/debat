@@ -4,13 +4,17 @@ import {
   ArrowRight,
   Bell,
   Check,
+  Compass,
   Gavel,
+  Home,
   Mic,
   Pause,
   Settings,
   Sparkles,
+  Swords,
   Volume2,
 } from "lucide-react";
+import { LoadingDots } from "@/components/common/LoadingDots";
 import { useState } from "react";
 import {
   Badge,
@@ -33,6 +37,22 @@ import {
 import { arenaVisualStates } from "@/lib/design-tokens";
 
 const waveformBars = [18, 34, 22, 48, 28, 54, 36, 24, 42, 30, 46, 20];
+const foundationTokens = [
+  ["App shell", "var(--ra-bg-app-shell)", "--ra-bg-app-shell"],
+  ["Panel", "var(--ra-bg-panel)", "--ra-bg-panel"],
+  ["Glass", "var(--ra-bg-glass)", "--ra-bg-glass"],
+  ["Action", "var(--ra-action)", "--ra-action"],
+  ["AI", "var(--ra-ai)", "--ra-ai"],
+  ["Prestige", "var(--ra-prestige)", "--ra-prestige"],
+  ["Focus", "var(--ra-focus-ring)", "--ra-focus-ring"],
+  ["Chrome", "var(--ra-bg-sidebar)", "--ra-bg-sidebar"],
+] as const;
+
+const navPreviewItems = [
+  { label: "Beranda", icon: Home, active: false },
+  { label: "Main", icon: Swords, active: true },
+  { label: "Topik", icon: Compass, active: false },
+] as const;
 
 export function UiPlayground() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,7 +66,7 @@ export function UiPlayground() {
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         <header className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] p-5 shadow-[var(--ra-shadow-elevated)] md:p-8">
-          <Badge tone="prestige">UI Sprint 0</Badge>
+          <Badge tone="prestige">Sprint R3</Badge>
           <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_340px] lg:items-end">
             <div>
               <h1 className="max-w-3xl font-serif text-4xl font-bold leading-tight text-[var(--ra-text-primary)]">
@@ -67,6 +87,99 @@ export function UiPlayground() {
             </div>
           </div>
         </header>
+
+        <section className="grid gap-6 lg:grid-cols-[1fr_1fr_360px]">
+          <PlaygroundSection title="Tokens" description="Warna, surface, glow, dan chrome utama dipanggil lewat variable.">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {foundationTokens.map(([label, background, token]) => (
+                <div
+                  key={token}
+                  className="flex min-h-16 items-center gap-3 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-subtle)] bg-[var(--ra-bg-panel)] p-3"
+                >
+                  <span
+                    className="h-10 w-10 shrink-0 rounded-[var(--ra-radius-sm)] border border-[var(--ra-border-default)]"
+                    style={{ background }}
+                    aria-hidden="true"
+                  />
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold">{label}</span>
+                    <code className="block truncate text-xs text-[var(--ra-text-muted)]">
+                      {token}
+                    </code>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </PlaygroundSection>
+
+          <PlaygroundSection title="Typography" description="Display untuk judul arena, UI font untuk kontrol cepat dibaca.">
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[var(--ra-text-muted)]">
+                  Display
+                </p>
+                <p className="mt-2 font-serif text-3xl font-bold leading-tight">
+                  Panas pada gagasan
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[var(--ra-text-muted)]">
+                  Interface
+                </p>
+                <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
+                  Debat harus terasa cepat, jelas, dan dapat dipindai tanpa
+                  kehilangan nuansa arena.
+                </p>
+              </div>
+            </div>
+          </PlaygroundSection>
+
+          <PlaygroundSection title="Sidebar and Bottom Nav" description="Chrome navigasi memakai token yang sama dengan AppShell.">
+            <div className="rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-chrome)] bg-[image:var(--ra-bg-sidebar)] p-3">
+              <div className="rounded-[var(--ra-radius-md)] border border-[var(--ra-border-brand)] bg-[var(--ra-bg-brand-panel)] p-3 text-center">
+                <p className="font-black uppercase leading-none text-[var(--ra-text-primary)]">
+                  Republik
+                </p>
+                <p className="mt-1 font-black uppercase leading-none text-[var(--ra-brand-mark)]">
+                  Argumen
+                </p>
+              </div>
+              <div className="mt-3 grid gap-1.5">
+                {navPreviewItems.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <div
+                      key={item.label}
+                      className={`flex min-h-10 items-center gap-2 rounded-[var(--ra-radius-md)] border px-3 text-sm font-bold ${
+                        item.active
+                          ? "border-[var(--ra-border-nav-active)] bg-[image:var(--ra-bg-nav-active)] shadow-[var(--ra-shadow-nav-active)]"
+                          : "border-transparent text-[var(--ra-text-secondary)]"
+                      }`}
+                    >
+                      <Icon size={16} aria-hidden="true" />
+                      {item.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-5 gap-1 rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-mobile-nav)] p-2">
+              {["Home", "Main", "Buat", "Topik", "Log"].map((label, index) => (
+                <span
+                  key={label}
+                  className={`grid min-h-12 place-items-center rounded-[var(--ra-radius-md)] text-[10px] font-bold ${
+                    index === 2
+                      ? "bg-[var(--ra-cyan)] text-[var(--ra-text-inverse)] shadow-[var(--ra-glow-user)]"
+                      : "text-[var(--ra-text-muted)]"
+                  }`}
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+          </PlaygroundSection>
+        </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
           <PlaygroundSection title="Buttons" description="Primary action jelas, state loading/disabled terlihat.">
@@ -222,6 +335,7 @@ export function UiPlayground() {
 
           <PlaygroundSection title="Skeleton and Momentum" description="Loading dan momentum punya label angka.">
             <div className="space-y-4">
+              <LoadingDots label="AI sedang menyiapkan respons" />
               <Skeleton className="h-8" />
               <Skeleton className="h-24" />
               <div>

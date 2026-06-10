@@ -1,6 +1,8 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useId } from "react";
+import { Button, IconButton } from "@/components/ui";
 
 export function ConfirmDialog({
   title,
@@ -15,38 +17,47 @@ export function ConfirmDialog({
   onCancel: () => void;
   onConfirm: () => void;
 }) {
+  const titleId = useId();
+  const messageId = useId();
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
-      <div className="w-full max-w-md rounded-lg border border-white/10 bg-slate-950 p-5 shadow-2xl">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-[var(--ra-bg-overlay)] px-4"
+      role="presentation"
+      style={{ zIndex: "var(--ra-z-modal)" }}
+    >
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={messageId}
+        className="w-full max-w-md rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-5 text-[var(--ra-text-primary)] shadow-[var(--ra-shadow-overlay)]"
+      >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">{title}</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{message}</p>
+            <h2 id={titleId} className="font-serif text-xl font-bold leading-tight">
+              {title}
+            </h2>
+            <p
+              id={messageId}
+              className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]"
+            >
+              {message}
+            </p>
           </div>
-          <button
-            type="button"
+          <IconButton
+            icon={<X size={18} aria-hidden="true" />}
+            label="Tutup"
             onClick={onCancel}
-            className="rounded-md p-2 text-slate-400 transition hover:bg-white/10 hover:text-white"
-            aria-label="Tutup"
-          >
-            <X size={18} aria-hidden="true" />
-          </button>
+          />
         </div>
         <div className="mt-5 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-md border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
-          >
+          <Button variant="ghost" onClick={onCancel}>
             Batal
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-400"
-          >
+          </Button>
+          <Button variant="danger" onClick={onConfirm}>
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

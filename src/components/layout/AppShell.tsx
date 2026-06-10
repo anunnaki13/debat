@@ -13,7 +13,7 @@ export function AppShell({
   return (
     <div
       data-ra-theme="default"
-      className="min-h-screen bg-[radial-gradient(circle_at_18%_0%,rgba(45,129,255,0.12),transparent_30%),radial-gradient(circle_at_88%_6%,rgba(255,64,82,0.10),transparent_28%),linear-gradient(180deg,#030714,#060a15_48%,#03060d)] text-[var(--ra-text-primary)]"
+      className="min-h-screen bg-[image:var(--ra-bg-app-shell)] text-[var(--ra-text-primary)]"
     >
       <DesktopSidebar />
       <div className="min-h-screen lg:pl-[252px]">

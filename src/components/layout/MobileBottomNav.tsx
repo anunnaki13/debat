@@ -19,7 +19,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Navigasi mobile"
-      className="fixed inset-x-0 bottom-0 z-[var(--ra-z-sticky)] border-t border-[var(--ra-border-default)] bg-[rgba(7,11,19,0.92)] px-2 pb-[calc(8px+env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-[var(--ra-z-sticky)] border-t border-[var(--ra-border-default)] bg-[var(--ra-bg-mobile-nav)] px-2 pb-[calc(8px+env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl lg:hidden"
     >
       <div className="mx-auto grid max-w-md grid-cols-5 gap-1">
         {navItems.map((item) => {

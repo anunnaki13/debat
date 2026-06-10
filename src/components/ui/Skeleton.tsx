@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
+import { uiSkeletonSurfaceClasses } from "./styles";
 
 export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
@@ -10,10 +11,7 @@ export function Skeleton({ label = "Memuat", className, ...props }: SkeletonProp
     <div
       aria-label={label}
       role="status"
-      className={cn(
-        "relative overflow-hidden rounded-[var(--ra-radius-md)] bg-[var(--ra-bg-panel)]",
-        className,
-      )}
+      className={cn(uiSkeletonSurfaceClasses, className)}
       {...props}
     >
       <span

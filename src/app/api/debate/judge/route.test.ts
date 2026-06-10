@@ -109,10 +109,13 @@ const completedSession = {
 
 describe("/api/debate/judge", () => {
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
   it("falls back to plain JSON when a cheap OpenRouter model rejects json_schema", async () => {
+    vi.stubEnv("OPENROUTER_API_KEY", "server_key_123456");
+    vi.stubEnv("OPENROUTER_JUDGE_MODEL", "cheap-json-model");
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
@@ -129,12 +132,6 @@ describe("/api/debate/judge", () => {
     const response = await POST(
       createJsonRequest({
         session: completedSession,
-        aiConfig: {
-          provider: "openrouter",
-          apiKey: "or_test_key_123456",
-          opponentModel: "openrouter/free",
-          judgeModel: "cheap-json-model",
-        },
       }),
     );
     const payload = await response.json();
@@ -148,6 +145,30 @@ describe("/api/debate/judge", () => {
     expect(payload.report).toMatchObject({
       summary: judgeReport.summary,
       overallScore: 80,
+    });
+    expect(payload.model).toBeUndefined();
+  });
+
+  it("rejects browser-supplied AI config before judging", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await POST(
+      createJsonRequest({
+        session: completedSession,
+        aiConfig: {
+          provider: "openrouter",
+          apiKey: "browser_secret_should_not_pass",
+        },
+      }),
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(payload.error).toMatchObject({
+      code: "INVALID_REQUEST",
+      retryable: false,
     });
   });
 });

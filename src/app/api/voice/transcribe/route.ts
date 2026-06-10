@@ -129,7 +129,7 @@ export async function POST(request: Request) {
     if (error instanceof Error && error.message === "CONFIG_MISSING") {
       return apiError(
         "CONFIG_MISSING",
-        "OpenRouter STT key belum dikonfigurasi di server.",
+        "Transkripsi suara belum dikonfigurasi di server.",
         false,
         500,
       );

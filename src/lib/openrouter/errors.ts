@@ -37,7 +37,7 @@ export function toOpenRouterApiError(
       return {
         code: "OPENROUTER_AUTH",
         message:
-          "OpenRouter API key tidak valid atau tidak punya akses. Periksa key yang Anda isi.",
+          "Konfigurasi AI server belum valid. Hubungi pengelola atau coba lagi setelah konfigurasi diperbaiki.",
         retryable: false,
         status: error.status ?? 401,
       };
@@ -45,7 +45,7 @@ export function toOpenRouterApiError(
       return {
         code: "OPENROUTER_RATE_LIMIT",
         message:
-          "OpenRouter sedang rate limit. Tunggu sebentar atau pilih model lain.",
+          "AI server sedang rate limit. Tunggu sebentar lalu coba lagi.",
         retryable: true,
         status: error.status ?? 429,
       };
@@ -53,7 +53,7 @@ export function toOpenRouterApiError(
       return {
         code: "OPENROUTER_MODEL_UNAVAILABLE",
         message:
-          "Model OpenRouter tidak tersedia atau ID model salah. Pilih model gratis/murah lain.",
+          "Model AI server belum tersedia. Hubungi pengelola atau coba lagi nanti.",
         retryable: false,
         status: error.status ?? 400,
       };
@@ -61,7 +61,7 @@ export function toOpenRouterApiError(
       return {
         code: "OPENROUTER_CREDITS",
         message:
-          "Kuota atau kredit OpenRouter tidak cukup untuk model ini. Pilih model gratis atau isi kredit.",
+          "Kuota AI server belum cukup untuk memproses permintaan ini.",
         retryable: false,
         status: error.status ?? 402,
       };
@@ -70,7 +70,7 @@ export function toOpenRouterApiError(
         return {
           code: "OPENROUTER_UNSUPPORTED_RESPONSE_FORMAT",
           message:
-            "Model atau format suara OpenRouter tidak didukung. Periksa model TTS dan format audio.",
+            "Format suara AI belum didukung oleh konfigurasi server saat ini.",
           retryable: false,
           status: error.status ?? 400,
         };
@@ -80,7 +80,7 @@ export function toOpenRouterApiError(
         return {
           code: "OPENROUTER_UNSUPPORTED_RESPONSE_FORMAT",
           message:
-            "Model transkripsi OpenRouter tidak mendukung format audio ini. Coba ulangi atau gunakan ketikan.",
+            "Format transkripsi suara belum didukung. Coba ulangi atau gunakan ketikan.",
           retryable: true,
           status: error.status ?? 400,
         };
@@ -89,14 +89,14 @@ export function toOpenRouterApiError(
       return {
         code: "OPENROUTER_UNSUPPORTED_RESPONSE_FORMAT",
         message:
-          "Model OpenRouter ini belum mendukung format JSON ketat yang dibutuhkan penilaian. Pilih model judge lain.",
+          "AI Judge belum mendukung format penilaian yang dibutuhkan server.",
         retryable: false,
         status: error.status ?? 400,
       };
     case "EMPTY_RESPONSE":
       return {
         code: "OPENROUTER_EMPTY_RESPONSE",
-        message: `OpenRouter mengembalikan respons kosong untuk ${label}. Coba ulangi atau pilih model lain.`,
+        message: `AI server mengembalikan respons kosong untuk ${label}. Coba ulangi.`,
         retryable: true,
         status: 502,
       };
@@ -104,7 +104,7 @@ export function toOpenRouterApiError(
     default:
       return {
         code: "OPENROUTER_ERROR",
-        message: `OpenRouter gagal mengembalikan jawaban ${label}. Coba ulangi atau pilih model lain.`,
+        message: `AI server gagal mengembalikan jawaban ${label}. Coba ulangi.`,
         retryable: true,
         status: error.status && error.status >= 400 ? error.status : 502,
       };

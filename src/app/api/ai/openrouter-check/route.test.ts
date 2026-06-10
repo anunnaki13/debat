@@ -11,49 +11,16 @@ function createJsonRequest(body: unknown): Request {
 
 describe("/api/ai/openrouter-check", () => {
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
-  it("checks unique OpenRouter models with a tiny chat request", async () => {
-    const fetchMock = vi.fn(
-      async (input: RequestInfo | URL, init?: RequestInit) => {
-        void input;
-        void init;
-
-        return Response.json({
-          model: "openrouter/free",
-          choices: [{ message: { content: "OK" } }],
-        });
-      },
-    );
-    vi.stubGlobal("fetch", fetchMock);
-
-    const response = await POST(
-      createJsonRequest({
-        apiKey: "or_test_key_123456",
-        opponentModel: "openrouter/free",
-        judgeModel: "openrouter/free",
-      }),
-    );
-    const payload = await response.json();
-    const firstBody = JSON.parse(
-      (fetchMock.mock.calls[0]![1] as RequestInit).body as string,
-    );
-
-    expect(response.status).toBe(200);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(firstBody).toMatchObject({
-      model: "openrouter/free",
-      temperature: 0,
-      max_completion_tokens: 12,
-    });
-    expect(payload).toMatchObject({
-      status: "ready",
-      checkedModels: ["openrouter/free"],
-    });
-  });
-
-  it("checks opponent and judge separately when models differ", async () => {
+  it("checks server-configured opponent and judge roles without browser secrets", async () => {
+    vi.stubEnv("OPENROUTER_API_KEY", "server-secret");
+    vi.stubEnv("OPENROUTER_OPPONENT_MODEL", "model-a");
+    vi.stubEnv("OPENROUTER_JUDGE_MODEL", "model-b");
+    vi.spyOn(console, "info").mockImplementation(() => undefined);
     const fetchMock = vi.fn(
       async (input: RequestInfo | URL, init?: RequestInit) => {
         void input;
@@ -66,61 +33,44 @@ describe("/api/ai/openrouter-check", () => {
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    const response = await POST(
-      createJsonRequest({
-        apiKey: "or_test_key_123456",
-        opponentModel: "model-a",
-        judgeModel: "model-b",
-      }),
-    );
+    const response = await POST();
     const payload = await response.json();
+    const firstHeaders = (fetchMock.mock.calls[0]![1] as RequestInit)
+      .headers as Record<string, string>;
+    const serialized = JSON.stringify(payload);
 
     expect(response.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(payload.checkedModels).toEqual(["model-a", "model-b"]);
+    expect(firstHeaders.Authorization).toBe("Bearer server-secret");
+    expect(payload).toMatchObject({
+      status: "ready",
+      checkedRoles: ["opponent", "judge"],
+    });
+    expect(serialized).not.toContain("server-secret");
+    expect(serialized).not.toContain("model-a");
+    expect(serialized).not.toContain("model-b");
   });
 
-  it("rejects missing API key before calling OpenRouter", async () => {
+  it("ignores browser-supplied API key/model body and reports missing server config", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    const response = await POST(
-      createJsonRequest({
-        apiKey: "",
-        opponentModel: "openrouter/free",
-        judgeModel: "openrouter/free",
-      }),
-    );
+    const request = createJsonRequest({
+      apiKey: "browser_secret_should_not_be_used",
+      opponentModel: "browser-model",
+    });
+    const response = await POST();
     const payload = await response.json();
+    const serialized = JSON.stringify(payload);
 
-    expect(response.status).toBe(400);
+    expect(await request.text()).toContain("browser_secret_should_not_be_used");
+    expect(response.status).toBe(500);
     expect(fetchMock).not.toHaveBeenCalled();
     expect(payload.error).toMatchObject({
-      code: "INVALID_REQUEST",
+      code: "CONFIG_MISSING",
       retryable: false,
     });
-  });
-
-  it("returns the failed model in a specific OpenRouter error", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response("rate limit exceeded", { status: 429 })),
-    );
-
-    const response = await POST(
-      createJsonRequest({
-        apiKey: "or_test_key_123456",
-        opponentModel: "busy-model",
-        judgeModel: "openrouter/free",
-      }),
-    );
-    const payload = await response.json();
-
-    expect(response.status).toBe(429);
-    expect(payload.error).toMatchObject({
-      code: "OPENROUTER_RATE_LIMIT",
-      retryable: true,
-    });
-    expect(payload.error.message).toContain("busy-model");
+    expect(serialized).not.toContain("browser_secret_should_not_be_used");
+    expect(serialized).not.toContain("browser-model");
   });
 });

@@ -40,23 +40,6 @@ export const debateMessageSchema = z.object({
   inputSource: inputSourceSchema.optional(),
 });
 
-const clientProviderConfigBaseSchema = z.object({
-  apiKey: z.string().trim().min(10).max(500),
-  opponentModel: z.string().trim().min(1).max(160).optional(),
-  judgeModel: z.string().trim().min(1).max(160).optional(),
-});
-
-export const clientAiConfigSchema = z
-  .union([
-    clientProviderConfigBaseSchema.extend({
-      provider: z.literal("openrouter"),
-    }),
-    clientProviderConfigBaseSchema.extend({
-      provider: z.literal("gemini"),
-    }),
-  ])
-  .optional();
-
 export const debateSessionSchema = z.object({
   id: z.string().min(1).max(120),
   version: z.literal(1),
@@ -79,15 +62,13 @@ export const opponentRequestSchema = z.object({
   opponentSide: debateSideSchema,
   currentRound: roundIdSchema,
   messages: z.array(debateMessageSchema).min(1).max(MAX_TRANSCRIPT_MESSAGES),
-  aiConfig: clientAiConfigSchema,
-});
+}).strict();
 
 export const judgeRequestSchema = z.object({
   session: debateSessionSchema.extend({
     messages: z.array(debateMessageSchema).min(1).max(MAX_TRANSCRIPT_MESSAGES),
   }),
-  aiConfig: clientAiConfigSchema,
-});
+}).strict();
 
 export function isBodyTooLarge(request: Request): boolean {
   const contentLength = request.headers.get("content-length");

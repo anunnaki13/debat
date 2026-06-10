@@ -18,7 +18,8 @@ function readEnv(name: string): string | undefined {
 }
 
 export function getOpenRouterConfig(role: OpenRouterRole): OpenRouterRoleConfig {
-  const fallbackKey = readEnv("OPENROUTER_API_KEY");
+  const fallbackKey =
+    readEnv("OPENROUTER_API_KEY") ?? readEnv("OPENROUTER_SHARED_API_KEY");
   const apiKey =
     role === "opponent"
       ? readEnv("OPENROUTER_OPPONENT_API_KEY") ?? fallbackKey

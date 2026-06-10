@@ -33,7 +33,6 @@ import {
   trimArgument,
 } from "@/lib/debate/rules";
 import { createId } from "@/lib/utils/ids";
-import { buildClientAiConfig } from "@/lib/ai/preferences";
 import { featureFlags } from "@/lib/features/flags";
 import { speakText, stopSpeaking } from "@/lib/speech/speakText";
 import {
@@ -431,7 +430,6 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
           opponentSide: nextSession.opponentSide,
           currentRound: nextSession.currentRound,
           messages: nextSession.messages,
-          aiConfig: buildClientAiConfig(preferences),
         }),
       });
       const payload = (await response.json()) as
@@ -567,7 +565,6 @@ export function DebateScreen({ sessionId }: { sessionId: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           session,
-          aiConfig: buildClientAiConfig(preferences),
         }),
       });
       const payload = (await response.json()) as

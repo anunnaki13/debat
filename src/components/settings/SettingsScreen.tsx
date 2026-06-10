@@ -42,7 +42,7 @@ export function SettingsScreen() {
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--ra-text-secondary)]">
           Pengaturan user-facing hanya berisi preferensi pengalaman debat.
-          Konfigurasi API dan model AI tetap berada di server atau route dev.
+          Konfigurasi AI tetap berada di server atau route dev.
         </p>
       </section>
 
@@ -96,8 +96,8 @@ export function SettingsScreen() {
             <Badge tone="neutral">Dev</Badge>
             <CardTitle className="mt-4 text-lg">AI config</CardTitle>
             <CardDescription className="mt-2">
-              Model selector dan API key tidak tampil di flow pemain. Saat
-              development, gunakan route dev-only.
+              Konfigurasi AI tidak tampil di flow pemain. Saat development,
+              gunakan route dev-only.
             </CardDescription>
             <Link
               href="/dev/ai-config"

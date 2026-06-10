@@ -7,7 +7,6 @@ export type DebateStatus =
   | "IN_PROGRESS"
   | "AWAITING_JUDGE"
   | "COMPLETED";
-export type AiProvider = "openrouter" | "gemini";
 export type DebateMode = "DUEL_WACANA_AI" | "KURSI_PANAS_AI" | "PRIVATE_OPINION";
 export type DebateInputMode = "TEXT" | "VOICE" | "VOICE_CAMERA";
 export type VoiceArenaState =
@@ -142,13 +141,6 @@ export interface AnalyticsEvent {
 export interface UserPreferences {
   autoSpeakOpponent: boolean;
   voiceInputEnabled: boolean;
-  aiProvider: AiProvider;
-  openRouterApiKey: string;
-  openRouterOpponentModel: string;
-  openRouterJudgeModel: string;
-  geminiApiKey: string;
-  geminiOpponentModel: string;
-  geminiJudgeModel: string;
 }
 
 export interface ApiErrorResponse {

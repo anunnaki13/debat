@@ -1,6 +1,4 @@
 import type { DebateSession, UserPreferences } from "@/types/debate";
-import { DEFAULT_GEMINI_MODEL } from "@/lib/gemini/defaults";
-import { DEFAULT_OPENROUTER_MODEL } from "@/lib/openrouter/defaults";
 
 export const SESSIONS_STORAGE_KEY = "republik-argumen.sessions.v1";
 export const PREFERENCES_STORAGE_KEY = "republik-argumen.preferences.v1";
@@ -9,13 +7,6 @@ export const MAX_LOCAL_SESSIONS = 20;
 export const DEFAULT_PREFERENCES: UserPreferences = {
   autoSpeakOpponent: false,
   voiceInputEnabled: true,
-  aiProvider: "openrouter",
-  openRouterApiKey: "",
-  openRouterOpponentModel: DEFAULT_OPENROUTER_MODEL,
-  openRouterJudgeModel: DEFAULT_OPENROUTER_MODEL,
-  geminiApiKey: "",
-  geminiOpponentModel: DEFAULT_GEMINI_MODEL,
-  geminiJudgeModel: DEFAULT_GEMINI_MODEL,
 };
 
 function isBrowser(): boolean {
@@ -87,9 +78,14 @@ export function getPreferences(): UserPreferences {
 
   try {
     const raw = window.localStorage.getItem(PREFERENCES_STORAGE_KEY);
-    return raw
-      ? { ...DEFAULT_PREFERENCES, ...(JSON.parse(raw) as Partial<UserPreferences>) }
-      : DEFAULT_PREFERENCES;
+    const parsed = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+    const preferences = sanitizePreferences(parsed);
+
+    if (raw && JSON.stringify(parsed) !== JSON.stringify(preferences)) {
+      savePreferences(preferences);
+    }
+
+    return preferences;
   } catch {
     return DEFAULT_PREFERENCES;
   }
@@ -99,9 +95,22 @@ export function savePreferences(preferences: UserPreferences): void {
   if (isBrowser()) {
     window.localStorage.setItem(
       PREFERENCES_STORAGE_KEY,
-      JSON.stringify(preferences),
+      JSON.stringify(sanitizePreferences(preferences)),
     );
   }
+}
+
+export function sanitizePreferences(value: Partial<UserPreferences>): UserPreferences {
+  return {
+    autoSpeakOpponent:
+      typeof value.autoSpeakOpponent === "boolean"
+        ? value.autoSpeakOpponent
+        : DEFAULT_PREFERENCES.autoSpeakOpponent,
+    voiceInputEnabled:
+      typeof value.voiceInputEnabled === "boolean"
+        ? value.voiceInputEnabled
+        : DEFAULT_PREFERENCES.voiceInputEnabled,
+  };
 }
 
 export function createExportFilename(session: DebateSession): string {

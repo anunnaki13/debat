@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
 import { canRequestJudge } from "@/lib/debate/rules";
-import { DEFAULT_GEMINI_MODEL } from "@/lib/gemini/defaults";
-import {
-  GeminiTimeoutError,
-  GeminiUpstreamError,
-  sendGeminiGenerateContent,
-} from "@/lib/gemini/client";
-import { getOpenRouterConfig, ConfigMissingError } from "@/lib/openrouter/config";
-import { DEFAULT_OPENROUTER_MODEL } from "@/lib/openrouter/defaults";
+import { ConfigMissingError } from "@/lib/openrouter/config";
 import {
   OpenRouterTimeoutError,
   OpenRouterUpstreamError,
-  sendOpenRouterChat,
 } from "@/lib/openrouter/client";
 import {
   isUnsupportedStructuredOutputError,
@@ -29,10 +21,7 @@ import {
   normalizeJudgeReport,
 } from "@/lib/validation/judgeReportSchema";
 import type { DebateSession, JudgeReport } from "@/types/debate";
-import type { z } from "zod";
-import type { clientAiConfigSchema } from "@/lib/validation/apiSchemas";
-
-type ClientAiConfig = z.infer<typeof clientAiConfigSchema>;
+import { sendServerOpenRouterChat } from "@/lib/openrouter/server";
 
 function parseJudgeJson(content: string): unknown {
   const trimmed = content.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "");
@@ -49,17 +38,14 @@ function parseJudgeJson(content: string): unknown {
 
 async function requestJudgeReport({
   session,
-  aiConfig,
   retryInstruction,
   structuredOutput = true,
 }: {
   session: DebateSession;
-  aiConfig: ClientAiConfig;
   retryInstruction?: string;
   structuredOutput?: boolean;
 }): Promise<{
   report: JudgeReport;
-  model?: string;
   usage?: {
     promptTokens?: number;
     completionTokens?: number;
@@ -70,61 +56,8 @@ async function requestJudgeReport({
     ? `${buildJudgeInput(session)}\n\n${retryInstruction}`
     : buildJudgeInput(session);
 
-  if (aiConfig?.provider === "gemini") {
-    const model = aiConfig.judgeModel?.trim() || DEFAULT_GEMINI_MODEL;
-    const result = await sendGeminiGenerateContent({
-      apiKey: aiConfig.apiKey,
-      model,
-      systemInstruction: judgeSystemPrompt,
-      contents: [{ role: "user", parts: [{ text: userContent }] }],
-      temperature: 0.2,
-      maxOutputTokens: 1400,
-      responseMimeType: "application/json",
-    });
-    const rawReport = parseJudgeJson(result.content);
-    const report = normalizeJudgeReport(judgeReportSchema.parse(rawReport));
-
-    return {
-      report,
-      model: result.model ?? model,
-      usage: result.usage,
-    };
-  }
-
-  if (aiConfig?.provider === "openrouter") {
-    const model = aiConfig.judgeModel?.trim() || DEFAULT_OPENROUTER_MODEL;
-    const result = await sendOpenRouterChat({
-      apiKey: aiConfig.apiKey,
-      model,
-      messages: [
-        { role: "system", content: judgeSystemPrompt },
-        { role: "user", content: userContent },
-      ],
-      temperature: 0.2,
-      maxCompletionTokens: 1400,
-      ...(structuredOutput
-        ? {
-            responseFormat: {
-              type: "json_schema",
-              json_schema: judgeJsonSchema,
-            },
-          }
-        : {}),
-    });
-    const rawReport = parseJudgeJson(result.content);
-    const report = normalizeJudgeReport(judgeReportSchema.parse(rawReport));
-
-    return {
-      report,
-      model: result.model ?? model,
-      usage: result.usage,
-    };
-  }
-
-  const { apiKey, model } = getOpenRouterConfig("judge");
-  const result = await sendOpenRouterChat({
-    apiKey,
-    model,
+  const result = await sendServerOpenRouterChat({
+    role: "judge",
     messages: [
       { role: "system", content: judgeSystemPrompt },
       { role: "user", content: userContent },
@@ -148,7 +81,6 @@ async function requestJudgeReport({
 
   return {
     report,
-    model: result.model ?? model,
     usage: result.usage,
   };
 }
@@ -196,12 +128,16 @@ export async function POST(request: Request) {
   try {
     const result = await requestJudgeReport({
       session,
-      aiConfig: parsed.data.aiConfig,
     });
     return NextResponse.json(result);
   } catch (firstError) {
     if (firstError instanceof ConfigMissingError) {
-      return apiError("CONFIG_MISSING", firstError.message, false, 500);
+      return apiError(
+        "CONFIG_MISSING",
+        "AI server belum dikonfigurasi untuk penilaian.",
+        false,
+        500,
+      );
     }
 
     if (firstError instanceof OpenRouterTimeoutError) {
@@ -227,28 +163,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (firstError instanceof GeminiTimeoutError) {
-      return apiError(
-        "GEMINI_TIMEOUT",
-        "Gemini terlalu lama merespons penilaian.",
-        true,
-        504,
-      );
-    }
-
-    if (firstError instanceof GeminiUpstreamError) {
-      return apiError(
-        "GEMINI_ERROR",
-        "Gemini gagal mengembalikan penilaian. Periksa API key dan model.",
-        true,
-        502,
-      );
-    }
-
     try {
       const retryResult = await requestJudgeReport({
         session,
-        aiConfig: parsed.data.aiConfig,
         structuredOutput: !isUnsupportedStructuredOutputError(firstError),
         retryInstruction:
           "Return valid JSON only. No markdown fences. Follow the requested schema exactly. If structured JSON mode is unavailable, still produce the same JSON object as plain text.",
@@ -256,7 +173,12 @@ export async function POST(request: Request) {
       return NextResponse.json(retryResult);
     } catch (retryError) {
       if (retryError instanceof ConfigMissingError) {
-        return apiError("CONFIG_MISSING", retryError.message, false, 500);
+        return apiError(
+          "CONFIG_MISSING",
+          "AI server belum dikonfigurasi untuk penilaian.",
+          false,
+          500,
+        );
       }
 
       if (retryError instanceof OpenRouterTimeoutError) {
@@ -276,24 +198,6 @@ export async function POST(request: Request) {
           openRouterError.message,
           openRouterError.retryable,
           openRouterError.status,
-        );
-      }
-
-      if (retryError instanceof GeminiTimeoutError) {
-        return apiError(
-          "GEMINI_TIMEOUT",
-          "Gemini terlalu lama merespons penilaian.",
-          true,
-          504,
-        );
-      }
-
-      if (retryError instanceof GeminiUpstreamError) {
-        return apiError(
-          "GEMINI_ERROR",
-          "Gemini gagal mengembalikan penilaian. Periksa API key dan model.",
-          true,
-          502,
         );
       }
 

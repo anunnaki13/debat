@@ -16,6 +16,16 @@ describe("OpenRouter config", () => {
     });
   });
 
+  it("uses the explicit shared OpenRouter key as secondary fallback", () => {
+    vi.stubEnv("OPENROUTER_SHARED_API_KEY", "shared-openrouter-key");
+    vi.stubEnv("OPENROUTER_JUDGE_MODEL", "judge-model");
+
+    expect(getOpenRouterConfig("judge")).toEqual({
+      apiKey: "shared-openrouter-key",
+      model: "judge-model",
+    });
+  });
+
   it("throws when the role model is missing", () => {
     vi.stubEnv("OPENROUTER_API_KEY", "shared-key");
 

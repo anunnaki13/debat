@@ -100,7 +100,7 @@ describe("/api/voice/transcribe", () => {
       code: "OPENROUTER_AUTH",
       retryable: false,
     });
-    expect(payload.error.message).toContain("API key");
+    expect(payload.error.message).toContain("Konfigurasi AI server");
   });
 
   it("returns an empty-response error when STT returns no transcript", async () => {

@@ -1,21 +1,13 @@
 import { NextResponse } from "next/server";
 import { getNextRound } from "@/lib/debate/rules";
-import { DEFAULT_GEMINI_MODEL } from "@/lib/gemini/defaults";
-import {
-  GeminiTimeoutError,
-  GeminiUpstreamError,
-  sendGeminiGenerateContent,
-  type GeminiContent,
-} from "@/lib/gemini/client";
-import { getOpenRouterConfig, ConfigMissingError } from "@/lib/openrouter/config";
-import { DEFAULT_OPENROUTER_MODEL } from "@/lib/openrouter/defaults";
+import { ConfigMissingError } from "@/lib/openrouter/config";
 import {
   OpenRouterTimeoutError,
   OpenRouterUpstreamError,
-  sendOpenRouterChat,
   type OpenRouterMessage,
 } from "@/lib/openrouter/client";
 import { toOpenRouterApiError } from "@/lib/openrouter/errors";
+import { sendServerOpenRouterChat } from "@/lib/openrouter/server";
 import { buildOpponentSystemPrompt } from "@/lib/prompts/opponent";
 import { apiError } from "@/lib/utils/apiError";
 import {
@@ -88,56 +80,10 @@ export async function POST(request: Request) {
     role: message.speaker === "USER" ? "user" : "assistant",
     content: `[${message.round}] ${message.content}`,
   }));
-  const geminiMessages: GeminiContent[] = messages.map((message) => ({
-    role: message.speaker === "USER" ? "user" : "model",
-    parts: [{ text: `[${message.round}] ${message.content}` }],
-  }));
 
   try {
-    if (parsed.data.aiConfig?.provider === "openrouter") {
-      const model =
-        parsed.data.aiConfig.opponentModel?.trim() ||
-        DEFAULT_OPENROUTER_MODEL;
-      const result = await sendOpenRouterChat({
-        apiKey: parsed.data.aiConfig.apiKey,
-        model,
-        messages: [{ role: "system", content: systemPrompt }, ...transcriptMessages],
-        temperature: 0.7,
-        maxCompletionTokens: 500,
-      });
-
-      return NextResponse.json({
-        content: result.content,
-        model: result.model ?? model,
-        usage: result.usage,
-        nextRound: getNextRound(currentRound),
-      });
-    }
-
-    if (parsed.data.aiConfig?.provider === "gemini") {
-      const model =
-        parsed.data.aiConfig.opponentModel?.trim() || DEFAULT_GEMINI_MODEL;
-      const result = await sendGeminiGenerateContent({
-        apiKey: parsed.data.aiConfig.apiKey,
-        model,
-        systemInstruction: systemPrompt,
-        contents: geminiMessages,
-        temperature: 0.7,
-        maxOutputTokens: 500,
-      });
-
-      return NextResponse.json({
-        content: result.content,
-        model: result.model ?? model,
-        usage: result.usage,
-        nextRound: getNextRound(currentRound),
-      });
-    }
-
-    const { apiKey, model } = getOpenRouterConfig("opponent");
-    const result = await sendOpenRouterChat({
-      apiKey,
-      model,
+    const result = await sendServerOpenRouterChat({
+      role: "opponent",
       messages: [{ role: "system", content: systemPrompt }, ...transcriptMessages],
       temperature: 0.7,
       maxCompletionTokens: 500,
@@ -145,13 +91,17 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       content: result.content,
-      model: result.model ?? model,
       usage: result.usage,
       nextRound: getNextRound(currentRound),
     });
   } catch (error) {
     if (error instanceof ConfigMissingError) {
-      return apiError("CONFIG_MISSING", error.message, false, 500);
+      return apiError(
+        "CONFIG_MISSING",
+        "AI server belum dikonfigurasi untuk lawan AI.",
+        false,
+        500,
+      );
     }
 
     if (error instanceof OpenRouterTimeoutError) {
@@ -171,24 +121,6 @@ export async function POST(request: Request) {
         openRouterError.message,
         openRouterError.retryable,
         openRouterError.status,
-      );
-    }
-
-    if (error instanceof GeminiTimeoutError) {
-      return apiError(
-        "GEMINI_TIMEOUT",
-        "Gemini terlalu lama merespons. Coba ulangi panggilan lawan AI.",
-        true,
-        504,
-      );
-    }
-
-    if (error instanceof GeminiUpstreamError) {
-      return apiError(
-        "GEMINI_ERROR",
-        "Gemini gagal mengembalikan jawaban lawan AI. Periksa API key dan model.",
-        true,
-        502,
       );
     }
 

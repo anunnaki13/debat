@@ -102,7 +102,7 @@ export async function POST(request: Request) {
     if (error instanceof Error && error.message === "CONFIG_MISSING") {
       return apiError(
         "CONFIG_MISSING",
-        "OpenRouter TTS key atau model belum dikonfigurasi di server.",
+        "Suara AI belum dikonfigurasi di server.",
         false,
         500,
       );

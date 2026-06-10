@@ -101,6 +101,6 @@ describe("/api/voice/synthesize", () => {
       code: "OPENROUTER_MODEL_UNAVAILABLE",
       retryable: false,
     });
-    expect(payload.error.message).toContain("Model OpenRouter");
+    expect(payload.error.message).toContain("Model AI server");
   });
 });

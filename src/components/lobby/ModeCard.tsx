@@ -86,7 +86,7 @@ export function ModeCard<TValue extends string>({
       aria-pressed={selected}
       onClick={() => onSelect(value)}
       className={cn(
-    "group relative flex h-full min-h-[164px] flex-col overflow-hidden rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-70",
+        "group ra-hud-panel relative flex h-full min-h-[174px] flex-col overflow-hidden rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150 disabled:cursor-not-allowed disabled:opacity-70",
         selected
           ? tone.border
           : "border-[rgba(255,255,255,0.12)] bg-[rgba(7,16,28,0.82)] hover:border-[var(--ra-electric-cyan)] hover:bg-[rgba(7,16,28,0.95)] hover:shadow-[var(--ra-glow-esports-cyan)]",

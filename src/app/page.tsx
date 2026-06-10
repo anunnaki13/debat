@@ -7,16 +7,25 @@ import {
   ArrowRight,
   BookOpenCheck,
   Clock,
+  Crosshair,
   FileText,
   History,
   Mic2,
   PenLine,
+  RadioTower,
   Sparkles,
   Swords,
   Trophy,
+  Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import {
+  AnimatedAvatarRing,
+  AnimatedWaveform,
+  ArenaParticleField,
+  EnergyDivider,
+} from "@/components/arena/ArenaEffects";
 import { PageShell } from "@/components/layout/PageShell";
 import { SpiceMeter } from "@/components/topics/SpiceMeter";
 import {
@@ -184,42 +193,53 @@ function LobbyIntro({
   onPrimaryAction: () => void;
 }) {
   return (
-    <section className="relative min-h-[420px] overflow-hidden rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-chrome-soft)] bg-[var(--ra-bg-panel)] shadow-[var(--ra-shadow-elevated)]">
+    <section className="ra-hud-panel ra-arena-scanline relative min-h-[520px] overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.36)] bg-[#020713] shadow-[var(--ra-shadow-elevated)]">
       <Image
-        src="/assets/arena/hero-duel-scene.svg"
+        src="/assets/arena/arena-backdrop.svg"
         alt=""
         fill
         priority
         sizes="(min-width: 1024px) calc(100vw - 680px), 100vw"
-        className="object-cover object-center opacity-80"
+        className="object-cover object-center opacity-70"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-[image:var(--ra-gradient-esports-arena)] opacity-80" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--ra-bg-deep),rgba(7,11,19,0.82)_48%,rgba(7,11,19,0.34))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_27%_24%,rgba(21,248,255,0.24),transparent_30%),radial-gradient(circle_at_78%_20%,rgba(255,43,214,0.18),transparent_30%),linear-gradient(90deg,rgba(2,7,19,0.96),rgba(2,7,19,0.78)_44%,rgba(2,7,19,0.40))]" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-[linear-gradient(0deg,#020713,transparent)]" />
+      <ArenaParticleField density={14} />
 
-      <div className="relative flex min-h-[420px] flex-col justify-between p-5 sm:p-7 lg:p-8">
-        <div>
+      <div className="relative grid min-h-[520px] gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_390px] lg:p-8">
+        <div className="flex min-w-0 flex-col justify-between">
+          <div>
           <div className="flex flex-wrap gap-2">
-            <Badge tone="user">Voice Arena MVP</Badge>
-            <Badge tone="prestige">AI lawan + wasit</Badge>
+            <Badge tone="user" className="uppercase tracking-[0.18em]">
+              Live Debate Arena
+            </Badge>
+            <Badge tone="special" className="uppercase tracking-[0.18em]">
+              High Tech Match
+            </Badge>
           </div>
 
-          <div className="mt-10 max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-[var(--ra-cyan-bright)]">
+          <div className="mt-10 max-w-4xl">
+            <p className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.22em] text-[var(--ra-cyan-bright)]">
+              <RadioTower size={16} aria-hidden="true" />
               {hasHistory ? "Selamat datang kembali" : "Selamat datang di arena"}
             </p>
-            <h1 className="mt-3 font-serif text-4xl font-black leading-tight text-[var(--ra-text-primary)] sm:text-5xl lg:text-6xl">
-              Latih argumen melawan AI.
+            <h1 className="mt-3 text-4xl font-black uppercase leading-[0.95] text-[var(--ra-text-primary)] drop-shadow-[0_0_34px_rgba(21,248,255,0.20)] sm:text-6xl lg:text-7xl">
+              Masuk Arena.
+              <span className="block text-[var(--ra-cyan-bright)]">
+                Lawan AI.
+              </span>
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--ra-text-secondary)] sm:text-lg">
-              Pilih mode, ambil posisi, debat melawan AI oposisi, lalu terima
-              laporan wasit tentang logika, bukti, dan respons Anda.
+              Pilih topik, nyalakan mode text atau voice, lalu bertanding dalam
+              HUD kompetitif melawan AI oposisi dengan wasit objektif.
             </p>
           </div>
 
           <div className="mt-7 flex flex-wrap gap-3">
             <Button
               size="lg"
+              className="ra-laser-sweep min-w-[190px] border border-[rgba(21,248,255,0.42)]"
               onClick={onPrimaryAction}
               leadingIcon={<Swords size={19} aria-hidden="true" />}
               trailingIcon={<ArrowRight size={18} aria-hidden="true" />}
@@ -228,26 +248,119 @@ function LobbyIntro({
             </Button>
             <Link
               href="/topics"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] px-5 py-3 text-base font-semibold text-[var(--ra-text-primary)] transition hover:border-[var(--ra-cyan)] hover:bg-[var(--ra-cyan-soft)]"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--ra-radius-md)] border border-[rgba(255,255,255,0.16)] bg-[rgba(7,11,19,0.72)] px-5 py-3 text-base font-semibold text-[var(--ra-text-primary)] transition hover:border-[var(--ra-cyan)] hover:bg-[var(--ra-cyan-soft)]"
             >
               Lihat Topik
               <BookOpenCheck size={18} aria-hidden="true" />
             </Link>
           </div>
+
+          <div className="mt-8 max-w-3xl">
+            <EnergyDivider />
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <ArenaStep icon={BookOpenCheck} label="Pilih match" />
+              <ArenaStep icon={Mic2} label="Aktifkan mode" />
+              <ArenaStep icon={Trophy} label="Claim verdict" />
+            </div>
+          </div>
+          </div>
         </div>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-3">
-          <ArenaStep icon={BookOpenCheck} label="Pilih topik" />
-          <ArenaStep icon={Mic2} label="Debat teks/voice" />
-          <ArenaStep icon={Trophy} label="Baca laporan" />
-        </div>
+        <div className="flex flex-col gap-4">
+          <div className="ra-animated-frame rounded-[var(--ra-radius-xl)]">
+            <div className="relative overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[rgba(5,9,22,0.88)] p-4 backdrop-blur-xl">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-black uppercase tracking-[0.26em] text-[var(--ra-cyan-bright)]">
+                  Arena Match HUD
+                </p>
+                <Badge tone="ai">AI Online</Badge>
+              </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <LocalMetric label="Sesi selesai" value={completedCount} />
-          <LocalMetric label="Sesi aktif" value={activeCount} />
+              <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                <DuelHudAvatar
+                  label="Player"
+                  src="/assets/arena/user-orator-avatar.svg"
+                  tone="user"
+                />
+                <div className="grid h-14 w-14 place-items-center rounded-[var(--ra-radius-pill)] border border-[rgba(216,170,92,0.44)] bg-[rgba(216,170,92,0.12)] text-[var(--ra-gold-bright)] shadow-[var(--ra-glow-gold)]">
+                  <Zap size={24} aria-hidden="true" />
+                </div>
+                <DuelHudAvatar
+                  label="AI"
+                  src="/assets/arena/ai-opponent-avatar.svg"
+                  tone="ai"
+                />
+              </div>
+
+              <div className="mt-6 rounded-[var(--ra-radius-lg)] border border-[rgba(255,255,255,0.10)] bg-[rgba(7,11,19,0.72)] p-3">
+                <div className="flex items-center justify-between gap-3 text-xs font-black uppercase tracking-[0.14em]">
+                  <span className="text-[var(--ra-cyan-bright)]">Momentum</span>
+                  <span className="text-[var(--ra-magenta-bright)]">AI pressure</span>
+                </div>
+                <div className="mt-3 h-3 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.10)]">
+                  <div className="h-full w-[58%] rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta))] shadow-[0_0_22px_rgba(21,248,255,0.72)]" />
+                </div>
+                <AnimatedWaveform tone="user" className="mt-4 bg-[rgba(2,8,23,0.78)]" />
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <LocalMetric label="Selesai lokal" value={completedCount} />
+                <LocalMetric label="Aktif lokal" value={activeCount} />
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[var(--ra-radius-xl)] border border-[rgba(255,43,214,0.22)] bg-[rgba(20,5,30,0.66)] p-4 backdrop-blur-xl">
+            <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[var(--ra-magenta-bright)]">
+              <Crosshair size={14} aria-hidden="true" />
+              Match Rule
+            </p>
+            <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
+              AI selalu mengambil sisi lawan. Wasit AI memberi verdict setelah
+              semua ronde selesai.
+            </p>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function DuelHudAvatar({
+  label,
+  src,
+  tone,
+}: {
+  label: string;
+  src: string;
+  tone: "user" | "ai";
+}) {
+  return (
+    <div className="text-center">
+      <AnimatedAvatarRing
+        tone={tone}
+        active
+        className="mx-auto h-24 w-24 sm:h-28 sm:w-28"
+      >
+        <Image
+          src={src}
+          alt=""
+          width={92}
+          height={92}
+          className="rounded-[var(--ra-radius-pill)]"
+          aria-hidden="true"
+        />
+      </AnimatedAvatarRing>
+      <p
+        className={`mt-3 text-xs font-black uppercase tracking-[0.24em] ${
+          tone === "ai"
+            ? "text-[var(--ra-magenta-bright)]"
+            : "text-[var(--ra-cyan-bright)]"
+        }`}
+      >
+        {label}
+      </p>
+    </div>
   );
 }
 
@@ -291,15 +404,33 @@ function RecommendationCard({
     "Mulai dengan klaim pembuka 45 detik, lalu siapkan satu data dan satu sanggahan.";
 
   return (
-    <Card variant="selected" className="relative overflow-hidden">
+    <Card
+      variant="selected"
+      className="ra-hud-panel relative overflow-hidden border-[rgba(216,170,92,0.34)] bg-[rgba(7,11,19,0.82)]"
+    >
       <div className="absolute inset-x-0 top-0 h-1 bg-[image:linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta),var(--ra-gold))]" />
-      <Badge tone="prestige">Rekomendasi Latihan</Badge>
-      <CardTitle className="mt-4 text-2xl">Sesi berikutnya</CardTitle>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <Badge tone="prestige" className="uppercase tracking-[0.16em]">
+            Training Quest
+          </Badge>
+          <CardTitle className="mt-4 text-2xl uppercase">
+            Sesi berikutnya
+          </CardTitle>
+        </div>
+        <Image
+          src="/assets/arena/rank-orator-badge.svg"
+          alt=""
+          width={58}
+          height={58}
+          aria-hidden="true"
+        />
+      </div>
       <CardDescription className="mt-2">
         {exercise}
       </CardDescription>
 
-      <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] p-4">
+      <div className="mt-5 rounded-[var(--ra-radius-lg)] border border-[rgba(21,248,255,0.24)] bg-[rgba(21,248,255,0.08)] p-4">
         <Badge tone="user">{topic.category}</Badge>
         <h2 className="mt-3 text-base font-black leading-6 text-[var(--ra-text-primary)]">
           {topic.title}
@@ -345,21 +476,25 @@ function ActiveModeGrid({
               key={mode.mode}
               type="button"
               onClick={() => onSelect(mode.mode, mode.href)}
-              className="group min-h-[190px] rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-glass)] p-5 text-left shadow-[var(--ra-shadow-card)] transition hover:border-[var(--ra-cyan)] hover:bg-[var(--ra-cyan-soft)] hover:shadow-[var(--ra-glow-esports-cyan)]"
+              className="group ra-hud-panel relative min-h-[210px] overflow-hidden rounded-[var(--ra-radius-lg)] border border-[rgba(255,255,255,0.12)] bg-[rgba(7,16,28,0.82)] p-5 text-left shadow-[var(--ra-shadow-card)] transition hover:border-[var(--ra-electric-cyan)] hover:bg-[rgba(7,16,28,0.95)] hover:shadow-[var(--ra-glow-esports-cyan)]"
             >
+              <span className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta))] opacity-70" />
+              <span className="absolute -right-10 -top-10 h-36 w-36 rounded-[var(--ra-radius-pill)] bg-[rgba(21,248,255,0.10)] blur-2xl transition group-hover:bg-[rgba(255,43,214,0.14)]" />
               <div className="flex items-start justify-between gap-3">
                 <span className="grid h-12 w-12 place-items-center rounded-[var(--ra-radius-md)] border border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)]">
                   <Icon size={22} aria-hidden="true" />
                 </span>
-                <Badge tone={mode.tone}>Aktif</Badge>
+                <Badge tone={mode.tone} className="uppercase tracking-[0.12em]">
+                  Aktif
+                </Badge>
               </div>
-              <h3 className="mt-5 text-xl font-black text-[var(--ra-text-primary)]">
+              <h3 className="mt-5 text-xl font-black uppercase text-[var(--ra-text-primary)]">
                 {mode.title}
               </h3>
               <p className="mt-2 text-sm leading-6 text-[var(--ra-text-secondary)]">
                 {mode.description}
               </p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[var(--ra-cyan-bright)]">
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-[var(--ra-cyan-bright)]">
                 {mode.cta}
                 <ArrowRight
                   size={16}

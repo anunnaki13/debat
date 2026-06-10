@@ -48,15 +48,27 @@ export function InputModeSelector({
             onClick={() => onChange(mode.value)}
             aria-pressed={selected}
             className={cn(
-              "flex min-h-28 flex-col items-start justify-between rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150",
+              "ra-hud-panel relative flex min-h-32 flex-col items-start justify-between overflow-hidden rounded-[var(--ra-radius-md)] border p-3 text-left transition duration-150",
               selected
-                ? "border-[var(--ra-cyan)] bg-[var(--ra-cyan-soft)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-user)]"
-                : "border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] text-[var(--ra-text-secondary)] hover:border-[var(--ra-border-strong)] hover:bg-[var(--ra-bg-panel-strong)] hover:text-[var(--ra-text-primary)]",
+                ? "border-[var(--ra-electric-cyan)] bg-[rgba(21,248,255,0.14)] text-[var(--ra-cyan-bright)] shadow-[var(--ra-glow-esports-cyan)]"
+                : "border-[rgba(255,255,255,0.12)] bg-[rgba(7,16,28,0.76)] text-[var(--ra-text-secondary)] hover:border-[var(--ra-electric-cyan)] hover:bg-[rgba(7,16,28,0.92)] hover:text-[var(--ra-text-primary)]",
             )}
           >
-            <Icon size={18} aria-hidden="true" />
+            <span className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta))] opacity-60" />
+            <span
+              className={cn(
+                "grid h-10 w-10 place-items-center rounded-[var(--ra-radius-md)] border",
+                selected
+                  ? "border-[var(--ra-electric-cyan)] bg-[rgba(21,248,255,0.18)]"
+                  : "border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.05)]",
+              )}
+            >
+              <Icon size={18} aria-hidden="true" />
+            </span>
             <span>
-              <span className="block text-sm font-semibold">{mode.label}</span>
+              <span className="block text-sm font-black uppercase tracking-[0.08em]">
+                {mode.label}
+              </span>
               <span className="mt-1 block text-xs leading-5 text-[var(--ra-text-muted)]">
                 {mode.description}
               </span>

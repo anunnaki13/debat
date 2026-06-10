@@ -1,15 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   Compass,
+  Crown,
   History,
   Home,
   Settings,
   Swords,
+  Zap,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { Badge } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 const navItems = [
@@ -24,30 +26,66 @@ export function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[var(--ra-border-chrome)] bg-[image:var(--ra-bg-sidebar)] px-3 py-4 backdrop-blur-xl lg:flex lg:flex-col">
-      <Link href="/" className="relative flex min-h-[118px] flex-col justify-center rounded-[var(--ra-radius-lg)] border border-[var(--ra-border-brand)] bg-[var(--ra-bg-brand-panel)] p-3">
+    <aside className="fixed inset-y-0 left-0 z-[var(--ra-z-sticky)] hidden w-[252px] border-r border-[rgba(21,248,255,0.24)] bg-[image:var(--ra-bg-sidebar)] px-3 py-4 shadow-[18px_0_70px_rgba(0,0,0,0.34)] backdrop-blur-xl lg:flex lg:flex-col">
+      <Link
+        href="/"
+        className="ra-hud-panel relative flex min-h-[118px] items-center gap-3 overflow-hidden rounded-[var(--ra-radius-lg)] border border-[rgba(21,248,255,0.30)] bg-[rgba(0,0,0,0.46)] p-3"
+      >
         <div className="absolute inset-0 rounded-[var(--ra-radius-lg)] bg-[image:var(--ra-bg-brand-aura)]" />
+        <div className="relative grid h-14 w-14 shrink-0 place-items-center rounded-[var(--ra-radius-lg)] border border-[var(--ra-electric-cyan)] bg-[rgba(21,248,255,0.10)] shadow-[var(--ra-glow-esports-cyan)]">
+          <Image
+            src="/assets/arena/logo-mark.svg"
+            alt=""
+            width={42}
+            height={42}
+            aria-hidden="true"
+          />
+        </div>
         <div className="relative">
-          <p className="text-center text-[1.55rem] font-black uppercase leading-none tracking-tight text-[var(--ra-text-primary)] drop-shadow-[var(--ra-shadow-brand)]">
+          <p className="text-[1.34rem] font-black uppercase leading-none tracking-tight text-[var(--ra-text-primary)] drop-shadow-[var(--ra-shadow-brand)]">
             Republik
           </p>
-          <p className="mt-1 text-center text-[1.45rem] font-black uppercase leading-none tracking-wide text-[var(--ra-brand-mark)]">
+          <p className="mt-1 text-[1.24rem] font-black uppercase leading-none tracking-wide text-[var(--ra-brand-mark)]">
             Argumen
           </p>
-          <p className="mt-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--ra-brand-mark-muted)]">
-            Panas pada gagasan.
+          <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--ra-brand-mark-muted)]">
+            Debate Arena AI
           </p>
         </div>
       </Link>
 
-      <div className="mt-4 rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-nav-card)] bg-[var(--ra-bg-sidebar-card)] p-3 shadow-[var(--ra-shadow-nav-card)]">
-        <Badge tone="user">MVP Voice Arena</Badge>
-        <p className="mt-3 text-sm font-extrabold text-[var(--ra-text-primary)]">
-          Latih argumen melawan AI.
-        </p>
-        <p className="mt-2 text-xs leading-5 text-[var(--ra-text-muted)]">
-          Pilih topik, tentukan posisi, lalu masuk ke arena debat.
-        </p>
+      <div className="mt-4 overflow-hidden rounded-[var(--ra-radius-xl)] border border-[rgba(21,248,255,0.26)] bg-[rgba(7,13,30,0.88)] p-3 shadow-[var(--ra-shadow-nav-card)]">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/assets/arena/user-orator-avatar.svg"
+            alt=""
+            width={58}
+            height={58}
+            className="rounded-[var(--ra-radius-pill)]"
+            aria-hidden="true"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-black text-[var(--ra-text-primary)]">
+              Budi Hidayat
+            </p>
+            <p className="mt-1 text-xs font-bold text-[var(--ra-cyan-bright)]">
+              Orator Muda
+            </p>
+            <span className="mt-2 inline-flex items-center gap-1 rounded-[var(--ra-radius-pill)] border border-[rgba(216,170,92,0.42)] bg-[rgba(216,170,92,0.10)] px-2 py-0.5 text-[10px] font-black uppercase text-[var(--ra-gold-bright)]">
+              <Crown size={11} aria-hidden="true" />
+              Local Rank
+            </span>
+          </div>
+        </div>
+        <div className="mt-3">
+          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[0.14em] text-[var(--ra-text-muted)]">
+            <span>Progress</span>
+            <span>Level 01</span>
+          </div>
+          <div className="mt-2 h-2 overflow-hidden rounded-[var(--ra-radius-pill)] bg-[rgba(255,255,255,0.08)]">
+            <div className="h-full w-[42%] rounded-[var(--ra-radius-pill)] bg-[linear-gradient(90deg,var(--ra-electric-cyan),var(--ra-magenta),var(--ra-gold))] shadow-[0_0_18px_rgba(21,248,255,0.58)]" />
+          </div>
+        </div>
       </div>
 
       <nav className="mt-4 flex flex-1 flex-col gap-1.5" aria-label="Navigasi utama">
@@ -64,8 +102,8 @@ export function DesktopSidebar() {
               className={cn(
                 "flex min-h-11 items-center gap-3 rounded-[var(--ra-radius-md)] border px-3 text-sm font-bold transition duration-150",
                 active
-                  ? "border-[var(--ra-border-nav-active)] bg-[image:var(--ra-bg-nav-active)] text-[var(--ra-text-primary)] shadow-[var(--ra-shadow-nav-active)]"
-                  : "border-transparent text-[var(--ra-text-secondary)] hover:border-[var(--ra-border-nav-hover)] hover:bg-[var(--ra-bg-nav-hover)] hover:text-[var(--ra-text-primary)]",
+                  ? "border-[var(--ra-electric-cyan)] bg-[rgba(21,248,255,0.16)] text-[var(--ra-text-primary)] shadow-[var(--ra-glow-esports-cyan)]"
+                  : "border-transparent text-[var(--ra-text-secondary)] hover:border-[rgba(21,248,255,0.24)] hover:bg-[rgba(12,24,50,0.78)] hover:text-[var(--ra-text-primary)]",
               )}
             >
               <Icon size={18} aria-hidden="true" />
@@ -75,15 +113,16 @@ export function DesktopSidebar() {
         })}
       </nav>
 
-      <div className="rounded-[var(--ra-radius-xl)] border border-[var(--ra-border-chrome-soft)] bg-[var(--ra-bg-sidebar-card-muted)] p-3">
-        <p className="text-xs font-black uppercase tracking-wide text-[var(--ra-text-muted)]">
-          Status
+      <div className="ra-hud-panel rounded-[var(--ra-radius-xl)] border border-[rgba(255,43,214,0.24)] bg-[rgba(7,13,30,0.82)] p-3">
+        <p className="flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[var(--ra-magenta-bright)]">
+          <Zap size={13} aria-hidden="true" />
+          Arena Core
         </p>
         <p className="mt-2 text-sm font-bold text-[var(--ra-text-primary)]">
-          Personal MVP
+          Personal MVP Mode
         </p>
         <p className="mt-1 text-xs leading-5 text-[var(--ra-text-muted)]">
-          Fitur sosial dan monetisasi disembunyikan selama recovery.
+          Fokus: lawan AI, wasit AI, voice arena, dan riwayat lokal.
         </p>
       </div>
     </aside>

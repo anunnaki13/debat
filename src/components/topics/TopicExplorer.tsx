@@ -77,12 +77,17 @@ export function TopicExplorer({
 
   return (
     <div className="space-y-4">
-      <Card variant="outline" className="bg-[var(--ra-bg-glass)]">
+      <Card
+        variant="outline"
+        className="ra-hud-panel border-[rgba(21,248,255,0.24)] bg-[rgba(3,8,20,0.82)]"
+      >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <Badge tone="prestige">Tantangan Pilihan</Badge>
-            <h2 className="mt-3 font-serif text-2xl font-bold text-[var(--ra-text-primary)]">
-              Topik untuk diuji
+            <Badge tone="prestige" className="uppercase tracking-[0.16em]">
+              Match Terminal
+            </Badge>
+            <h2 className="mt-3 text-2xl font-black uppercase text-[var(--ra-text-primary)]">
+              Pilih match yang siap dipanasi
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--ra-text-secondary)]">
               Filter topik, buat tesis privat, lalu pilih gagasan yang siap
@@ -116,14 +121,14 @@ export function TopicExplorer({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Cari topik, kategori, atau konteks..."
-              className="min-h-12 w-full rounded-[var(--ra-radius-md)] border border-[var(--ra-border-default)] bg-[var(--ra-bg-panel)] pl-11 pr-4 text-sm text-[var(--ra-text-primary)] placeholder:text-[var(--ra-text-muted)]"
+              className="min-h-12 w-full rounded-[var(--ra-radius-md)] border border-[rgba(21,248,255,0.20)] bg-[rgba(7,11,19,0.72)] pl-11 pr-4 text-sm text-[var(--ra-text-primary)] shadow-[inset_0_0_24px_rgba(21,248,255,0.04)] placeholder:text-[var(--ra-text-muted)] focus:border-[var(--ra-electric-cyan)]"
             />
           </label>
-          <div className="flex items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[var(--ra-border-default)] px-3 py-2 text-xs font-semibold text-[var(--ra-text-muted)]">
+          <div className="flex items-center gap-2 rounded-[var(--ra-radius-pill)] border border-[rgba(255,43,214,0.26)] bg-[rgba(255,43,214,0.08)] px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-[var(--ra-magenta-bright)]">
             <span>{filteredTopics.length}</span>
             <span>dari</span>
             <span>{topics.length}</span>
-            <span>topik</span>
+            <span>match</span>
           </div>
         </div>
 
